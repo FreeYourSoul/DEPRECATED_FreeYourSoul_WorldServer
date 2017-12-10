@@ -7,10 +7,10 @@
 
 #include <FySMessage.pb.h>
 #include <FySAuthenticationLoginMessage.pb.h>
-#include "Gateway.hh"
+#include "WorldServer.hh"
 
 namespace fys {
-    namespace gateway {
+    namespace ws {
         namespace buslistener {
 
             class Authenticator {
@@ -18,17 +18,16 @@ namespace fys {
             public:
                 enum { IndexInBus = 0 };
 
-                explicit Authenticator(Gateway::ptr&);
+                explicit Authenticator(WorldServer::ptr&);
 
                 void operator()(mq::QueueContainer<fys::pb::FySMessage> msg);
 
             private:
-                void authGameServer(const uint indexSession, pb::LoginMessage &&loginMessage);
+                void notifyNewPlayer(fys::pb::LoginMessage  &&indexSession);
                 void authPlayer(const uint indexSession, pb::LoginMessage &&loginMessage);
-                void authAuthServer(const uint indexSession, pb::LoginMessage &&loginMessage);
 
             private:
-                Gateway::ptr _gtw;
+                WorldServer::ptr _gtw;
             };
 
         }

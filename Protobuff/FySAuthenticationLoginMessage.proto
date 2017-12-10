@@ -43,8 +43,8 @@ message LoginPlayerOnGateway {
 
 message LogingPlayerOnGame {
 
-    bytes tokenBattleServer = 1;
-    
+    bytes tokenGameServer = 1;
+
 }
 
 message NotifyPlayerIncoming {

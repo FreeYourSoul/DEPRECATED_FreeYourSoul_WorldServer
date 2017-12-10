@@ -8,7 +8,7 @@
 #include <string>
 
 namespace fys {
-    namespace gateway {
+    namespace ws {
 
         class GameServerInstance {
         public:
@@ -28,8 +28,6 @@ namespace fys {
             std::string _ip;
             ushort _port;
         };
-
-        using AuthServerInstance = GameServerInstance;
 
     }
 }

@@ -32,7 +32,7 @@ namespace fys {
 
             boost::asio::ip::tcp::socket& getSocket();
 
-            void readOnSocket(fys::mq::FysBus<fys::pb::FySMessage, gateway::BUS_QUEUES_SIZE>::ptr &fysBus);
+            void readOnSocket(fys::mq::FysBus<fys::pb::FySMessage, ws::BUS_QUEUES_SIZE>::ptr &fysBus);
             void send(fys::pb::FySResponseMessage&& msg);
 
             void setCustomShutdownHandler(const std::function<void()> &customShutdownHandler);
@@ -48,7 +48,7 @@ namespace fys {
             void shuttingConnectionDown();
 
             void handleRead(const boost::system::error_code &error, size_t bytesTransferred,
-                            fys::mq::FysBus<fys::pb::FySMessage, gateway::BUS_QUEUES_SIZE>::ptr);
+                            fys::mq::FysBus<fys::pb::FySMessage, ws::BUS_QUEUES_SIZE>::ptr);
 
         private:
             bool _isShuttingDown;

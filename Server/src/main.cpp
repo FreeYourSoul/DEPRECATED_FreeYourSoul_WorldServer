@@ -1,16 +1,14 @@
 #include <iostream>
 #include <thread>
-#include <Gateway.hh>
+#include <WorldServer.hh>
 #include <BusListener.hh>
-#include <Babble.hh>
 #include <Authenticator.hh>
 #include <TokenGenerator.hh>
 
 using namespace fys::mq;
-using namespace fys::gateway;
+using namespace fys::ws;
 using namespace fys::network;
 
-using BabbleBusListener = BusListener <buslistener::Babble, FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>>;
 using AuthBusListener = BusListener <buslistener::Authenticator, FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>>;
 
 int main(int argc, const char * const *argv) {
@@ -19,19 +17,15 @@ int main(int argc, const char * const *argv) {
         boost::asio::io_service ios;
         boost::asio::io_service::work work(ios);
         Context ctx(argc, argv);
+        std::cout << ctx << std::endl;
         auto fysBus = std::make_shared<FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > (fys::pb::Type_ARRAYSIZE);
-        Gateway::ptr gtw = Gateway::create(ctx, ios, fysBus);
-        buslistener::Babble babble(gtw);
+        WorldServer::ptr gtw = WorldServer::create(ctx, ios, fysBus);
         buslistener::Authenticator authenticator(gtw);
-        BabbleBusListener babbleListener(babble);
         AuthBusListener authenticatorListener(authenticator);
 
         authenticatorListener.launchListenThread(fysBus);
-        babbleListener.launchListenThread(fysBus);
-        std::cout << ctx << std::endl;
         std::cout << fys::utils::TokenGenerator::getInstance()->generate() << std::endl;
         gtw->runPlayerAccept();
-        gtw->runServerAccept();
         ios.run();
     }
     catch (std::exception &e) {

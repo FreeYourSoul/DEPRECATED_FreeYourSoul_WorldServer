@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.3)
 project(FreeSouls CXX)
 
 set(CMAKE_CXX_COMPILER /usr/bin/g++)
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lprotobuf -lboost_timer -lboost_system -lboost_thread")
+#SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -23,15 +23,13 @@ include_directories(
         FySMQ/include/queue
         FySMQ/include/bus
         FySMemoryManager/include
-        Server/include/gateway
+        Server/include/ws
         Server/include/network
-        Server/include/babble
         Server/include/game Utils/src)
 
 set(SOURCE_FILES_MM)
 
 set(SOURCE_PROTOBUF
-        cmake-build-debug/Protobuff/FySBabbleMessage.pb.cc
         cmake-build-debug/Protobuff/FySMessage.pb.cc
         cmake-build-debug/Protobuff/FySAuthenticationLoginMessage.pb.cc
         cmake-build-debug/Protobuff/FySAuthenticationResponse.pb.cc
@@ -45,22 +43,18 @@ set(SOURCE_FILES_MQ
         FySMQ/include/bus/FysBus.hh)
 
 set(SOURCE_FILES_SRV
-        Server/src/gateway/Gateway.cpp
-        Server/include/gateway/Gateway.hh
+        Server/src/gateway/WorldServer.cpp
+        Server/include/ws/WorldServer.hh
         Server/src/gateway/Context.cpp
-        Server/include/gateway/Context.hh
+        Server/include/ws/Context.hh
         Server/src/network/SessionManager.cpp
         Server/include/network/SessionManager.hh
-        Server/src/babble/Babble.cpp
-        Server/include/babble/Babble.hh
-        Server/src/babble/BabbleChannel.cpp
-        Server/include/babble/BabbleChannel.hh
         Server/src/network/TcpConnection.cpp
         Server/include/network/TcpConnection.hh
         Server/src/gateway/GameServerInstance.cpp
-        Server/include/gateway/GameServerInstance.hh
+        Server/include/ws/GameServerInstance.hh
         Server/src/gateway/Authenticator.cpp
-        Server/include/gateway/Authenticator.hh
+        Server/include/ws/Authenticator.hh
 )
 
 set(SOURCE_FILES_UTILS Utils/src/CheckVars.hh Utils/src/TokenGenerator.cpp Utils/src/TokenGenerator.hh)
@@ -90,6 +84,7 @@ target_link_libraries(FreeSouls proto )
 add_definitions(-DBOOST_ALL_DYN_LINK)
 
 ## Test executable
+#find_package(TMXLITE REQUIRED)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 add_executable(UnitTests ${SOURCE_FILES_TEST})
 target_link_libraries(UnitTests ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})

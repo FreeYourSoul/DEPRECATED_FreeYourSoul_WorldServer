@@ -16,7 +16,7 @@
 #define GTW_QUEUES_SIZE "bus.queuesSize"
 
 namespace fys {
-    namespace gateway {
+    namespace ws {
 
         enum { BUS_QUEUES_SIZE = 1024 };
 
@@ -55,7 +55,7 @@ namespace fys {
             std::size_t _queuesSize;
             bool _verbose;
 
-            std::vector<gateway::GameServerInstance> _gameServers;
+            std::vector<ws::GameServerInstance> _gameServers;
         };
 
     }
