@@ -5,13 +5,13 @@
 #ifndef FREESOULS_GATEWAY_HH
 #define FREESOULS_GATEWAY_HH
 
-#include <map>
 #include <boost/asio/ip/tcp.hpp>
 #include <SessionManager.hh>
 #include <FysBus.hh>
 #include <TcpConnection.hh>
 #include <Context.hh>
 #include <FySMessage.pb.h>
+#include <Map.hh>
 
 namespace fys {
     namespace ws {
@@ -25,7 +25,8 @@ namespace fys {
 
         public:
             ~WorldServer();
-            WorldServer(const Context &ctx, boost::asio::io_service &ios, fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>::ptr &fysBus);
+            WorldServer(const Context &, boost::asio::io_service&,
+                        fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>::ptr&);
 
             static inline ptr create(const Context &ctx, boost::asio::io_service &ios, fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>::ptr &fysBus) {
                 return std::make_shared<WorldServer>(ctx, ios, fysBus);
@@ -43,6 +44,8 @@ namespace fys {
 
             network::SessionManager _gamerConnections;
             network::TcpConnection::ptr _gtwConnection;
+
+            std::vector<fys::ws::Map> _map;
         };
 
     }
