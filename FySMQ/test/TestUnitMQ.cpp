@@ -37,13 +37,13 @@ BOOST_AUTO_TEST_CASE( test_bus_ini_error2 )
 
 /**
  *------------------------------------------------------
- * Bus exections test ----------------------------------
+ * Bus executions test ----------------------------------
  *------------------------------------------------------
  */
 fys::mq::LockFreeQueue<fys::mq::QueueContainer<std::string>, 5000> *lockFreeQueue;
 int readValues;
 
-void addinlockfreequeue(const fys::mq::QueueContainer<std::string> &container) {
+void addInLockFreeQueue(const fys::mq::QueueContainer<std::string> &container) {
 
     for (int i = 0; i < 1500; ++i) {
         lockFreeQueue->push(container);
@@ -77,21 +77,21 @@ BOOST_AUTO_TEST_CASE( test_queue_exec ) {
     fys::mq::QueueContainer<std::string> c2("B");
     fys::mq::QueueContainer<std::string> c3("C");
 
-    std::cout << "begin Protobuff exec" << std::endl;
+    std::cout << "begin Protobuf exec" << std::endl;
     c1.setOpCodeMsg(42);
     c2.setOpCodeMsg(43);
     c3.setOpCodeMsg(44);
     initTestExecution();
     boost::thread workerRead(readLockFreeQueue);
-    boost::thread w1([this, &c1]() { addinlockfreequeue(c1); });
-    boost::thread w2([this, &c2]() { addinlockfreequeue(c2); });
-    boost::thread w3([this, &c3]() { addinlockfreequeue(c3); });
+    boost::thread w1([this, &c1]() { addInLockFreeQueue(c1); });
+    boost::thread w2([this, &c2]() { addInLockFreeQueue(c2); });
+    boost::thread w3([this, &c3]() { addInLockFreeQueue(c3); });
 
     w1.join();
     w2.join();
     w3.join();
     workerRead.join();
     cleanTestExecution();
-    std::cout << "end Protobuff exec : readValue = " << readValues << std::endl;
+    std::cout << "end Protobuf exec : readValue = " << readValues << std::endl;
     BOOST_CHECK(readValues == 4500);
 }

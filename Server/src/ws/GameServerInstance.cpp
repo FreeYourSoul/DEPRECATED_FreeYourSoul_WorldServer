@@ -10,7 +10,7 @@ _ip(std::move(other._ip)), _port(other._port)
 
 fys::ws::GameServerInstance &fys::ws::GameServerInstance::operator=(fys::ws::GameServerInstance other) {
     std::swap(_ip, other._ip);
-    std::swap(_port, other._port);
+    other._port = other._port;
     return *this;
 }
 

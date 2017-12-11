@@ -16,7 +16,7 @@ endif()
 
 enable_testing()
 
-add_subdirectory( Protobuff )
+add_subdirectory(Protobuf)
 
 include_directories(
         ${TMXLITE_INCLUDE_DIR}

@@ -21,9 +21,9 @@ void fys::network::TcpConnection::send(pb::FySResponseMessage&& msg) {
 
     _socket.async_write_some(b.prepare(msg.ByteSizeLong()),
                              [this](const boost::system::error_code& ec, std::size_t bytes_transferred) {
-                                 std::cout << "Writting response : " <<  bytes_transferred << std::endl;
+                                 std::cout << "Writing response : " <<  bytes_transferred << std::endl;
                                  if (((boost::asio::error::eof == ec) || (boost::asio::error::connection_reset == ec)) && !_isShuttingDown) {
-                                     std::cerr << "An Error Occured during writting" << std::endl;
+                                     std::cerr << "An Error Occurred during writing" << std::endl;
                                      shuttingConnectionDown();
                                  }
                              }
@@ -33,8 +33,8 @@ void fys::network::TcpConnection::send(pb::FySResponseMessage&& msg) {
 void fys::network::TcpConnection::readOnSocket(fys::mq::FysBus<pb::FySMessage, ws::BUS_QUEUES_SIZE>::ptr &fysBus) {
     std::fill(_buffer, _buffer + MESSAGE_BUFFER_SIZE, 0);
     _socket.async_read_some(boost::asio::buffer(_buffer, MESSAGE_BUFFER_SIZE),
-                            [this, &fysBus](boost::system::error_code ec, const std::size_t byteTransfered) {
-                                this->handleRead(ec, byteTransfered, fysBus);
+                            [this, &fysBus](boost::system::error_code ec, const std::size_t byteTransferred) {
+                                this->handleRead(ec, byteTransferred, fysBus);
                             });
 }
 
@@ -49,7 +49,7 @@ void fys::network::TcpConnection::handleRead(const boost::system::error_code &er
         containerMsg.setIndexSession(this->_sessionIndex);
         containerMsg.setContained(message);
         containerMsg.setOpCodeMsg(message.type());
-        std::cout << "Raw Message to write on bus :" << message.ShortDebugString()  << " container op code : " << containerMsg.getOpCodeMsg() << " bytetransfered : " << bytesTransferred << " with index: " << _sessionIndex << std::endl;
+        std::cout << "Raw Message to write on bus :" << message.ShortDebugString()  << " container op code : " << containerMsg.getOpCodeMsg() << " byteTransferred : " << bytesTransferred << " with index: " << _sessionIndex << std::endl;
         fysBus->pushInBus(containerMsg);
     }
     else
