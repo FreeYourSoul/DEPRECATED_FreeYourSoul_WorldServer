@@ -9,29 +9,25 @@
 #include <FySAuthenticationLoginMessage.pb.h>
 #include "WorldServer.hh"
 
-namespace fys {
-    namespace ws {
-        namespace buslistener {
+namespace fys::ws::buslistener {
 
-            class Authenticator {
+    class Authenticator {
 
-            public:
-                enum { IndexInBus = 0 };
+    public:
+        enum { IndexInBus = 0 };
 
-                explicit Authenticator(WorldServer::ptr&);
+        explicit Authenticator(WorldServer::ptr&);
 
-                void operator()(mq::QueueContainer<fys::pb::FySMessage> msg);
+        void operator()(mq::QueueContainer<fys::pb::FySMessage> msg);
 
-            private:
-                void notifyNewPlayer(fys::pb::LoginMessage  &&indexSession);
-                void authPlayer(const uint indexSession, pb::LoginMessage &&loginMessage);
+    private:
+        void notifyNewPlayer(fys::pb::LoginMessage  &&indexSession);
+        void authPlayer(const uint indexSession, pb::LoginMessage &&loginMessage);
 
-            private:
-                WorldServer::ptr _gtw;
-            };
+    private:
+        WorldServer::ptr _gtw;
+    };
 
-        }
-    }
 }
 
 
