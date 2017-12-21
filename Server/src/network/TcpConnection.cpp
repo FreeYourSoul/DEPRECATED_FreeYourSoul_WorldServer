@@ -47,10 +47,10 @@ void fys::network::TcpConnection::handleRead(const boost::system::error_code &er
         message.ParseFromArray(_buffer, static_cast<int>(bytesTransferred));
         readOnSocket(fysBus);
         containerMsg.setIndexSession(this->_sessionIndex);
-        containerMsg.setContained(message);
+        containerMsg.setContained(std::move(message));
         containerMsg.setOpCodeMsg(message.type());
         std::cout << "Raw Message to write on bus :" << message.ShortDebugString()  << " container op code : " << containerMsg.getOpCodeMsg() << " byteTransferred : " << bytesTransferred << " with index: " << _sessionIndex << std::endl;
-        fysBus->pushInBus(containerMsg);
+        fysBus->pushInBus(std::move(containerMsg));
     }
     else
         shuttingConnectionDown();
