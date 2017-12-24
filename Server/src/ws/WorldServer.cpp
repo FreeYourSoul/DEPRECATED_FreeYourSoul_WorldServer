@@ -30,12 +30,4 @@ void fys::ws::WorldServer::runPlayerAccept() {
     );
 }
 
-const fys::network::SessionManager &fys::ws::WorldServer::getGamerConnections() const {
-    return _gamerConnections;
-}
-
-const fys::network::TcpConnection::ptr &fys::ws::WorldServer::get_gtwConnection() const {
-    return _gtwConnection;
-}
-
 #pragma clang diagnostic pop

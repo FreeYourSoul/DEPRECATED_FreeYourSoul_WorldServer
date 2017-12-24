@@ -33,8 +33,8 @@ namespace fys::ws {
 
         void runPlayerAccept();
 
-        const network::SessionManager &getGamerConnections() const;
-        const network::TcpConnection::ptr &get_gtwConnection() const;
+        const network::SessionManager &getGamerConnections() const { return _gamerConnections; }
+        const network::TcpConnection::ptr &getGtwConnection() const { return _gtwConnection; }
 
     private:
         boost::asio::io_service &_ios;
