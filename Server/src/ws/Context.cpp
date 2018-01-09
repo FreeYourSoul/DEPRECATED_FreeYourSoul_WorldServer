@@ -96,8 +96,11 @@ void fys::ws::Context::setQueuesSize(std::size_t _queuesSize) {
 }
 
 std::ostream &fys::ws::operator<<(std::ostream &os, const fys::ws::Context &context) {
-    os << "Current Context -> _port: " << context._port  << " _gtwPort: " << context._gtwPort << " _asioThread: " << context._asioThread << " _busIniFilePath: "
-       << context._busIniFilePath << " _queuesSize: " << context._queuesSize << std::endl;
+    os << "Current Context -> _port: " << context._port  << " _gtwPort: " << context._gtwPort
+       << " _gtwIp" << context.getGtwIp() << " _asioThread: " << context._asioThread
+       << " _positionId: " << context._positionId << " _busIniFilePath: " << context._busIniFilePath
+       << " _queuesSize: " << context._queuesSize
+       << std::endl;
     return os;
 }
 
@@ -123,6 +126,14 @@ void fys::ws::Context::setGtwIp(std::string &&gtwIp) noexcept {
 
 const std::string &fys::ws::Context::getGtwIp() const {
     return _gtwIp;
+}
+
+const std::string &fys::ws::Context::getPositionId() const {
+    return _positionId;
+}
+
+void fys::ws::Context::setPositionId(const std::string &positionId) {
+    Context::_positionId = positionId;
 }
 
 

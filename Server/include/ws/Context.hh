@@ -47,6 +47,10 @@ namespace fys::ws {
         void setGtwPort(u_short gtwPort);
         void setGtwIp(std::string&& gtwIp) noexcept;
 
+        const std::string &getPositionId() const;
+
+        void setPositionId(const std::string &_positionId);
+
     private:
         void initializeFromIni(const std::string &iniPath);
 
@@ -57,6 +61,7 @@ namespace fys::ws {
         std::size_t _asioThread;
         std::string _busIniFilePath;
         std::size_t _queuesSize;
+        std::string _positionId;
         bool _verbose;
 
         std::vector<ws::GameServerInstance> _gameServers;

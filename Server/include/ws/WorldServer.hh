@@ -35,6 +35,7 @@ namespace fys::ws {
         void runPlayerAccept();
 
         void connectToGateway(const Context &ctx);
+        void notifyGateway(const std::string &id);
 
         const network::SessionManager &getGamerConnections() const { return _gamerConnections; }
         const network::TcpConnection::uptr &getGtwConnection() const { return _gtwConnection; }
