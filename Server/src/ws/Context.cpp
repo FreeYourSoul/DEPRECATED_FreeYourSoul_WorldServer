@@ -10,35 +10,37 @@
 #include "Context.hh"
 
 fys::ws::Context::Context(const fys::ws::Context &other) :
-        _port(other._port), _serverPort(other._serverPort), _asioThread(other._asioThread), _busIniFilePath(other._busIniFilePath),
+        _port(other._port), _gtwPort(other._gtwPort), _gtwIp(other._gtwIp), _asioThread(other._asioThread), _busIniFilePath(other._busIniFilePath),
         _queuesSize(other._queuesSize), _verbose(other._verbose)
 {}
 
 fys::ws::Context::Context(fys::ws::Context &&other) noexcept :
-        _port(other._port), _serverPort(other._serverPort), _asioThread(other._asioThread),
+        _port(other._port), _gtwPort(other._gtwPort), _gtwIp(std::move(other._gtwIp)), _asioThread(other._asioThread),
         _busIniFilePath(std::move(other._busIniFilePath)), _queuesSize(other._queuesSize), _verbose(other._verbose)
 {}
 
 fys::ws::Context::Context(const int ac, const char *const *av) {
     try {
         TCLAP::CmdLine cli("WorldServer of Fys World Server Game", ' ', "1.0");
-        TCLAP::ValueArg<std::string> configPath("c", "config", "Path of config file", false, "/home/FyS/ClionProjects/FreeYourSoul_Server/Server/resource/worldserver.ini", "string");
+        TCLAP::ValueArg<std::string> configPath("c", "config", "Path of config file", false, "/home/FyS/ClionProjects/FreeYourSoul_WorldServer/Server/resource/worldserver.ini", "string");
         TCLAP::ValueArg<u_short> changePort("p", "port", "Listening Port", false, 1337, "integer");
-        TCLAP::ValueArg<u_short> changeServerPort("s", "sport", "Listening Port for servers", false, 0, "integer");
+        TCLAP::ValueArg<u_short> changeGtwPort("s", "gport", "Listening Port for Gateway", false, 0, "integer");
+        TCLAP::ValueArg<u_short> changeGtwIp("g", "gip", "IP of Gateway", false, 0, "string");
         TCLAP::ValueArg<std::size_t> changeThread("t", "thread", "Thread Numbers for listening", false, 0, "integer");
         TCLAP::ValueArg<bool> verbose("v", "verbose", "Print logs on standard output", false, false, "boolean");
 
         cli.add(configPath);
         cli.add(changePort);
-        cli.add(changeServerPort);
+        cli.add(changeGtwPort);
+        cli.add(changeGtwIp);
         cli.add(changeThread);
         cli.add(verbose);
         cli.parse(ac, av);
         this->initializeFromIni(configPath.getValue());
         if (changePort.getValue() > 0)
             setPort(changePort.getValue());
-        if (changeServerPort.getValue() > 0)
-            setServerPort(changeServerPort.getValue());
+        if (changeGtwPort.getValue() > 0)
+            setGtwPort(changeGtwPort.getValue());
         if (changeThread.getValue() > 0)
             setAsioThread(changeThread.getValue());
         setVerbose(verbose.getValue());
@@ -52,11 +54,12 @@ void fys::ws::Context::initializeFromIni(const std::string &iniPath) {
     boost::property_tree::ptree pt;
     boost::property_tree::read_ini(iniPath, pt);
 
-    std::cout << "Context Initialization..." << std::endl;
+    std::cout << iniPath << " Context Initialization..." << std::endl;
     setPort(pt.get<u_short>(GTW_INI_PORT));
-    setServerPort(pt.get<u_short>(GTW_INI_SERVER_PORT));
+    setGtwPort(pt.get<u_short>(GTW_INI_GTW_PORT));
+    setGtwIp(std::move(pt.get<std::string>(GTW_INI_GTW_IP)));
     setAsioThread(pt.get<std::size_t>(GTW_INI_ASIO_THREADS));
-    setBusIniFilePath(pt.get<std::string>(GTW_INI_BUS_PATH));
+    setBusIniFilePath(std::move(pt.get<std::string>(GTW_INI_BUS_PATH)));
     setQueuesSize(pt.get<std::size_t>(GTW_QUEUES_SIZE));
 }
 
@@ -72,7 +75,7 @@ const std::string &fys::ws::Context::getBusIniFilePath() const {
     return _busIniFilePath;
 }
 
-void fys::ws::Context::setBusIniFilePath(const std::string &busIniFilePath) {
+void fys::ws::Context::setBusIniFilePath(std::string &&busIniFilePath) noexcept  {
     Context::_busIniFilePath = busIniFilePath;
 }
 
@@ -93,7 +96,7 @@ void fys::ws::Context::setQueuesSize(std::size_t _queuesSize) {
 }
 
 std::ostream &fys::ws::operator<<(std::ostream &os, const fys::ws::Context &context) {
-    os << "Current Context -> _port: " << context._port  << " serverport: " << context._serverPort << " _asioThread: " << context._asioThread << " _busIniFilePath: "
+    os << "Current Context -> _port: " << context._port  << " _gtwPort: " << context._gtwPort << " _asioThread: " << context._asioThread << " _busIniFilePath: "
        << context._busIniFilePath << " _queuesSize: " << context._queuesSize << std::endl;
     return os;
 }
@@ -106,10 +109,20 @@ void fys::ws::Context::setVerbose(bool _verbose) {
     Context::_verbose = _verbose;
 }
 
-u_short fys::ws::Context::getServerPort() const {
-    return _serverPort;
+u_short fys::ws::Context::getGtwPort() const {
+    return _gtwPort;
 }
 
-void fys::ws::Context::setServerPort(u_short _serverPort) {
-    Context::_serverPort = _serverPort;
+void fys::ws::Context::setGtwPort(u_short gtwPort) {
+    Context::_gtwPort = gtwPort;
 }
+
+void fys::ws::Context::setGtwIp(std::string &&gtwIp) noexcept {
+    Context::_gtwIp = std::move(gtwIp);
+}
+
+const std::string &fys::ws::Context::getGtwIp() const {
+    return _gtwIp;
+}
+
+

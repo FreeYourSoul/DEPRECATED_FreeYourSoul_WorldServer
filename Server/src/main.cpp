@@ -19,13 +19,13 @@ int main(int argc, const char * const *argv) {
         Context ctx(argc, argv);
         std::cout << ctx << std::endl;
         auto fysBus = std::make_shared<FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > (fys::pb::Type_ARRAYSIZE);
-        WorldServer::ptr gtw = WorldServer::create(ctx, ios, fysBus);
-        buslistener::Authenticator authenticator(gtw);
+        WorldServer::ptr worldServer = WorldServer::create(ctx, ios, fysBus);
+        buslistener::Authenticator authenticator(worldServer);
         AuthBusListener authenticatorListener(authenticator);
 
         authenticatorListener.launchListenThread(fysBus);
-        std::cout << fys::utils::TokenGenerator::getInstance()->generate() << std::endl;
-        gtw->runPlayerAccept();
+        worldServer->connectToGateway(ctx);
+        worldServer->runPlayerAccept();
         ios.run();
     }
     catch (std::exception &e) {

@@ -20,6 +20,7 @@ namespace fys::network {
     class TcpConnection : public std::enable_shared_from_this<TcpConnection>
     {
     public:
+        using uptr = std::unique_ptr<TcpConnection>;
         using ptr = std::shared_ptr<TcpConnection>;
         using wptr = std::weak_ptr<TcpConnection>;
 

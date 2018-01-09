@@ -27,14 +27,17 @@ namespace fys::ws {
         WorldServer(const Context &, boost::asio::io_service&,
                     fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>::ptr&);
 
-        static inline ptr create(const Context &ctx, boost::asio::io_service &ios, fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>::ptr &fysBus) {
+        static inline ptr create(const Context &ctx, boost::asio::io_service &ios,
+                                 fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>::ptr &fysBus) {
             return std::make_shared<WorldServer>(ctx, ios, fysBus);
         }
 
         void runPlayerAccept();
 
+        void connectToGateway(const Context &ctx);
+
         const network::SessionManager &getGamerConnections() const { return _gamerConnections; }
-        const network::TcpConnection::ptr &getGtwConnection() const { return _gtwConnection; }
+        const network::TcpConnection::uptr &getGtwConnection() const { return _gtwConnection; }
 
     private:
         boost::asio::io_service &_ios;
@@ -42,7 +45,7 @@ namespace fys::ws {
         fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>::ptr _fysBus;
 
         network::SessionManager _gamerConnections;
-        network::TcpConnection::ptr _gtwConnection;
+        network::TcpConnection::uptr _gtwConnection;
 
         std::vector<fys::ws::Map> _map;
     };

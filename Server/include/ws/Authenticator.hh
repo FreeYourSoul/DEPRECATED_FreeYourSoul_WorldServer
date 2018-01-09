@@ -11,6 +11,11 @@
 
 namespace fys::ws::buslistener {
 
+    /**
+     * \brief Authenticator is a BusListener that is
+     *  acknowledging new server connecting on the Universe
+     *  acknowledging new players connecting and authenticate them
+     */
     class Authenticator {
 
     public:
@@ -21,7 +26,7 @@ namespace fys::ws::buslistener {
         void operator()(mq::QueueContainer<fys::pb::FySMessage> msg);
 
     private:
-        void notifyNewPlayer(fys::pb::LoginMessage  &&indexSession);
+        void notifiedServer(fys::pb::LoginMessage &&indexSession);
         void authPlayer(const uint indexSession, pb::LoginMessage &&loginMessage);
 
     private:

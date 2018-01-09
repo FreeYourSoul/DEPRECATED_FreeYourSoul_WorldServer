@@ -15,7 +15,7 @@ void fys::ws::buslistener::Authenticator::operator()(mq::QueueContainer<pb::FySM
     if (pb::LoginMessage_Type_IsValid(authMessage.typemessage())) {
         switch (authMessage.typemessage()) {
             case pb::LoginMessage_Type_NotifyNewPlayer :
-                notifyNewPlayer(std::move(authMessage));
+                notifiedServer(std::move(authMessage));
                 break;
 
             case pb::LoginMessage_Type_LoginPlayerOnGame:
@@ -28,7 +28,7 @@ void fys::ws::buslistener::Authenticator::operator()(mq::QueueContainer<pb::FySM
     }
 }
 
-void fys::ws::buslistener::Authenticator::notifyNewPlayer(fys::pb::LoginMessage &&indexSession) {
+void fys::ws::buslistener::Authenticator::notifiedServer(fys::pb::LoginMessage &&indexSession) {
 
 }
 

@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.3)
 
-project(FreeSouls CXX)
+project(FreeSouls_World CXX)
 
 set(CMAKE_CXX_COMPILER /usr/bin/g++)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lprotobuf -lboost_timer -lboost_system -lboost_thread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lprotobuf -lboost_timer -lboost_system -lboost_thread -lboost_date_time")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
 
 set(CMAKE_CXX_STANDARD 17)
@@ -78,8 +78,8 @@ set(SOURCE_FILES_TEST
         FySMQ/test/FysBusTest.hh)
 
 ### Server ###
-add_executable(FreeSouls ${SOURCE_FILES} Server/src/main.cpp)
-target_link_libraries(FreeSouls proto ${TMXLITE_LIBRARIES})
+add_executable(FreeSouls_World ${SOURCE_FILES} Server/src/main.cpp)
+target_link_libraries(FreeSouls_World proto ${TMXLITE_LIBRARIES})
 
 # link against dynamic libraries
 add_definitions(-DBOOST_ALL_DYN_LINK)
