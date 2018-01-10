@@ -24,6 +24,7 @@ int main(int argc, const char * const *argv) {
         AuthBusListener authenticatorListener(authenticator);
 
         authenticatorListener.launchListenThread(fysBus);
+        ::sleep(1);
         worldServer->connectToGateway(ctx);
         worldServer->runPlayerAccept();
         ios.run();

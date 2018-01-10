@@ -56,15 +56,18 @@ void fys::ws::WorldServer::connectToGateway(const fys::ws::Context &ctx) {
 
 void fys::ws::WorldServer::notifyGateway(const std::string &id) const {
     fys::pb::FySMessage msg;
-    fys::pb::LoginMessage loginMessage;
+    fys::pb::LoginMessage loginMsg;
     fys::pb::LoginGameServer gameServerMessage;
 
+    loginMsg.set_typemessage(fys::pb::LoginMessage_Type_LoginGameServer);
+    loginMsg.mutable_content()->PackFrom(gameServerMessage);
     gameServerMessage.set_isworldserver(true);
-    gameServerMessage.set_magicpassword(MAGIC_PASSWORD);
-    loginMessage.set_typemessage(fys::pb::LoginMessage_Type_LoginGameServer);
-    loginMessage.mutable_content()->PackFrom(gameServerMessage);
+    gameServerMessage.set_magicpassword("magie magie");
     msg.set_type(fys::pb::AUTH);
-    msg.mutable_content()->PackFrom(loginMessage);
+    msg.mutable_content()->PackFrom(gameServerMessage);
+
+    std::cout << "gateway notified " << msg.ShortDebugString() << std::endl;
+    _gtwConnection->send(std::move(msg));
 }
 
 #pragma clang diagnostic pop

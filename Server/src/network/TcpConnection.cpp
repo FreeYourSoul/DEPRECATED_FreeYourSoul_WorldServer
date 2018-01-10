@@ -14,14 +14,14 @@ boost::asio::ip::tcp::socket& fys::network::TcpConnection::getSocket() {
     return _socket;
 }
 
-void fys::network::TcpConnection::send(pb::FySResponseMessage&& msg) {
+void fys::network::TcpConnection::send(google::protobuf::Message&& msg) {
     boost::asio::streambuf b;
     std::ostream os(&b);
     msg.SerializeToOstream(&os);
 
     _socket.async_write_some(b.prepare(msg.ByteSizeLong()),
                              [this](const boost::system::error_code& ec, std::size_t bytes_transferred) {
-                                 std::cout << "Writing response : " <<  bytes_transferred << std::endl;
+                                 std::cout << "Writing on socket : " <<  bytes_transferred << std::endl;
                                  if (((boost::asio::error::eof == ec) || (boost::asio::error::connection_reset == ec)) && !_isShuttingDown) {
                                      std::cerr << "An Error Occurred during writing" << std::endl;
                                      shuttingConnectionDown();
