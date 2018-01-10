@@ -6,8 +6,11 @@
 #pragma ide diagnostic ignored "InfiniteRecursion"
 
 #include <WorldServer.hh>
+#include <FySAuthenticationLoginMessage.pb.h>
+#include <google/protobuf/any.pb.h>
 
 static constexpr int RETRY_TIMER = 30;
+static constexpr char MAGIC_PASSWORD[] = "42Magic42FyS";
 
 fys::ws::WorldServer::~WorldServer() = default;
 
@@ -46,7 +49,22 @@ void fys::ws::WorldServer::connectToGateway(const fys::ws::Context &ctx) {
                 this->connectToGateway(ctx);
             });
         }
+        else
+            this->notifyGateway(ctx.getPositionId());
     });
+}
+
+void fys::ws::WorldServer::notifyGateway(const std::string &id) const {
+    fys::pb::FySMessage msg;
+    fys::pb::LoginMessage loginMessage;
+    fys::pb::LoginGameServer gameServerMessage;
+
+    gameServerMessage.set_isworldserver(true);
+    gameServerMessage.set_magicpassword(MAGIC_PASSWORD);
+    loginMessage.set_typemessage(fys::pb::LoginMessage_Type_LoginGameServer);
+    loginMessage.mutable_content()->PackFrom(gameServerMessage);
+    msg.set_type(fys::pb::AUTH);
+    msg.mutable_content()->PackFrom(loginMessage);
 }
 
 #pragma clang diagnostic pop
