@@ -61,6 +61,7 @@ void fys::ws::Context::initializeFromIni(const std::string &iniPath) {
     setAsioThread(pt.get<std::size_t>(GTW_INI_ASIO_THREADS));
     setBusIniFilePath(std::move(pt.get<std::string>(GTW_INI_BUS_PATH)));
     setQueuesSize(pt.get<std::size_t>(GTW_QUEUES_SIZE));
+    setPositionId(pt.get<std::string>(GTW_MAP_POSITIONID));
 }
 
 u_short fys::ws::Context::getPort() const {

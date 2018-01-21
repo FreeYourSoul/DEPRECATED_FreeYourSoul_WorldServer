@@ -16,6 +16,7 @@ static constexpr char GTW_INI_GTW_IP[] = "gateway.ip";
 static constexpr char GTW_INI_ASIO_THREADS[] = "server.asioThread";
 static constexpr char GTW_INI_BUS_PATH[] = "bus.iniPath";
 static constexpr char GTW_QUEUES_SIZE[] = "bus.queuesSize";
+static constexpr char GTW_MAP_POSITIONID[] = "map.positionId";
 
 namespace fys::ws {
 
