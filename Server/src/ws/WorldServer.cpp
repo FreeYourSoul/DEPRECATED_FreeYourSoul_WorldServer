@@ -18,6 +18,7 @@ fys::ws::WorldServer::WorldServer(const fys::ws::Context &ctx, boost::asio::io_s
         _acceptorPlayer(_ios, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), ctx.getPort())),
         _fysBus(fysBus),
         _gamerConnections(1000),
+        _worldServerCluster(10),
         _gtwConnection(std::make_unique<fys::network::TcpConnection>(ios))
 {}
 
@@ -66,6 +67,10 @@ void fys::ws::WorldServer::notifyGateway(const std::string &id) const {
     _gtwConnection->send(std::move(msg));
 
     std::cout << "gateway notified " << msg.ShortDebugString() << std::endl;
+}
+
+void fys::ws::WorldServer::addWorldServerInCluster(const std::string& clusterKey, const fys::network::TcpConnection::ptr &newConnection) {
+    _worldServerCluster.addConnectionInCluster(clusterKey, newConnection);
 }
 
 #pragma clang diagnostic pop

@@ -12,6 +12,7 @@
 #include <Context.hh>
 #include <FySMessage.pb.h>
 #include <Map.hh>
+#include <ClusterManager.hh>
 
 namespace fys::ws {
 
@@ -33,12 +34,16 @@ namespace fys::ws {
         }
 
         void runPlayerAccept();
-
         void connectToGateway(const Context &ctx);
-        void notifyGateway(const std::string &id) const;
+
+        void addWorldServerInCluster(const std::string& clusterKey, const fys::network::TcpConnection::ptr &newConnection);
 
         const network::SessionManager &getGamerConnections() const { return _gamerConnections; }
+        const network::SessionManager &getWorldServerCluster() const { return _worldServerCluster; }
         const network::TcpConnection::uptr &getGtwConnection() const { return _gtwConnection; }
+
+    private:
+        void notifyGateway(const std::string &id) const;
 
     private:
         boost::asio::io_service &_ios;
@@ -46,6 +51,7 @@ namespace fys::ws {
         fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>::ptr _fysBus;
 
         network::SessionManager _gamerConnections;
+        network::ClusterManager _worldServerCluster;
         network::TcpConnection::uptr _gtwConnection;
 
         std::vector<fys::ws::Map> _map;

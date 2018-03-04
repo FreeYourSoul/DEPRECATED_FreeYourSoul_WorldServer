@@ -26,11 +26,23 @@ namespace fys::ws::buslistener {
         void operator()(mq::QueueContainer<fys::pb::FySMessage> msg);
 
     private:
-        void notifiedServer(fys::pb::LoginMessage &&indexSession);
+        /**
+         * \brief Notify this server instance of another world server joining the universe
+         * \details This method is called by the FySGateway which aknowledge a new World Server connection in the
+         * cluster and forward this information to the members of the cluster
+         * \note reminder, universe is how we call a world server cluster
+         * \param loginMessage full notification message received
+         */
+        void notifyServer(fys::pb::LoginMessage &&loginMessage);
+        /**
+         * Authenticate a player in the current world server instance
+         * \param indexSession in the player session manager to root reply
+         * \param loginMessage full authentication message received
+         */
         void authPlayer(const uint indexSession, pb::LoginMessage &&loginMessage);
 
     private:
-        WorldServer::ptr _gtw;
+        WorldServer::ptr _ws;
     };
 
 }

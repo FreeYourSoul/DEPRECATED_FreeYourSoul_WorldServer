@@ -57,7 +57,12 @@ set(SOURCE_FILES_SRV
         Server/include/ws/GameServerInstance.hh
         Server/src/ws/Authenticator.cpp
         Server/include/ws/Authenticator.hh
-        Server/src/ws/tmx/MapBuilder.cpp Server/include/ws/tmx/MapBuilder.hh Server/src/ws/tmx/Map.cpp Server/include/ws/tmx/Map.hh)
+        Server/src/ws/tmx/MapBuilder.cpp
+        Server/include/ws/tmx/MapBuilder.hh
+        Server/src/ws/tmx/Map.cpp
+        Server/include/ws/tmx/Map.hh
+        Server/src/network/ClusterManager.cpp
+        Server/include/network/ClusterManager.hh)
 
 set(SOURCE_FILES_UTILS Utils/src/CheckVars.hh Utils/src/TokenGenerator.cpp Utils/src/TokenGenerator.hh)
 
@@ -75,7 +80,7 @@ set(SOURCE_FILES_TEST
         ${SOURCE_FILES_ALL}
         FySMQ/test/TestUnitMQ.cpp
         Utils/test/TestCheckVar.cpp
-        FySMQ/test/FysBusTest.hh)
+        )
 
 ### Server ###
 add_executable(FreeSouls_World ${SOURCE_FILES} Server/src/main.cpp)

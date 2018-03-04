@@ -5,11 +5,11 @@
 #include <TokenGenerator.hh>
 #include "SessionManager.hh"
 
-fys::network::SessionManager::SessionManager(const u_int size) : _connections(size), _connectionsToken(size)
+fys::network::SessionManager::SessionManager(const uint size) : _connections(size), _connectionsToken(size)
 {}
 
-const u_int fys::network::SessionManager::addConnection(const fys::network::TcpConnection::ptr &newConnection) {
-    u_int i = 0;
+const uint fys::network::SessionManager::addConnection(const fys::network::TcpConnection::ptr &newConnection) {
+    uint i = 0;
 
     for (; i < _connections.size(); ++i) {
         if (!_connections.at(i)) {
@@ -17,8 +17,8 @@ const u_int fys::network::SessionManager::addConnection(const fys::network::TcpC
             return i;
         }
     }
-    _connections.resize(_connections.size() + 1000, nullptr);
-    _connectionsToken.resize(_connections.size() + 1000);
+    _connections.resize(_connections.size() * 2, nullptr);
+    _connectionsToken.resize(_connections.size() * 2);
     connectionHandle(newConnection, i);
     return i;
 }
@@ -34,7 +34,7 @@ void fys::network::SessionManager::connectionHandle(const fys::network::TcpConne
 }
 
 void fys::network::SessionManager::disconnectUser(const fys::network::Token &token) {
-    u_int i = 0;
+    uint i = 0;
 
     for (; i < _connectionsToken.size(); ++i) {
         if (std::equal(_connectionsToken.at(i).begin(), _connectionsToken.at(i).end(), token.begin())) {
