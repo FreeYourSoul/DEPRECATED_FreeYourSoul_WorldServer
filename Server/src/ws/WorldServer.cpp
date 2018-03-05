@@ -30,7 +30,7 @@ void fys::ws::WorldServer::runPlayerAccept() {
 
                                  [this, session](const boost::system::error_code &e) {
                                      session->readOnSocket(_fysBus);
-                                     this->_gamerConnections.addConnection(session);
+                                     this->_gamerConnections.addPlayerConnection(session);
                                      this->runPlayerAccept();
                                  }
 
@@ -83,6 +83,14 @@ void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &
         } else
             this->_worldServerCluster.addConnectionInCluster(clusterKey, clusterMemberConnection);
     });
+}
+
+void fys::ws::WorldServer::addIncomingPlayerInAcceptedIp(const std::string& futureIp, const network::Token& futureToken) {
+    _gamerConnections.addIncomingPlayer(futureIp, futureToken);
+}
+
+bool fys::ws::WorldServer::consumePlayerAcceptedToken(const std::string& futureIp, const network::Token& futureToken) {
+    return _gamerConnections.consumePlayerAcceptedToken(futureIp, futureToken);
 }
 
 #pragma clang diagnostic pop
