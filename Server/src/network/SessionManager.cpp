@@ -2,6 +2,7 @@
 // Created by FyS on 30/05/17.
 //
 
+#include <spdlog/spdlog.h>
 #include <TokenGenerator.hh>
 #include "SessionManager.hh"
 
@@ -30,7 +31,6 @@ void fys::network::SessionManager::connectionHandle(const fys::network::TcpConne
     this->_connectionsToken.at(i) = newToken;
     newConnection->setSessionIndex(i);
     newConnection->setCustomShutdownHandler([this, newToken]() { this->disconnectUser(newToken); });
-    std::cout << "index ->" << i <<std::endl;
 }
 
 void fys::network::SessionManager::disconnectUser(const fys::network::Token &token) {
@@ -38,12 +38,12 @@ void fys::network::SessionManager::disconnectUser(const fys::network::Token &tok
 
     for (; i < _connectionsToken.size(); ++i) {
         if (std::equal(_connectionsToken.at(i).begin(), _connectionsToken.at(i).end(), token.begin())) {
-            std::cout << "Disconnect user " << i << " from Session manager" << std::endl;
+            spdlog::get("c")->info("Disconnect user {} from Session manager", i);
             _connections.at(i) = nullptr;
             return;
         }
     }
-    std::cerr << "Couldn't find the specified user's token to disconnect" << std::endl;
+    spdlog::get("c")->error("Couldn't find the specified user's token to disconnect");
 }
 
 std::string fys::network::SessionManager::getConnectionToken(const uint indexInSession) const noexcept {

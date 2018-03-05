@@ -30,7 +30,7 @@ namespace fys::ws {
         Context(const Context&);
         Context(Context&&) noexcept;
 
-        friend std::ostream &operator<<(std::ostream &os, const Context &context);
+        void logContext();
 
         u_short getPort() const;
         const std::string &getBusIniFilePath() const;

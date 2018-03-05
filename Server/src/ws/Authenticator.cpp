@@ -29,7 +29,10 @@ void fys::ws::buslistener::Authenticator::operator()(mq::QueueContainer<pb::FySM
 }
 
 void fys::ws::buslistener::Authenticator::notifyServer(fys::pb::LoginMessage &&loginMessage) {
-    _ws->addWorldServerInCluster()
+    pb::NotifyServerIncoming notif;
+
+    loginMessage.content().UnpackTo(&notif);
+    _ws->connectAndAddWorldServerInCluster(notif.positionid(), notif.token(), notif.ip(), notif.port());
 }
 
 void fys::ws::buslistener::Authenticator::authPlayer(const uint indexSession, fys::pb::LoginMessage &&loginMessage) {

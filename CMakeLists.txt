@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.3)
 project(FreeSouls_World CXX)
 
 set(CMAKE_CXX_COMPILER /usr/bin/g++)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lprotobuf -lboost_timer -lboost_system -lboost_thread -lboost_date_time")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lprotobuf -lboost_timer -lboost_system -lboost_thread -lboost_date_time -pthread")
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
 
 set(CMAKE_CXX_STANDARD 17)
@@ -62,7 +62,8 @@ set(SOURCE_FILES_SRV
         Server/src/ws/tmx/Map.cpp
         Server/include/ws/tmx/Map.hh
         Server/src/network/ClusterManager.cpp
-        Server/include/network/ClusterManager.hh)
+        Server/include/network/ClusterManager.hh
+        )
 
 set(SOURCE_FILES_UTILS Utils/src/CheckVars.hh Utils/src/TokenGenerator.cpp Utils/src/TokenGenerator.hh)
 

@@ -2,6 +2,7 @@
 // Created by FyS on 26/05/17.
 //
 
+#include <spdlog/spdlog.h>
 #include <iostream>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
@@ -27,7 +28,7 @@ fys::ws::Context::Context(const int ac, const char *const *av) {
         TCLAP::ValueArg<u_short> changeGtwPort("s", "gport", "Listening Port for Gateway", false, 0, "integer");
         TCLAP::ValueArg<u_short> changeGtwIp("g", "gip", "IP of Gateway", false, 0, "string");
         TCLAP::ValueArg<std::size_t> changeThread("t", "thread", "Thread Numbers for listening", false, 0, "integer");
-        TCLAP::ValueArg<bool> verbose("v", "verbose", "Print logs on standard output", false, false, "boolean");
+        TCLAP::ValueArg<bool> verbose("v", "verbose", "Print logs on standard output", false, true, "boolean");
 
         cli.add(configPath);
         cli.add(changePort);
@@ -54,7 +55,6 @@ void fys::ws::Context::initializeFromIni(const std::string &iniPath) {
     boost::property_tree::ptree pt;
     boost::property_tree::read_ini(iniPath, pt);
 
-    std::cout << iniPath << " Context Initialization..." << std::endl;
     setPort(pt.get<u_short>(GTW_INI_PORT));
     setGtwPort(pt.get<u_short>(GTW_INI_GTW_PORT));
     setGtwIp(std::move(pt.get<std::string>(GTW_INI_GTW_IP)));
@@ -96,14 +96,10 @@ void fys::ws::Context::setQueuesSize(std::size_t _queuesSize) {
     Context::_queuesSize = _queuesSize;
 }
 
-std::ostream &fys::ws::operator<<(std::ostream &os, const fys::ws::Context &context) {
-    os << "Current Context -> _port: " << context._port  << " _gtwPort: " << context._gtwPort
-       << " _gtwIp" << context.getGtwIp() << " _asioThread: " << context._asioThread
-       << " _positionId: " << context._positionId << " _busIniFilePath: " << context._busIniFilePath
-       << " _queuesSize: " << context._queuesSize
-       << std::endl;
-    return os;
-}
+void fys::ws::Context::logContext() {
+    spdlog::get("c")->info("Current Context: [ port: {} , positionId: {}, asioThread: {}, busIniFilePath: {} ]",
+                           _port, _positionId, _asioThread, _busIniFilePath);
+};
 
 bool fys::ws::Context::isVerbose() const {
     return _verbose;
