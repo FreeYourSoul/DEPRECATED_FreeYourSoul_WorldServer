@@ -22,7 +22,8 @@ namespace fys::network {
 
         explicit SessionManager(const uint size);
 
-        std::string getConnectionToken(const uint indexInSession) const noexcept;
+        const std::string getConnectionToken(const uint indexInSession) const noexcept;
+        const std::string getIp(const uint indexInSession) const noexcept;
         std::pair<std::string, ushort> getConnectionData(const uint indexInSession) const noexcept;
         const uint addConnection(const TcpConnection::ptr& newConnection);
         void disconnectUser(const Token &);

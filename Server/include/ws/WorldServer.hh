@@ -40,11 +40,8 @@ namespace fys::ws {
         void connectAndAddWorldServerInCluster(const std::string &clusterKey, const std::string &token,
                                                const std::string &ip, const std::string &port);
 
-        void addIncomingPlayerInAcceptedIp(const std::string& futureIp, const network::Token& futureToken);
-        bool consumePlayerAcceptedToken(const std::string& futureIp, const network::Token& futureToken);
-
-        const network::SessionManager &getGamerConnections() const { return _gamerConnections; }
-        const network::SessionManager &getWorldServerCluster() const { return _worldServerCluster; }
+        network::PlayerManager &getGamerConnections() { return _gamerConnections; }
+        network::ClusterManager &getWorldServerCluster() { return _worldServerCluster; }
         const network::TcpConnection::uptr &getGtwConnection() const { return _gtwConnection; }
 
     private:

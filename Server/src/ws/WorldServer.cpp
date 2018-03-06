@@ -85,12 +85,4 @@ void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &
     });
 }
 
-void fys::ws::WorldServer::addIncomingPlayerInAcceptedIp(const std::string& futureIp, const network::Token& futureToken) {
-    _gamerConnections.addIncomingPlayer(futureIp, futureToken);
-}
-
-bool fys::ws::WorldServer::consumePlayerAcceptedToken(const std::string& futureIp, const network::Token& futureToken) {
-    return _gamerConnections.consumePlayerAcceptedToken(futureIp, futureToken);
-}
-
 #pragma clang diagnostic pop

@@ -46,7 +46,13 @@ void fys::network::SessionManager::disconnectUser(const fys::network::Token &tok
     spdlog::get("c")->error("Couldn't find the specified user's token to disconnect");
 }
 
-std::string fys::network::SessionManager::getConnectionToken(const uint indexInSession) const noexcept {
+const std::string fys::network::SessionManager::getIp(const uint indexInSession) const noexcept {
+    if (indexInSession < _connections.size())
+        return _connections.at(indexInSession)->getIpAddress();
+    return "";
+}
+
+const std::string fys::network::SessionManager::getConnectionToken(const uint indexInSession) const noexcept {
     if (indexInSession < _connectionsToken.size())
         return std::string(_connectionsToken.at(indexInSession).begin(), _connectionsToken.at(indexInSession).end());
     return "";

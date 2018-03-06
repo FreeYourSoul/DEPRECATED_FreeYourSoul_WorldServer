@@ -11,6 +11,10 @@ void fys::network::PlayerManager::addIncomingPlayer(const std::string &ipIncoPla
     _incomingPlayer[ipIncoPlayer] = tokenIncoPlayer;
 }
 
+const bool fys::network::PlayerManager::hasBeenAuthenticated(const uint indexInSession) const {
+    return _incomingPlayer.find(getIp(indexInSession)) != _incomingPlayer.end();
+}
+
 const uint fys::network::PlayerManager::addPlayerConnection(const fys::network::TcpConnection::ptr &newConnection) {
     auto findIt = _incomingPlayer.find(newConnection->getIpAddress());
 
@@ -21,7 +25,8 @@ const uint fys::network::PlayerManager::addPlayerConnection(const fys::network::
     return addConnection(newConnection);
 }
 
-const bool fys::network::PlayerManager::consumePlayerAcceptedToken(const std::string &ip, const Token &token) {
+const bool fys::network::PlayerManager::connectPlayerWithToken(const uint indexInSession, const Token &token) {
+    const std::string ip = getIp(indexInSession);
     auto findIt = _incomingPlayer.find(ip);
 
     if (findIt != _incomingPlayer.end()) {
@@ -29,7 +34,8 @@ const bool fys::network::PlayerManager::consumePlayerAcceptedToken(const std::st
             _incomingPlayer.erase(findIt);
             return true;
         }
-        spdlog::get("c")->warn("The given token is wrong for ip {}", ip);
+        disconnectUser(_incomingPlayer.at(ip));
+        spdlog::get("c")->warn("The given token is wrong for index {} ip {}", indexInSession, ip);
     }
     spdlog::get("c")->error("The given ip {} is not registered as accepted ip, "
                                     "this should have already been checked!", ip);

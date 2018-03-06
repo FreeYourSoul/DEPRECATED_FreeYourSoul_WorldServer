@@ -2,6 +2,7 @@
 // Created by FyS on 31/08/17.
 //
 
+#include <spdlog/spdlog.h>
 #include <FySAuthenticationResponse.pb.h>
 #include "Authenticator.hh"
 
@@ -42,13 +43,17 @@ void fys::ws::buslistener::Authenticator::notifyServer(fys::pb::LoginMessage &&l
 
 void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(uint indexSession, fys::pb::LoginMessage &&loginMsg) {
     pb::NotifyPlayerIncoming notif;
-    std::vector<char> data(notif.token().begin(), notif.token().end());
+    network::Token token(notif.token().begin(), notif.token().end());
 
     loginMsg.content().UnpackTo(&notif);
-    _ws->addIncomingPlayerInAcceptedIp(notif.ip(), data);
+    _ws->getGamerConnections().addIncomingPlayer(notif.ip(), token);
 }
 
 void fys::ws::buslistener::Authenticator::authPlayer(const uint indexSession, fys::pb::LoginMessage &&loginMessage) {
+    pb::LogingPlayerOnGame loginPlayerOnGame;
+    network::Token token(loginPlayerOnGame.tokengameserver().begin(), loginPlayerOnGame.tokengameserver().end());
 
+    loginMessage.content().UnpackTo(&loginPlayerOnGame);
+    _ws->getGamerConnections().connectPlayerWithToken(indexSession, token);
 }
 
