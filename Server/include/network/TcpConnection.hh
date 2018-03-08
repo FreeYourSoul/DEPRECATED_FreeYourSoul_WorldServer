@@ -63,7 +63,7 @@ namespace fys::network {
         uint _sessionIndex;
         boost::asio::ip::tcp::socket _socket;
 
-        static const int MESSAGE_BUFFER_SIZE = 100;
+        static const int MESSAGE_BUFFER_SIZE = 512;
         mutable u_char _buffer[MESSAGE_BUFFER_SIZE];
 
         std::function<void ()> _customShutdownHandler;

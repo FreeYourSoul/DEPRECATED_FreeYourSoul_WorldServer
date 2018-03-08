@@ -101,6 +101,14 @@ void welcome(bool verbose) {
 int main(int argc, const char * const *argv) {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
     try {
+
+        auto MyLogHandler = [] (google::protobuf::LogLevel level, const char* filename, int line, const std::string& message)
+        {
+            std::cout << "message " << message << std::endl;
+        };
+        google::protobuf::SetLogHandler(MyLogHandler);
+
+
         boost::asio::io_service ios;
         boost::asio::io_service::work work(ios);
         Context ctx(argc, argv);

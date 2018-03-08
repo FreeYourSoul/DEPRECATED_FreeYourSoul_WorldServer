@@ -49,8 +49,10 @@ void fys::ws::WorldServer::connectToGateway(const fys::ws::Context &ctx) {
             timer.expires_from_now(boost::posix_time::seconds(RETRY_TIMER));
             timer.wait();
             this->connectToGateway(ctx);
-        } else
+        } else {
+            _gtwConnection->readOnSocket(_fysBus);
             this->notifyGateway(ctx.getPositionId(), ctx.getPort());
+        }
     });
 }
 

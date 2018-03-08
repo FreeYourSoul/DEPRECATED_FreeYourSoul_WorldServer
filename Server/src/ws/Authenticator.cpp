@@ -50,6 +50,7 @@ void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(uint indexSession
 
     loginMsg.content().UnpackTo(&notif);
     _ws->getGamerConnections().addIncomingPlayer(notif.ip(), token);
+    spdlog::get("c")->warn("TESTING POINT > {}", loginMsg.ShortDebugString());
 }
 
 void fys::ws::buslistener::Authenticator::authPlayer(const uint indexSession, fys::pb::LoginMessage &&loginMessage) {

@@ -49,10 +49,10 @@ void fys::network::TcpConnection::handleRead(const boost::system::error_code &er
         message.ParseFromArray(_buffer, static_cast<int>(bytesTransferred));
         readOnSocket(fysBus);
         containerMsg.setIndexSession(this->_sessionIndex);
-        containerMsg.setContained(std::move(message));
         containerMsg.setOpCodeMsg(message.type());
         spdlog::get("c")->debug("Raw Message to read on bus :{} Container op code : {} bytetransfered : {} with index: {}",
                                 message.ShortDebugString(), containerMsg.getOpCodeMsg(), bytesTransferred, _sessionIndex);
+        containerMsg.setContained(std::move(message));
         fysBus->pushInBus(std::move(containerMsg));
     }
     else

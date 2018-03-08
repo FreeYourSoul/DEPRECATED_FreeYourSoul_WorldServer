@@ -57,9 +57,13 @@ set(SOURCE_FILES_SRV
         Server/include/ws/tmx/Map.hh
         Server/src/network/ClusterManager.cpp
         Server/include/network/ClusterManager.hh
-        Server/src/network/PlayerManager.cpp Server/include/network/PlayerManager.hh)
+        Server/src/network/PlayerManager.cpp
+        Server/include/network/PlayerManager.hh)
 
-set(SOURCE_FILES_UTILS Utils/src/CheckVars.hh Utils/src/TokenGenerator.cpp Utils/src/TokenGenerator.hh)
+set(SOURCE_FILES_UTILS
+        Utils/src/CheckVars.hh
+        Utils/src/TokenGenerator.cpp
+        Utils/src/TokenGenerator.hh)
 
 set(SOURCE_FILES_ALL
         ${SOURCE_FILES_UTILS}
