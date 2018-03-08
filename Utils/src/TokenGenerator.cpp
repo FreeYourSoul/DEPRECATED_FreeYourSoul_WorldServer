@@ -3,13 +3,12 @@
 //
 
 #include <iostream>
-#include <boost/lexical_cast.hpp>
 #include "TokenGenerator.hh"
 
 fys::utils::TokenGenerator *fys::utils::TokenGenerator::instance = nullptr;
 
 const std::string fys::utils::TokenGenerator::generate() const {
-    return boost::lexical_cast<std::string>((const_cast<TokenGenerator *>(this))->_generator());
+    return boost::uuids::to_string((const_cast<TokenGenerator *>(this))->_generator());
 }
 
 const std::vector<char> fys::utils::TokenGenerator::generateByte() {

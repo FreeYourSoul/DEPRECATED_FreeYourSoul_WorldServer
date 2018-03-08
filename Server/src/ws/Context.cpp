@@ -24,9 +24,9 @@ fys::ws::Context::Context(const int ac, const char *const *av) {
     try {
         TCLAP::CmdLine cli("WorldServer of Fys World Server Game", ' ', "1.0");
         TCLAP::ValueArg<std::string> configPath("c", "config", "Path of config file", false, "/home/FyS/ClionProjects/FreeYourSoul_WorldServer/Server/resource/worldserver.ini", "string");
-        TCLAP::ValueArg<u_short> changePort("p", "port", "Listening Port", false, 1337, "integer");
-        TCLAP::ValueArg<u_short> changeGtwPort("s", "gport", "Listening Port for Gateway", false, 0, "integer");
-        TCLAP::ValueArg<u_short> changeGtwIp("g", "gip", "IP of Gateway", false, 0, "string");
+        TCLAP::ValueArg<ushort> changePort("p", "port", "Listening Port", false, 1337, "integer");
+        TCLAP::ValueArg<ushort> changeGtwPort("s", "gport", "Listening Port for Gateway", false, 0, "integer");
+        TCLAP::ValueArg<ushort> changeGtwIp("g", "gip", "IP of Gateway", false, 0, "string");
         TCLAP::ValueArg<std::size_t> changeThread("t", "thread", "Thread Numbers for listening", false, 0, "integer");
         TCLAP::ValueArg<bool> verbose("v", "verbose", "Print logs on standard output", false, true, "boolean");
 
@@ -55,8 +55,8 @@ void fys::ws::Context::initializeFromIni(const std::string &iniPath) {
     boost::property_tree::ptree pt;
     boost::property_tree::read_ini(iniPath, pt);
 
-    setPort(pt.get<u_short>(GTW_INI_PORT));
-    setGtwPort(pt.get<u_short>(GTW_INI_GTW_PORT));
+    setPort(pt.get<ushort>(GTW_INI_PORT));
+    setGtwPort(pt.get<ushort>(GTW_INI_GTW_PORT));
     setGtwIp(std::move(pt.get<std::string>(GTW_INI_GTW_IP)));
     setAsioThread(pt.get<std::size_t>(GTW_INI_ASIO_THREADS));
     setBusIniFilePath(std::move(pt.get<std::string>(GTW_INI_BUS_PATH)));
@@ -64,11 +64,11 @@ void fys::ws::Context::initializeFromIni(const std::string &iniPath) {
     setPositionId(pt.get<std::string>(GTW_MAP_POSITIONID));
 }
 
-u_short fys::ws::Context::getPort() const {
+ushort fys::ws::Context::getPort() const {
     return _port;
 }
 
-void fys::ws::Context::setPort(const u_short port) {
+void fys::ws::Context::setPort(const ushort port) {
     Context::_port = port;
 }
 
@@ -109,11 +109,11 @@ void fys::ws::Context::setVerbose(bool _verbose) {
     Context::_verbose = _verbose;
 }
 
-u_short fys::ws::Context::getGtwPort() const {
+ushort fys::ws::Context::getGtwPort() const {
     return _gtwPort;
 }
 
-void fys::ws::Context::setGtwPort(u_short gtwPort) {
+void fys::ws::Context::setGtwPort(ushort gtwPort) {
     Context::_gtwPort = gtwPort;
 }
 

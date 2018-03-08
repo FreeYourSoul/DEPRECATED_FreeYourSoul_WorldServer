@@ -39,8 +39,16 @@ namespace fys::network {
         void setSessionIndex(uint _sessionIndex);
 
         uint getSessionIndex() const;
+        /**
+         * \brief Get the remoge ip address
+         * \return
+         */
         std::string getIpAddress() const;
-        ushort  getPort() const;
+        /**
+         * \brief Get the remote port
+         * \return remote port
+         */
+        ushort getPort() const;
 
 
     private:

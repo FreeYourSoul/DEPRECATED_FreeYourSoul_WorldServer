@@ -32,20 +32,20 @@ namespace fys::ws {
 
         void logContext();
 
-        u_short getPort() const;
+        ushort getPort() const;
         const std::string &getBusIniFilePath() const;
         std::size_t getQueuesSize() const;
         size_t getAsioThread() const;
-        u_short getGtwPort() const;
+        ushort getGtwPort() const;
         bool isVerbose() const;
         const std::string &getGtwIp() const;
 
         void setBusIniFilePath(std::string &&busIniFilePath) noexcept;
-        void setPort(u_short port);
+        void setPort(ushort port);
         void setAsioThread(size_t asioThread);
         void setVerbose(bool verbose);
         void setQueuesSize(std::size_t queuesSize);
-        void setGtwPort(u_short gtwPort);
+        void setGtwPort(ushort gtwPort);
         void setGtwIp(std::string&& gtwIp) noexcept;
 
         const std::string &getPositionId() const;
@@ -56,8 +56,8 @@ namespace fys::ws {
         void initializeFromIni(const std::string &iniPath);
 
     private:
-        u_short _port;
-        u_short _gtwPort;
+        ushort _port;
+        ushort _gtwPort;
         std::string _gtwIp;
         std::size_t _asioThread;
         std::string _busIniFilePath;

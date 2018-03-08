@@ -53,10 +53,11 @@ namespace fys::ws {
 
         network::PlayerManager &getGamerConnections() { return _gamerConnections; }
         network::ClusterManager &getWorldServerCluster() { return _worldServerCluster; }
+
         const std::unique_ptr<network::TcpConnection> &getGtwConnection() const { return _gtwConnection; }
 
     private:
-        void notifyGateway(const std::string &id) const;
+        void notifyGateway(const std::string &id, const ushort port) const;
 
     private:
         boost::asio::io_service &_ios;

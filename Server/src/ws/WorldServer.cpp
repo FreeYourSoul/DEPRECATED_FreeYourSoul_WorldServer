@@ -50,16 +50,17 @@ void fys::ws::WorldServer::connectToGateway(const fys::ws::Context &ctx) {
             timer.wait();
             this->connectToGateway(ctx);
         } else
-            this->notifyGateway(ctx.getPositionId());
+            this->notifyGateway(ctx.getPositionId(), ctx.getPort());
     });
 }
 
-void fys::ws::WorldServer::notifyGateway(const std::string &id) const {
+void fys::ws::WorldServer::notifyGateway(const std::string &id, const ushort port) const {
     fys::pb::FySMessage msg;
     fys::pb::LoginMessage loginMsg;
     fys::pb::LoginGameServer gameServerMessage;
 
     gameServerMessage.set_isworldserver(true);
+    gameServerMessage.set_portforplayer(std::to_string(port));
     gameServerMessage.set_magicpassword(std::string(MAGIC_PASSWORD).append(id));
     loginMsg.set_typemessage(fys::pb::LoginMessage_Type_LoginGameServer);
     loginMsg.mutable_content()->PackFrom(gameServerMessage);
