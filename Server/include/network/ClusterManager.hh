@@ -13,7 +13,7 @@ namespace fys::network {
     public:
         ClusterManager(const uint size);
 
-        uint addConnectionInCluster(const std::string& clusterKey, const fys::network::TcpConnection::ptr &newConnection);
+        uint addConnectionInCluster(const std::string& clusterKey, const std::shared_ptr<TcpConnection> &newConnection);
 
     private:
         std::vector<std::string> _clusterKey;

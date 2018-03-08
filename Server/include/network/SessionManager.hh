@@ -6,11 +6,20 @@
 #define FREESOULS_CONNECTIONMANAGER_HH
 
 #include <zconf.h>
-#include <list>
-#include <FySMessage.pb.h>
-#include "TcpConnection.hh"
+#include <vector>
+
+// forward declarations
+namespace fys {
+    namespace pb {
+        class FySResponseMessage;
+    }
+    namespace network {
+        class TcpConnection;
+    }
+}
 
 namespace fys::network {
+
     using Token = std::vector<char>;
 
     class SessionManager {
@@ -25,16 +34,16 @@ namespace fys::network {
         const std::string getConnectionToken(const uint indexInSession) const noexcept;
         const std::string getIp(const uint indexInSession) const noexcept;
         std::pair<std::string, ushort> getConnectionData(const uint indexInSession) const noexcept;
-        const uint addConnection(const TcpConnection::ptr& newConnection);
+        const uint addConnection(const std::shared_ptr<TcpConnection>& newConnection);
         void disconnectUser(const Token &);
 
         void sendResponse(uint i, pb::FySResponseMessage &&message) const noexcept;
 
     private:
-        inline void connectionHandle(const fys::network::TcpConnection::ptr &newConnection, const uint i);
+        inline void connectionHandle(const std::shared_ptr<TcpConnection> &newConnection, const uint i);
 
     private:
-        std::vector<fys::network::TcpConnection::ptr> _connections;
+        std::vector<std::shared_ptr<TcpConnection>> _connections;
         std::vector<Token > _connectionsToken;
     };
 

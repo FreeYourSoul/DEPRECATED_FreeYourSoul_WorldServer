@@ -7,13 +7,23 @@
 
 #include <boost/asio/ip/tcp.hpp>
 #include <SessionManager.hh>
-#include <FysBus.hh>
-#include <TcpConnection.hh>
 #include <Context.hh>
-#include <FySMessage.pb.h>
 #include <Map.hh>
 #include <ClusterManager.hh>
 #include <PlayerManager.hh>
+
+namespace fys {
+    namespace mq {
+        template<typename T, int U>
+        class FysBus;
+    }
+    namespace pb {
+        class FySMessage;
+    }
+    namespace network {
+        class TcpConnection;
+    }
+}
 
 namespace fys::ws {
 
@@ -27,10 +37,11 @@ namespace fys::ws {
     public:
         ~WorldServer();
         WorldServer(const Context &, boost::asio::io_service&,
-                    fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>::ptr&);
+                    std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> >&);
 
-        static inline ptr create(const Context &ctx, boost::asio::io_service &ios,
-                                 fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>::ptr &fysBus) {
+        static inline
+        ptr create(const Context &ctx, boost::asio::io_service &ios,
+                   std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > &fysBus) {
             return std::make_shared<WorldServer>(ctx, ios, fysBus);
         }
 
@@ -42,7 +53,7 @@ namespace fys::ws {
 
         network::PlayerManager &getGamerConnections() { return _gamerConnections; }
         network::ClusterManager &getWorldServerCluster() { return _worldServerCluster; }
-        const network::TcpConnection::uptr &getGtwConnection() const { return _gtwConnection; }
+        const std::unique_ptr<network::TcpConnection> &getGtwConnection() const { return _gtwConnection; }
 
     private:
         void notifyGateway(const std::string &id) const;
@@ -50,11 +61,11 @@ namespace fys::ws {
     private:
         boost::asio::io_service &_ios;
         boost::asio::ip::tcp::acceptor _acceptorPlayer;
-        fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>::ptr _fysBus;
+        std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>> _fysBus;
 
         network::PlayerManager _gamerConnections;
         network::ClusterManager _worldServerCluster;
-        network::TcpConnection::uptr _gtwConnection;
+        std::unique_ptr<network::TcpConnection> _gtwConnection;
 
         std::vector<fys::ws::Map> _map;
     };

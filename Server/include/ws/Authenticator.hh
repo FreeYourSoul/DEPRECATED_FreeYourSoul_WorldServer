@@ -5,9 +5,22 @@
 #ifndef FREESOULS_AUTHENTICATION_HH
 #define FREESOULS_AUTHENTICATION_HH
 
-#include <FySMessage.pb.h>
-#include <FySAuthenticationLoginMessage.pb.h>
-#include "WorldServer.hh"
+#include <QueueContainer.hh>
+
+//forward declarations
+namespace fys {
+    namespace mq {
+        template<typename T>
+        class QueueContainer;
+    }
+    namespace pb {
+        class FySMessage;
+        class LoginMessage;
+    }
+    namespace ws {
+        class WorldServer;
+    }
+}
 
 namespace fys::ws::buslistener {
 
@@ -21,7 +34,7 @@ namespace fys::ws::buslistener {
     public:
         enum { IndexInBus = 0 };
 
-        explicit Authenticator(WorldServer::ptr&);
+        explicit Authenticator(std::shared_ptr<WorldServer>&);
 
         void operator()(mq::QueueContainer<fys::pb::FySMessage> msg);
 
@@ -50,7 +63,7 @@ namespace fys::ws::buslistener {
         void authPlayer(const uint indexSession, pb::LoginMessage &&loginMessage);
 
     private:
-        WorldServer::ptr _ws;
+        std::shared_ptr<WorldServer> _ws;
 
 
     };

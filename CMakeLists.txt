@@ -31,12 +31,6 @@ include_directories(
 
 set(SOURCE_FILES_MM)
 
-set(SOURCE_PROTOBUF
-        cmake-build-debug/Protobuf/FySMessage.pb.cc
-        cmake-build-debug/Protobuf/FySAuthenticationLoginMessage.pb.cc
-        cmake-build-debug/Protobuf/FySAuthenticationResponse.pb.cc
-)
-
 set(SOURCE_FILES_MQ
         FySMQ/include/queue/LockFreeQueue.hh
         FySMQ/include/queue/QueueContainer.hh
@@ -68,7 +62,6 @@ set(SOURCE_FILES_SRV
 set(SOURCE_FILES_UTILS Utils/src/CheckVars.hh Utils/src/TokenGenerator.cpp Utils/src/TokenGenerator.hh)
 
 set(SOURCE_FILES_ALL
-        ${SOURCE_PROTOBUF}
         ${SOURCE_FILES_UTILS}
         ${SOURCE_FILES_MQ}
         ${SOURCE_FILES_MM}

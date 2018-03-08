@@ -3,7 +3,10 @@
 //
 
 #include <spdlog/spdlog.h>
+#include <FySAuthenticationLoginMessage.pb.h>
 #include <FySAuthenticationResponse.pb.h>
+#include <FySMessage.pb.h>
+#include <WorldServer.hh>
 #include "Authenticator.hh"
 
 fys::ws::buslistener::Authenticator::Authenticator(WorldServer::ptr& gtw) : _ws(gtw)

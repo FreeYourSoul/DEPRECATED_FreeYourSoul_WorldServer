@@ -9,6 +9,9 @@
 
 namespace fys::network {
 
+    // forward declaration
+    class TcpConnection;
+
     class PlayerManager : public SessionManager {
 
     public:
@@ -26,7 +29,7 @@ namespace fys::network {
          * \param newConnection
          * \return
          */
-        const uint addPlayerConnection(const TcpConnection::ptr& newConnection);
+        const uint addPlayerConnection(const std::shared_ptr<TcpConnection>& newConnection);
         /**
          * \brief Check if the token corresponding to the given ip is correct and connect the user
          * \note Connect the user thanks to the given token. This token has to match the one given during the incoming
@@ -38,7 +41,7 @@ namespace fys::network {
          */
         const bool connectPlayerWithToken(const uint indexInSession, const Token &token);
 
-        const bool hasBeenAuthenticated(const uint indexInSession) const;
+        const bool isAuthenticated(const uint indexInSession) const;
 
     private:
         std::unordered_map<std::string, Token> _incomingPlayer;

@@ -8,6 +8,7 @@
 #include <spdlog/spdlog.h>
 #include <WorldServer.hh>
 #include <FySAuthenticationLoginMessage.pb.h>
+#include <TcpConnection.hh>
 
 static constexpr int RETRY_TIMER = 5;
 static constexpr char MAGIC_PASSWORD[] = "42Magic42FyS";
@@ -15,7 +16,7 @@ static constexpr char MAGIC_PASSWORD[] = "42Magic42FyS";
 fys::ws::WorldServer::~WorldServer() = default;
 
 fys::ws::WorldServer::WorldServer(const fys::ws::Context &ctx, boost::asio::io_service &ios,
-                                  fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>::ptr &fysBus) :
+                                  std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > &fysBus) :
         _ios(ios),
         _acceptorPlayer(_ios, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), ctx.getPort())),
         _fysBus(fysBus),

@@ -99,7 +99,7 @@ void fys::ws::Context::setQueuesSize(std::size_t _queuesSize) {
 void fys::ws::Context::logContext() {
     spdlog::get("c")->info("Current Context: [ port: {} , positionId: {}, asioThread: {}, busIniFilePath: {} ]",
                            _port, _positionId, _asioThread, _busIniFilePath);
-};
+}
 
 bool fys::ws::Context::isVerbose() const {
     return _verbose;

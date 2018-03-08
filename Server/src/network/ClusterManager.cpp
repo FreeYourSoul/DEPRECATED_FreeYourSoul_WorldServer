@@ -2,6 +2,7 @@
 // Created by FyS on 04/03/18.
 //
 
+#include <TcpConnection.hh>
 #include "ClusterManager.hh"
 
 fys::network::ClusterManager::ClusterManager(const uint size) : SessionManager(size) {}
