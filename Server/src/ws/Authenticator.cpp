@@ -46,6 +46,7 @@ void fys::ws::buslistener::Authenticator::notifyServer(fys::pb::LoginMessage &&l
 
 void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(uint indexSession, fys::pb::LoginMessage &&loginMsg) {
     pb::NotifyPlayerIncoming notif;
+    loginMsg.content().UnpackTo(&notif);
     network::Token token(notif.token().begin(), notif.token().end());
 
     loginMsg.content().UnpackTo(&notif);

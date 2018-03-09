@@ -75,7 +75,7 @@ void fys::ws::WorldServer::notifyGateway(const std::string &id, const ushort por
 
 void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &clusterKey, const std::string &token,
                                                              const std::string &ip, const std::string &port) {
-    spdlog::get("c")->info("Connect and add a new WorldServer in cluster: ip {}, on port {}", ip, port);
+    spdlog::get("c")->info("Connect and add a new WorldServer in cluster: ip {}, on port {} with token {}", ip, port, token);
     boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(ip),
                                             static_cast<unsigned short>(std::stoul(port)));
     network::TcpConnection::ptr clusterMemberConnection = network::TcpConnection::create(_ios);

@@ -35,7 +35,7 @@ const bool fys::network::PlayerManager::connectPlayerWithToken(const uint indexI
             _incomingPlayer.erase(findIt);
             return true;
         }
-        disconnectUser(_incomingPlayer.at(ip));
+        disconnectUser(indexInSession, _incomingPlayer.at(ip));
         spdlog::get("c")->warn("The given token is wrong for index {} ip {}", indexInSession, ip);
     }
     spdlog::get("c")->error("The given ip {} is not registered as accepted ip, "

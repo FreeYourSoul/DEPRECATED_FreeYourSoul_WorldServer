@@ -35,7 +35,7 @@ namespace fys::network {
         const std::string getIp(const uint indexInSession) const noexcept;
         std::pair<std::string, ushort> getConnectionData(const uint indexInSession) const noexcept;
         const uint addConnection(const std::shared_ptr<TcpConnection>& newConnection);
-        void disconnectUser(const Token &);
+        void disconnectUser(const uint , const Token &);
 
         void sendResponse(uint i, pb::FySResponseMessage &&message) const noexcept;
 
