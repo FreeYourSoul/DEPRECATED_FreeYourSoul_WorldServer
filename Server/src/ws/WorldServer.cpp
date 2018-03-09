@@ -16,10 +16,10 @@ static constexpr char MAGIC_PASSWORD[] = "42Magic42FyS";
 fys::ws::WorldServer::~WorldServer() = default;
 
 fys::ws::WorldServer::WorldServer(const fys::ws::Context &ctx, boost::asio::io_service &ios,
-                                  std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > &fysBus) :
+                                  std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > fysBus) :
         _ios(ios),
         _acceptorPlayer(_ios, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), ctx.getPort())),
-        _fysBus(fysBus),
+        _fysBus(std::move(fysBus)),
         _gamerConnections(1000),
         _worldServerCluster(10),
         _gtwConnection(std::make_unique<fys::network::TcpConnection>(ios)) {}
@@ -29,11 +29,11 @@ void fys::ws::WorldServer::runPlayerAccept() {
 
     _acceptorPlayer.async_accept(session->getSocket(),
 
-                                 [this, session](const boost::system::error_code &e) {
-                                     session->readOnSocket(_fysBus);
-                                     this->_gamerConnections.addPlayerConnection(session);
-                                     this->runPlayerAccept();
-                                 }
+             [this, session](const boost::system::error_code &e) {
+                 this->_gamerConnections.addPlayerConnection(session);
+                 session->readOnSocket(_fysBus);
+                 this->runPlayerAccept();
+             }
 
     );
 }

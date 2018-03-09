@@ -25,7 +25,7 @@ void fys::network::TcpConnection::send(google::protobuf::Message&& msg) {
                              [this](const boost::system::error_code& ec, std::size_t bytesTransferred) {
                                  spdlog::get("c")->debug("Writting response : {}", bytesTransferred);
                                  if (((boost::asio::error::eof == ec) || (boost::asio::error::connection_reset == ec)) && !_isShuttingDown) {
-                                     spdlog::get("c")->debug("An Error Occured during writting");
+                                     spdlog::get("c")->debug("An Error Occurred during witting");
                                      shuttingConnectionDown();
                                  }
                              }
@@ -33,9 +33,9 @@ void fys::network::TcpConnection::send(google::protobuf::Message&& msg) {
 }
 
 void fys::network::TcpConnection::readOnSocket(fys::mq::FysBus<pb::FySMessage, ws::BUS_QUEUES_SIZE>::ptr &fysBus) {
-    std::fill(_buffer, _buffer + MESSAGE_BUFFER_SIZE, 0);
+    std::memset(_buffer, 0, MESSAGE_BUFFER_SIZE);
     _socket.async_read_some(boost::asio::buffer(_buffer, MESSAGE_BUFFER_SIZE),
-                            [this, &fysBus](boost::system::error_code ec, const std::size_t byteTransferred) {
+                            [this, fysBus](boost::system::error_code ec, const std::size_t byteTransferred) {
                                 this->handleRead(ec, byteTransferred, fysBus);
                             });
 }

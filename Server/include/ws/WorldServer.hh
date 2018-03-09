@@ -37,11 +37,11 @@ namespace fys::ws {
     public:
         ~WorldServer();
         WorldServer(const Context &, boost::asio::io_service&,
-                    std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> >&);
+                    std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> >);
 
         static inline
         ptr create(const Context &ctx, boost::asio::io_service &ios,
-                   std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > &fysBus) {
+                   std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > fysBus) {
             return std::make_shared<WorldServer>(ctx, ios, fysBus);
         }
 
@@ -62,7 +62,7 @@ namespace fys::ws {
     private:
         boost::asio::io_service &_ios;
         boost::asio::ip::tcp::acceptor _acceptorPlayer;
-        std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>> _fysBus;
+        std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > _fysBus;
 
         network::PlayerManager _gamerConnections;
         network::ClusterManager _worldServerCluster;

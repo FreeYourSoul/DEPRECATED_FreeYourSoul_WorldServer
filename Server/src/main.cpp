@@ -121,12 +121,12 @@ int main(int argc, const char * const *argv) {
 
         authenticatorListener.launchListenThread(fysBus);
         ::sleep(1);
-        worldServer->connectToGateway(ctx);
         worldServer->runPlayerAccept();
+        worldServer->connectToGateway(ctx);
         ios.run();
     }
     catch (std::exception &e) {
-        std::cerr << e.what() << std::endl;
+        spdlog::get("c")->error("Exception on the main {}", e.what());
     }
     google::protobuf::ShutdownProtobufLibrary();
     return 0;
