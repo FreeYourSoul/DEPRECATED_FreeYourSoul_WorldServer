@@ -54,7 +54,7 @@ namespace fys::ws::buslistener {
          * \param indexSession
          * \param loginMsg
          */
-        void notifyPlayerIncoming(uint indexSession, pb::LoginMessage &&loginMsg);
+        void notifyPlayerIncoming(const uint indexSession, pb::LoginMessage &&loginMsg);
         /**
          * Authenticate a player in the current world server instance
          * \param indexSession in the player session manager to root reply

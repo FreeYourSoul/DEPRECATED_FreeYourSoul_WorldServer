@@ -44,7 +44,7 @@ void fys::ws::buslistener::Authenticator::notifyServer(fys::pb::LoginMessage &&l
     _ws->connectAndAddWorldServerInCluster(notif.positionid(), notif.token(), notif.ip(), notif.port());
 }
 
-void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(uint indexSession, fys::pb::LoginMessage &&loginMsg) {
+void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(const uint indexSession, fys::pb::LoginMessage &&loginMsg) {
     pb::NotifyPlayerIncoming notif;
     loginMsg.content().UnpackTo(&notif);
     network::Token token(notif.token().begin(), notif.token().end());
