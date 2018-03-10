@@ -3,10 +3,12 @@
 //
 
 #include <spdlog/spdlog.h>
+#include <FySMessage.pb.h>
 #include <boost/asio.hpp>
 #include <iostream>
 #include <WorldServer.hh>
 #include <bitset>
+#include <FysBus.hh>
 #include "TcpConnection.hh"
 
 fys::network::TcpConnection::TcpConnection(boost::asio::io_service& io_service) : _isShuttingDown(false), _socket(io_service) {
@@ -21,11 +23,10 @@ void fys::network::TcpConnection::send(google::protobuf::Message&& msg) {
     std::ostream os(&b);
     msg.SerializeToOstream(&os);
 
-    spdlog::get("c")->debug("Writing message on socket : {}", msg.ShortDebugString());
     _socket.async_write_some(b.data(),
                              [this](const boost::system::error_code& ec, std::size_t bytesTransferred) {
                                  if (ec && !_isShuttingDown) {
-                                     spdlog::get("c")->debug("An Error Occurred during writing");
+                                     spdlog::get("c")->debug("An Error Occurred during writing {}", ec.message());
                                      shuttingConnectionDown();
                                  }
                              }

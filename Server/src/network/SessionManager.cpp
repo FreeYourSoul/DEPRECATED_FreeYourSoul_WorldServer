@@ -3,6 +3,7 @@
 //
 
 #include <spdlog/spdlog.h>
+#include <FySMessage.pb.h>
 #include <TokenGenerator.hh>
 #include <TcpConnection.hh>
 #include "SessionManager.hh"

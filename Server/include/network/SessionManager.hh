@@ -44,7 +44,7 @@ namespace fys::network {
 
     private:
         std::vector<std::shared_ptr<TcpConnection>> _connections;
-        std::vector<Token > _connectionsToken;
+        std::vector<Token> _connectionsToken;
     };
 
 }

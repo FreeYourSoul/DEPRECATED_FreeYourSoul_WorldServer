@@ -8,9 +8,13 @@
 #include <spdlog/spdlog.h>
 #include <WorldServer.hh>
 #include <FySAuthenticationLoginMessage.pb.h>
+#include <FySMessage.pb.h>
 #include <TcpConnection.hh>
 
-static constexpr int RETRY_TIMER = 5;
+/**
+ * Timer between re-connection attempt on the Gateway
+ */
+static constexpr int RETRY_TIMER = 10;
 static constexpr char MAGIC_PASSWORD[] = "42Magic42FyS";
 
 fys::ws::WorldServer::~WorldServer() = default;
