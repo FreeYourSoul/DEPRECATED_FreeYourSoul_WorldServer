@@ -39,16 +39,23 @@ void fys::ws::WorldServer::runPlayerAccept() {
 }
 
 void fys::ws::WorldServer::connectToGateway(const fys::ws::Context &ctx) {
+    static std::once_flag of = {};
     spdlog::get("c")->info("Connect to the gateway on host: {}, with port: {}", ctx.getGtwIp(), ctx.getGtwPort());
     boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(ctx.getGtwIp()), ctx.getGtwPort());
 
-    _gtwConnection->getSocket().async_connect(endpoint, [this, &ctx](const boost::system::error_code &error) {
-        if (error) {
+    std::call_once(of, [this, &ctx](){
+        auto disconnectionHandler = [this, &ctx]() {
             boost::asio::deadline_timer timer(_ios);
             spdlog::get("c")->warn("An Error occurred while trying to connect to the gateway, retry in progress");
             timer.expires_from_now(boost::posix_time::seconds(RETRY_TIMER));
             timer.wait();
             this->connectToGateway(ctx);
+        };
+        _gtwConnection->setCustomShutdownHandler(disconnectionHandler);
+    });
+    _gtwConnection->getSocket().async_connect(endpoint, [this, &ctx](const boost::system::error_code &error) {
+        if (error) {
+            _gtwConnection->getCustomShutdownHandler()();
         } else {
             _gtwConnection->readOnSocket(_fysBus);
             this->notifyGateway(ctx.getPositionId(), ctx.getPort());
@@ -70,7 +77,7 @@ void fys::ws::WorldServer::notifyGateway(const std::string &id, const ushort por
     msg.mutable_content()->PackFrom(loginMsg);
     _gtwConnection->send(std::move(msg));
 
-    spdlog::get("c")->debug("Gateway has been notified of connection: {}", msg.ShortDebugString());
+    spdlog::get("c")->debug("Connection with gateway successful, the Gateway has been notified of connection: {}", msg.ShortDebugString());
 }
 
 void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &clusterKey, const std::string &token,

@@ -38,6 +38,7 @@ namespace fys::network {
         void setCustomShutdownHandler(const std::function<void()> &customShutdownHandler);
         void setSessionIndex(uint _sessionIndex);
 
+        const std::function<void()> &getCustomShutdownHandler() const;
         uint getSessionIndex() const;
         /**
          * \brief Get the remoge ip address
@@ -52,7 +53,6 @@ namespace fys::network {
 
 
     private:
-
         void shuttingConnectionDown();
 
         void handleRead(const boost::system::error_code &error, size_t bytesTransferred,

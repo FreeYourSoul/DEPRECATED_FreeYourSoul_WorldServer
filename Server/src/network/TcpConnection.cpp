@@ -21,11 +21,11 @@ void fys::network::TcpConnection::send(google::protobuf::Message&& msg) {
     std::ostream os(&b);
     msg.SerializeToOstream(&os);
 
+    spdlog::get("c")->debug("Writing message on socket : {}", msg.ShortDebugString());
     _socket.async_write_some(b.data(),
                              [this](const boost::system::error_code& ec, std::size_t bytesTransferred) {
-                                 spdlog::get("c")->debug("Writting response : {}", bytesTransferred);
-                                 if (((boost::asio::error::eof == ec) || (boost::asio::error::connection_reset == ec)) && !_isShuttingDown) {
-                                     spdlog::get("c")->debug("An Error Occurred during witting");
+                                 if (ec && !_isShuttingDown) {
+                                     spdlog::get("c")->debug("An Error Occurred during writing");
                                      shuttingConnectionDown();
                                  }
                              }
@@ -70,6 +70,7 @@ void fys::network::TcpConnection::shuttingConnectionDown() {
             _socket.close();
         }
         catch (std::exception &) {}
+        _isShuttingDown = false;
     }
 }
 
@@ -91,4 +92,8 @@ std::string fys::network::TcpConnection::getIpAddress() const {
 
 ushort fys::network::TcpConnection::getPort() const {
     return _socket.remote_endpoint().port();
+}
+
+const std::function<void()> &fys::network::TcpConnection::getCustomShutdownHandler() const {
+    return _customShutdownHandler;
 }
