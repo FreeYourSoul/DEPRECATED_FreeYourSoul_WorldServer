@@ -20,75 +20,74 @@ add_subdirectory(Protobuf)
 
 include_directories(
         ${TMXLITE_INCLUDE_DIR}
-        cmake-build-debug/Protobuf
-        FySMQ/include/queue
-        FySMQ/include/bus
-        FySMemoryManager/include
-        Server/include/ws
-        Server/include/ws/tmx
-        Server/include/network
-        Server/include/game Utils/src)
+        ${CMAKE_SOURCE_DIR}/cmake-build-debug/Protobuf
+        ${CMAKE_SOURCE_DIR}/FySMQ/include/queue
+        ${CMAKE_SOURCE_DIR}/FySMQ/include/bus
+        ${CMAKE_SOURCE_DIR}/FySMemoryManager/include
+        ${CMAKE_SOURCE_DIR}/Server/include/ws
+        ${CMAKE_SOURCE_DIR}/Server/include/ws/tmx
+        ${CMAKE_SOURCE_DIR}/Server/include/network
+        ${CMAKE_SOURCE_DIR}/Server/include/game Utils/src)
 
 set(SOURCE_FILES_MM)
 
 set(SOURCE_FILES_MQ
-        FySMQ/include/queue/LockFreeQueue.hh
-        FySMQ/include/queue/QueueContainer.hh
-        FySMQ/include/queue/LockingQueue.hh
-        FySMQ/include/bus/BusListener.hh
-        FySMQ/include/bus/FysBus.hh)
+        ${CMAKE_SOURCE_DIR}/FySMQ/include/queue/LockFreeQueue.hh
+        ${CMAKE_SOURCE_DIR}/FySMQ/include/queue/QueueContainer.hh
+        ${CMAKE_SOURCE_DIR}/FySMQ/include/queue/LockingQueue.hh
+        ${CMAKE_SOURCE_DIR}/FySMQ/include/bus/BusListener.hh
+        ${CMAKE_SOURCE_DIR}/FySMQ/include/bus/FysBus.hh)
 
 set(SOURCE_FILES_SRV
-        Server/src/ws/WorldServer.cpp
-        Server/include/ws/WorldServer.hh
-        Server/src/ws/Context.cpp
-        Server/include/ws/Context.hh
-        Server/src/network/SessionManager.cpp
-        Server/include/network/SessionManager.hh
-        Server/src/network/TcpConnection.cpp
-        Server/include/network/TcpConnection.hh
-        Server/src/ws/GameServerInstance.cpp
-        Server/include/ws/GameServerInstance.hh
-        Server/src/ws/Authenticator.cpp
-        Server/include/ws/Authenticator.hh
-        Server/src/ws/tmx/MapBuilder.cpp
-        Server/include/ws/tmx/MapBuilder.hh
-        Server/src/ws/tmx/Map.cpp
-        Server/include/ws/tmx/Map.hh
-        Server/src/network/ClusterManager.cpp
-        Server/include/network/ClusterManager.hh
-        Server/src/network/PlayerManager.cpp
-        Server/include/network/PlayerManager.hh)
+        ${CMAKE_SOURCE_DIR}/Server/src/ws/WorldServer.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/ws/WorldServer.hh
+        ${CMAKE_SOURCE_DIR}/Server/src/ws/Context.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/ws/Context.hh
+        ${CMAKE_SOURCE_DIR}/Server/src/network/SessionManager.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/network/SessionManager.hh
+        ${CMAKE_SOURCE_DIR}/Server/src/network/TcpConnection.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/network/TcpConnection.hh
+        ${CMAKE_SOURCE_DIR}/Server/src/ws/GameServerInstance.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/ws/GameServerInstance.hh
+        ${CMAKE_SOURCE_DIR}/Server/src/ws/Authenticator.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/ws/Authenticator.hh
+        ${CMAKE_SOURCE_DIR}/Server/src/ws/tmx/MapBuilder.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/ws/tmx/MapBuilder.hh
+        ${CMAKE_SOURCE_DIR}/Server/src/ws/tmx/Map.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/ws/tmx/Map.hh
+        ${CMAKE_SOURCE_DIR}/Server/src/network/ClusterManager.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/network/ClusterManager.hh
+        ${CMAKE_SOURCE_DIR}/Server/src/network/PlayerManager.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/network/PlayerManager.hh)
 
 set(SOURCE_FILES_UTILS
-        Utils/src/CheckVars.hh
-        Utils/src/TokenGenerator.cpp
-        Utils/src/TokenGenerator.hh)
+        ${CMAKE_SOURCE_DIR}/Utils/src/CheckVars.hh
+        ${CMAKE_SOURCE_DIR}/Utils/src/TokenGenerator.cpp
+        ${CMAKE_SOURCE_DIR}/Utils/src/TokenGenerator.hh)
 
 set(SOURCE_FILES_ALL
+        ${SOURCE_PROTOBUF}
         ${SOURCE_FILES_UTILS}
         ${SOURCE_FILES_MQ}
         ${SOURCE_FILES_MM}
         ${SOURCE_FILES_SRV})
 
 set(SOURCE_FILES
-        ${SOURCE_FILES_ALL})
+        ${SOURCE_FILES_ALL}
+        ${CMAKE_SOURCE_DIR}/Server/src/main.cpp
+        )
 
 set(SOURCE_FILES_TEST
         ${SOURCE_FILES_ALL}
-        FySMQ/test/TestUnitMQ.cpp
-        Utils/test/TestCheckVar.cpp
+        ${CMAKE_SOURCE_DIR}/FySMQ/test/TestUnitMQ.cpp
+        ${CMAKE_SOURCE_DIR}/Utils/test/TestCheckVar.cpp
         )
 
-### Server ###
-add_executable(FreeSouls_World ${SOURCE_FILES} Server/src/main.cpp)
-target_link_libraries(FreeSouls_World proto ${TMXLITE_LIBRARIES})
-
-# link against dynamic libraries
-add_definitions(-DBOOST_ALL_DYN_LINK)
-
 ## Test executable
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 add_executable(UnitTests ${SOURCE_FILES_TEST})
 target_link_libraries(UnitTests ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 add_test(UnitTests UnitTests)
+
+### Server ###
+add_executable(FreeSouls_World ${SOURCE_FILES})
+target_link_libraries(FreeSouls_World proto ${TMXLITE_LIBRARIES})
