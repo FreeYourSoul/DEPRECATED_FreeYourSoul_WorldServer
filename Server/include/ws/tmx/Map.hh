@@ -31,7 +31,7 @@ namespace fys::ws {
     struct MapElem {
         using Trigger = std::variant<
                 std::function<void (uint, uint)>,
-                std::function<void (uint, std::unique_ptr<WorldServer>)>
+                std::function<void (uint, std::weak_ptr<WorldServer>)>
         >;
 
         MapElemProperty type = MapElemProperty::NI;
@@ -44,7 +44,7 @@ namespace fys::ws {
     public:
         using uptr = std::unique_ptr<Map>;
 
-        Map();
+        Map(std::string &&tmxFileName);
 
         void setMapElems(std::vector<std::vector<MapElem> >&&);
 

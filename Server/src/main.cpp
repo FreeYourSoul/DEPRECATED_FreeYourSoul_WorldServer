@@ -108,7 +108,6 @@ int main(int argc, const char * const *argv) {
         };
         google::protobuf::SetLogHandler(MyLogHandler);
 
-
         boost::asio::io_service ios;
         boost::asio::io_service::work work(ios);
         Context ctx(argc, argv);

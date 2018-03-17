@@ -3,12 +3,10 @@
 //
 
 #include <spdlog/spdlog.h>
-#include <FySMessage.pb.h>
 #include <boost/asio.hpp>
-#include <iostream>
-#include <WorldServer.hh>
-#include <bitset>
+#include <FySMessage.pb.h>
 #include <FysBus.hh>
+#include <WorldServer.hh>
 #include "TcpConnection.hh"
 
 fys::network::TcpConnection::TcpConnection(boost::asio::io_service& io_service) : _isShuttingDown(false), _socket(io_service) {
@@ -67,10 +65,10 @@ void fys::network::TcpConnection::shuttingConnectionDown() {
         _isShuttingDown = true;
         try {
             _customShutdownHandler();
-            _socket.shutdown(boost::asio::ip::tcp::socket::shutdown_both);
-            _socket.close();
         }
-        catch (std::exception &) {}
+        catch (std::exception &e) {
+            spdlog::get("c")->error("An exception has been thrown during socket close {}", e.what());
+        }
         _isShuttingDown = false;
     }
 }

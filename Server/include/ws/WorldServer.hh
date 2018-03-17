@@ -68,7 +68,7 @@ namespace fys::ws {
         network::ClusterManager _worldServerCluster;
         std::unique_ptr<network::TcpConnection> _gtwConnection;
 
-        std::vector<fys::ws::Map> _map;
+        fys::ws::Map _map;
     };
 
 }

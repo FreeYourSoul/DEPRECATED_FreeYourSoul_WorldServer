@@ -24,7 +24,8 @@ fys::ws::Context::Context(const int ac, const char *const *av) {
     try {
         TCLAP::CmdLine cli("WorldServer of Fys World Server Game", ' ', "1.0");
         TCLAP::ValueArg<std::string> configPath("c", "config", "Path of config file", false, "/home/FyS/ClionProjects/FreeYourSoul_WorldServer/Server/resource/worldserver.ini", "string");
-        TCLAP::ValueArg<ushort> changePort("p", "port", "Listening Port", false, 1337, "integer");
+        TCLAP::ValueArg<std::string> map("m", "map", "Main map managed by the server", false, "/home/FyS/ClionProjects/FreeYourSoul_WorldServer/Server/resource/tmx_maps/map.tmx", "string");
+        TCLAP::ValueArg<ushort> changePort("p", "port", "Listening Port", false, 0, "integer");
         TCLAP::ValueArg<ushort> changeGtwPort("s", "gport", "Listening Port for Gateway", false, 0, "integer");
         TCLAP::ValueArg<ushort> changeGtwIp("g", "gip", "IP of Gateway", false, 0, "string");
         TCLAP::ValueArg<std::size_t> changeThread("t", "thread", "Thread Numbers for listening", false, 0, "integer");
@@ -36,6 +37,7 @@ fys::ws::Context::Context(const int ac, const char *const *av) {
         cli.add(changeGtwIp);
         cli.add(changeThread);
         cli.add(verbose);
+        cli.add(map);
         cli.parse(ac, av);
         this->initializeFromIni(configPath.getValue());
         if (changePort.getValue() > 0)
@@ -55,13 +57,14 @@ void fys::ws::Context::initializeFromIni(const std::string &iniPath) {
     boost::property_tree::ptree pt;
     boost::property_tree::read_ini(iniPath, pt);
 
-    setPort(pt.get<ushort>(GTW_INI_PORT));
-    setGtwPort(pt.get<ushort>(GTW_INI_GTW_PORT));
-    setGtwIp(std::move(pt.get<std::string>(GTW_INI_GTW_IP)));
-    setAsioThread(pt.get<std::size_t>(GTW_INI_ASIO_THREADS));
-    setBusIniFilePath(std::move(pt.get<std::string>(GTW_INI_BUS_PATH)));
-    setQueuesSize(pt.get<std::size_t>(GTW_QUEUES_SIZE));
-    setPositionId(pt.get<std::string>(GTW_MAP_POSITIONID));
+    setPort(pt.get<ushort>(WS_INI_PORT));
+    setGtwPort(pt.get<ushort>(WS_INI_GTW_PORT));
+    setGtwIp(std::move(pt.get<std::string>(WS_INI_GTW_IP)));
+    setAsioThread(pt.get<std::size_t>(WS_INI_ASIO_THREADS));
+    setBusIniFilePath(std::move(pt.get<std::string>(WS_INI_BUS_PATH)));
+    setQueuesSize(pt.get<std::size_t>(WS_QUEUES_SIZE));
+    setPositionId(pt.get<std::string>(WS_MAP_POSITIONID));
+    setTmxFileMapName(pt.get<std::string>(WS_MAP_TMX));
 }
 
 ushort fys::ws::Context::getPort() const {
@@ -133,4 +136,10 @@ void fys::ws::Context::setPositionId(const std::string &positionId) {
     Context::_positionId = positionId;
 }
 
+const std::string &fys::ws::Context::getTmxFileMapName() const {
+    return _tmxFileMapName;
+}
 
+void fys::ws::Context::setTmxFileMapName(std::string &&tmxFileMapName) {
+    _tmxFileMapName = std::move(tmxFileMapName);
+}

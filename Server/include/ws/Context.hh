@@ -10,13 +10,14 @@
 #include "GameServerInstance.hh"
 
 // -- Config File Keys
-static constexpr char GTW_INI_PORT[] = "server.port";
-static constexpr char GTW_INI_GTW_PORT[] = "gateway.port";
-static constexpr char GTW_INI_GTW_IP[] = "gateway.ip";
-static constexpr char GTW_INI_ASIO_THREADS[] = "server.asioThread";
-static constexpr char GTW_INI_BUS_PATH[] = "bus.iniPath";
-static constexpr char GTW_QUEUES_SIZE[] = "bus.queuesSize";
-static constexpr char GTW_MAP_POSITIONID[] = "map.positionId";
+static constexpr char WS_INI_PORT[] = "server.port";
+static constexpr char WS_INI_GTW_PORT[] = "gateway.port";
+static constexpr char WS_INI_GTW_IP[] = "gateway.ip";
+static constexpr char WS_INI_ASIO_THREADS[] = "server.asioThread";
+static constexpr char WS_INI_BUS_PATH[] = "bus.iniPath";
+static constexpr char WS_QUEUES_SIZE[] = "bus.queuesSize";
+static constexpr char WS_MAP_POSITIONID[] = "map.positionId";
+static constexpr char WS_MAP_TMX[] = "map.tmxPath";
 
 namespace fys::ws {
 
@@ -39,6 +40,7 @@ namespace fys::ws {
         ushort getGtwPort() const;
         bool isVerbose() const;
         const std::string &getGtwIp() const;
+        const std::string &getTmxFileMapName() const;
 
         void setBusIniFilePath(std::string &&busIniFilePath) noexcept;
         void setPort(ushort port);
@@ -47,6 +49,7 @@ namespace fys::ws {
         void setQueuesSize(std::size_t queuesSize);
         void setGtwPort(ushort gtwPort);
         void setGtwIp(std::string&& gtwIp) noexcept;
+        void setTmxFileMapName(std::string &&tmxFileMapName);
 
         const std::string &getPositionId() const;
 
@@ -65,6 +68,7 @@ namespace fys::ws {
         std::string _positionId;
         bool _verbose;
 
+        std::string _tmxFileMapName;
         std::vector<ws::GameServerInstance> _gameServers;
     };
 
