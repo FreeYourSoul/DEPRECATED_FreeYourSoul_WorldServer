@@ -26,8 +26,8 @@ fys::ws::WorldServer::WorldServer(const fys::ws::Context &ctx, boost::asio::io_s
         _fysBus(std::move(fysBus)),
         _gamerConnections(1000),
         _worldServerCluster(10),
-        _gtwConnection(std::make_unique<fys::network::TcpConnection>(ios)) {
-
+        _gtwConnection(std::make_unique<fys::network::TcpConnection>(ios)),
+        _map(ctx.getTmxFileMapName()){
 }
 
 void fys::ws::WorldServer::runPlayerAccept() {
