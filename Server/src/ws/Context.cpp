@@ -61,7 +61,6 @@ void fys::ws::Context::initializeFromIni(const std::string &iniPath) {
     setGtwPort(pt.get<ushort>(WS_INI_GTW_PORT));
     setGtwIp(std::move(pt.get<std::string>(WS_INI_GTW_IP)));
     setAsioThread(pt.get<std::size_t>(WS_INI_ASIO_THREADS));
-    setBusIniFilePath(std::move(pt.get<std::string>(WS_INI_BUS_PATH)));
     setQueuesSize(pt.get<std::size_t>(WS_QUEUES_SIZE));
     setPositionId(pt.get<std::string>(WS_MAP_POSITIONID));
     setTmxFileMapName(pt.get<std::string>(WS_MAP_TMX));
@@ -73,14 +72,6 @@ ushort fys::ws::Context::getPort() const {
 
 void fys::ws::Context::setPort(const ushort port) {
     Context::_port = port;
-}
-
-const std::string &fys::ws::Context::getBusIniFilePath() const {
-    return _busIniFilePath;
-}
-
-void fys::ws::Context::setBusIniFilePath(std::string &&busIniFilePath) noexcept  {
-    Context::_busIniFilePath = busIniFilePath;
 }
 
 size_t fys::ws::Context::getAsioThread() const {
@@ -100,8 +91,8 @@ void fys::ws::Context::setQueuesSize(std::size_t _queuesSize) {
 }
 
 void fys::ws::Context::logContext() {
-    spdlog::get("c")->info("Current Context: [ port: {} , positionId: {}, asioThread: {}, busIniFilePath: {} ]",
-                           _port, _positionId, _asioThread, _busIniFilePath);
+    spdlog::get("c")->info("Current Context: [ port: {} , positionId: {}, asioThread: {}, mainMapFilePath: {} , gatewayIp: {} , gatewayPort: {} ]",
+                           _port, _positionId, _asioThread, _tmxFileMapName, _gtwIp, _gtwPort);
 }
 
 bool fys::ws::Context::isVerbose() const {
