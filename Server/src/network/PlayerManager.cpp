@@ -6,7 +6,9 @@
 #include <TcpConnection.hh>
 #include "PlayerManager.hh"
 
-fys::network::PlayerManager::PlayerManager(const uint size) : SessionManager(size), _incomingPlayer(size) {}
+fys::network::PlayerManager::PlayerManager(const uint size) : SessionManager(size), _incomingPlayer(size) {
+    setName("Player Manager");
+}
 
 void fys::network::PlayerManager::addIncomingPlayer(const std::string &ipIncoPlayer, const Token& tokenIncoPlayer) {
     _incomingPlayer[ipIncoPlayer] = tokenIncoPlayer;

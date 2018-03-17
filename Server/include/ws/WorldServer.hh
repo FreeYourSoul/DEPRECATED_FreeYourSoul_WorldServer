@@ -8,7 +8,6 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <SessionManager.hh>
 #include <Context.hh>
-#include <Map.hh>
 #include <ClusterManager.hh>
 #include <PlayerManager.hh>
 
@@ -16,6 +15,9 @@ namespace fys {
     namespace mq {
         template<typename T, int U>
         class FysBus;
+    }
+    namespace ws {
+        class Map;
     }
     namespace pb {
         class FySMessage;
@@ -68,7 +70,7 @@ namespace fys::ws {
         network::ClusterManager _worldServerCluster;
         std::unique_ptr<network::TcpConnection> _gtwConnection;
 
-        fys::ws::Map _map;
+        std::unique_ptr<fys::ws::Map> _map;
     };
 
 }

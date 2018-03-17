@@ -28,7 +28,7 @@ namespace fys::ws {
         BLOCK,
         // element contain a trigger for an action
         TRIGGER,
-        // nothing happen on this element
+        // nothing happens on this element
         NI
     };
 

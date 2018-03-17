@@ -33,9 +33,10 @@ namespace fys::network {
 
         const std::string getConnectionToken(const uint indexInSession) const noexcept;
         const std::string getIp(const uint indexInSession) const noexcept;
+        void setName(std::string &&name);
         std::pair<std::string, ushort> getConnectionData(const uint indexInSession) const noexcept;
         const uint addConnection(const std::shared_ptr<TcpConnection>& newConnection);
-        void disconnectUser(const uint , const Token &);
+        void disconnectUser(const uint idxSession, const fys::network::Token &token);
 
         void sendResponse(uint i, pb::FySResponseMessage &&message) const noexcept;
 
@@ -43,6 +44,7 @@ namespace fys::network {
         inline void connectionHandle(const std::shared_ptr<TcpConnection> &newConnection, const uint i);
 
     private:
+        std::string _name;
         std::vector<std::shared_ptr<TcpConnection>> _connections;
         std::vector<Token> _connectionsToken;
     };

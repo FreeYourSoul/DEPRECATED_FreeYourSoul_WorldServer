@@ -49,15 +49,22 @@ void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(const uint indexS
     loginMsg.content().UnpackTo(&notif);
     network::Token token(notif.token().begin(), notif.token().end());
 
-    loginMsg.content().UnpackTo(&notif);
     _ws->getGamerConnections().addIncomingPlayer(notif.ip(), token);
 }
 
 void fys::ws::buslistener::Authenticator::authPlayer(const uint indexSession, fys::pb::LoginMessage &&loginMessage) {
     pb::LogingPlayerOnGame loginPlayerOnGame;
-    network::Token token(loginPlayerOnGame.tokengameserver().begin(), loginPlayerOnGame.tokengameserver().end());
+    const std::string &actualToken = _ws->getGamerConnections().getConnectionToken(indexSession);
+    const std::string &token = loginPlayerOnGame.tokengameserver();
 
     loginMessage.content().UnpackTo(&loginPlayerOnGame);
-    _ws->getGamerConnections().connectPlayerWithToken(indexSession, token);
+    if (std::equal(token.begin(), token.end(), actualToken.begin())) {
+        _ws->getGamerConnections().connectPlayerWithToken(indexSession, {token.begin(), token.end()});
+        spdlog::get("c")->info("A new player ({} at index {}) connected on server", loginMessage.user(), indexSession);
+    }
+    else {
+        spdlog::get("c")->error("Mismatch has been found for player({}) {}, token is {} and should be {}",
+                                indexSession, loginMessage.user(), token, actualToken);
+    }
 }
 

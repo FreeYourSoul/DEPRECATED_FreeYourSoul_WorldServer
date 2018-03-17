@@ -10,6 +10,7 @@
 #include <FySAuthenticationLoginMessage.pb.h>
 #include <FySMessage.pb.h>
 #include <TcpConnection.hh>
+#include <Map.hh>
 
 /**
  * Timer between re-connection attempt on the Gateway
@@ -27,7 +28,7 @@ fys::ws::WorldServer::WorldServer(const fys::ws::Context &ctx, boost::asio::io_s
         _gamerConnections(1000),
         _worldServerCluster(10),
         _gtwConnection(std::make_unique<fys::network::TcpConnection>(ios)),
-        _map(ctx.getTmxFileMapName()){
+        _map(std::make_unique<fys::ws::Map>(ctx.getTmxFileMapName())) {
 }
 
 void fys::ws::WorldServer::runPlayerAccept() {
@@ -36,7 +37,8 @@ void fys::ws::WorldServer::runPlayerAccept() {
     _acceptorPlayer.async_accept(session->getSocket(),
 
              [this, session](const boost::system::error_code &e) {
-                 this->_gamerConnections.addPlayerConnection(session);
+                 uint idx = this->_gamerConnections.addPlayerConnection(session);
+                 spdlog::get("c")->info("A player connected with index {}", idx);
                  session->readOnSocket(_fysBus);
                  this->runPlayerAccept();
              }
