@@ -7,7 +7,7 @@
 #include <FySAuthenticationResponse.pb.h>
 #include <FySMessage.pb.h>
 #include <WorldServer.hh>
-#include "Authenticator.hh"
+#include "listener/Authenticator.hh"
 
 fys::ws::buslistener::Authenticator::Authenticator(WorldServer::ptr& gtw) : _ws(gtw)
 {}

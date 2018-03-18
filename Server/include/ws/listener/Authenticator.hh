@@ -9,10 +9,6 @@
 
 //forward declarations
 namespace fys {
-    namespace mq {
-        template<typename T>
-        class QueueContainer;
-    }
     namespace pb {
         class FySMessage;
         class LoginMessage;

@@ -64,13 +64,14 @@ namespace fys::ws {
     private:
         boost::asio::io_service &_ios;
         boost::asio::ip::tcp::acceptor _acceptorPlayer;
-        std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > _fysBus;
+        std::shared_ptr<mq::FysBus<pb::FySMessage, BUS_QUEUES_SIZE>> _fysBus;
 
         network::PlayerManager _gamerConnections;
         network::ClusterManager _worldServerCluster;
         std::unique_ptr<network::TcpConnection> _gtwConnection;
 
-        std::unique_ptr<fys::ws::Map> _map;
+        std::unique_ptr<WorldEngine> _worldEngine;
+        std::unique_ptr<Map> _map;
     };
 
 }

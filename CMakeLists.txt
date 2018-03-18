@@ -39,6 +39,10 @@ set(SOURCE_FILES_MQ
         ${CMAKE_SOURCE_DIR}/FySMQ/include/bus/FysBus.hh)
 
 set(SOURCE_FILES_SRV
+        ${CMAKE_SOURCE_DIR}/Server/src/ws/listener/Authenticator.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/ws/listener/Authenticator.hh
+        ${CMAKE_SOURCE_DIR}/Server/src/ws/listener/GamingListener.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/ws/listener/GamingListener.hh
         ${CMAKE_SOURCE_DIR}/Server/src/ws/WorldServer.cpp
         ${CMAKE_SOURCE_DIR}/Server/include/ws/WorldServer.hh
         ${CMAKE_SOURCE_DIR}/Server/src/ws/Context.cpp
@@ -49,8 +53,6 @@ set(SOURCE_FILES_SRV
         ${CMAKE_SOURCE_DIR}/Server/include/network/TcpConnection.hh
         ${CMAKE_SOURCE_DIR}/Server/src/ws/GameServerInstance.cpp
         ${CMAKE_SOURCE_DIR}/Server/include/ws/GameServerInstance.hh
-        ${CMAKE_SOURCE_DIR}/Server/src/ws/Authenticator.cpp
-        ${CMAKE_SOURCE_DIR}/Server/include/ws/Authenticator.hh
         ${CMAKE_SOURCE_DIR}/Server/src/ws/tmx/MapBuilder.cpp
         ${CMAKE_SOURCE_DIR}/Server/include/ws/tmx/MapBuilder.hh
         ${CMAKE_SOURCE_DIR}/Server/src/ws/tmx/Map.cpp
@@ -58,7 +60,7 @@ set(SOURCE_FILES_SRV
         ${CMAKE_SOURCE_DIR}/Server/src/network/ClusterManager.cpp
         ${CMAKE_SOURCE_DIR}/Server/include/network/ClusterManager.hh
         ${CMAKE_SOURCE_DIR}/Server/src/network/PlayerManager.cpp
-        ${CMAKE_SOURCE_DIR}/Server/include/network/PlayerManager.hh Server/src/ws/GamingListenner.cpp Server/include/ws/GamingListenner.hh)
+        ${CMAKE_SOURCE_DIR}/Server/include/network/PlayerManager.hh)
 
 set(SOURCE_FILES_UTILS
         ${CMAKE_SOURCE_DIR}/Utils/src/CheckVars.hh

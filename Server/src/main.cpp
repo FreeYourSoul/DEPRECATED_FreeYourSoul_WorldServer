@@ -3,7 +3,7 @@
 #include <WorldServer.hh>
 #include <FysBus.hh>
 #include <BusListener.hh>
-#include <Authenticator.hh>
+#include <listener/Authenticator.hh>
 #include <FySMessage.pb.h>
 
 
