@@ -56,9 +56,12 @@ namespace fys::ws {
         network::PlayerManager &getGamerConnections() { return _gamerConnections; }
         network::ClusterManager &getWorldServerCluster() { return _worldServerCluster; }
 
+        std::shared_ptr<WorldEngine> getWorldEngine() const { return _worldEngine; }
+
         const std::unique_ptr<network::TcpConnection> &getGtwConnection() const { return _gtwConnection; }
 
     private:
+
         void notifyGateway(const std::string &id, const ushort port) const;
 
     private:
@@ -70,7 +73,7 @@ namespace fys::ws {
         network::ClusterManager _worldServerCluster;
         std::unique_ptr<network::TcpConnection> _gtwConnection;
 
-        std::unique_ptr<ws::WorldEngine> _worldEngine;
+        std::shared_ptr<ws::WorldEngine> _worldEngine;
     };
 
 }

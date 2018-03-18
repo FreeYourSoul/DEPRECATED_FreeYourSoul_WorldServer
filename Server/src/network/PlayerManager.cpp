@@ -22,8 +22,8 @@ const uint fys::network::PlayerManager::addPlayerConnection(const fys::network::
     auto findIt = _incomingPlayer.find(newConnection->getIpAddress());
 
     if (findIt == _incomingPlayer.end()) {
-        spdlog::get("c")->warn("The player isn't registered on the accepted ip list");
-        return 0;
+        spdlog::get("c")->warn("The player isn't registered on the accepted ip list, ip trying to connect is {}", newConnection->getIpAddress());
+        return std::numeric_limits<uint>::max();
     }
     return addConnection(newConnection);
 }

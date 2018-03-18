@@ -5,6 +5,7 @@
 #include <BusListener.hh>
 #include <listener/Authenticator.hh>
 #include <FySMessage.pb.h>
+#include <listener/GamingListener.hh>
 
 
 static const std::string welcomeMsg =
@@ -75,6 +76,7 @@ using namespace fys::ws;
 using namespace fys::network;
 
 using AuthBusListener = BusListener <buslistener::Authenticator, FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>>;
+using GamingListener = BusListener <buslistener::GamingListener, FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>>;
 
 void welcome(bool verbose) {
     spdlog::set_async_mode(1024, spdlog::async_overflow_policy::discard_log_msg);
@@ -115,8 +117,11 @@ int main(int argc, const char * const *argv) {
         ctx.logContext();
         auto fysBus = std::make_shared<FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > (fys::pb::Type_ARRAYSIZE);
         WorldServer::ptr worldServer = WorldServer::create(ctx, ios, fysBus);
+
         buslistener::Authenticator authenticator(worldServer);
         AuthBusListener authenticatorListener(authenticator);
+        buslistener::GamingListener gaming(worldServer);
+        GamingListener gamingListener(gamingListener);
 
         authenticatorListener.launchListenThread(fysBus);
         ::sleep(1);

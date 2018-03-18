@@ -10,6 +10,7 @@
 namespace fys {
     namespace ws {
         class Map;
+        class WorldEngine;
     }
 }
 
@@ -25,7 +26,6 @@ namespace fys::ws {
 
     private:
         std::unique_ptr<ws::Map> _map;
-
     };
 
 }

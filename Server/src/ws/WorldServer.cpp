@@ -29,7 +29,7 @@ fys::ws::WorldServer::WorldServer(const fys::ws::Context &ctx, boost::asio::io_s
         _gamerConnections(1000),
         _worldServerCluster(10),
         _gtwConnection(std::make_unique<fys::network::TcpConnection>(ios)),
-        _worldEngine(std::make_unique<fys::ws::WorldEngine>(ctx.getTmxFileMapName())) {
+        _worldEngine(std::make_shared<fys::ws::WorldEngine>(ctx.getTmxFileMapName())) {
 }
 
 void fys::ws::WorldServer::runPlayerAccept() {
@@ -39,8 +39,11 @@ void fys::ws::WorldServer::runPlayerAccept() {
 
              [this, session](const boost::system::error_code &e) {
                  uint idx = this->_gamerConnections.addPlayerConnection(session);
-                 spdlog::get("c")->info("A player connected with index {}", idx);
-                 session->readOnSocket(_fysBus);
+
+                 if (idx < std::numeric_limits<uint>::max())
+                     session->readOnSocket(_fysBus);
+                 else
+                     spdlog::get("c")->info("A player connected with index {}", idx);
                  this->runPlayerAccept();
              }
 

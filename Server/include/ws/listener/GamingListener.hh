@@ -12,13 +12,17 @@
 namespace fys {
     namespace pb {
         class FySMessage;
+        class PlayerInteract;
     }
     namespace ws {
         class WorldServer;
+        class WorldEngine;
     }
 }
 
-
+/**
+ * Bus listener are explained in the FySMQ::BusListener class
+ */
 namespace fys::ws::buslistener {
 
     /**
@@ -36,9 +40,42 @@ namespace fys::ws::buslistener {
         void operator()(mq::QueueContainer<pb::FySMessage> msg);
 
     private:
+        /**
+         * \brief Change the state of a connected player into a moving state.
+         * In this state, the player is going to move in the direction given until getting a stop command, or another
+         * call to this same method to change its direction
+         * \see GamingListener::playerInteractionWithWorldItem
+         * \param interact interaction message sent by the player containing detailed information about the movement
+         * wanted
+         */
+        void changePlayerStateInteractionMove(pb::PlayerInteract &&interact);
+
+        /**
+         * \brief Change the state of a connected player to stop its moving state
+         * If the player was in a moving state (we could assume the actual user was pressing a key and just released it)
+         * this method stop the character movement
+         * \param interact interaction message sent by the player
+         */
+        void changePlayerStatInteractionStop(pb::PlayerInteract &&interact);
+
+        /**
+         * \brief Change the state of a connected player to stop its moving state
+         * If the player was in a moving state (we could assume the actual user was pressing a key and just released it)
+         * this method stop the character movement
+         * \param interact interaction message sent by the player
+         */
+        void playerInteractionWithWorldItem(pb::PlayerInteract &&interact);
+
+        /**
+         * \brief A player requested informations about the world (information of another connected player for example)
+         * \param interact interaction message sent by the player containing detailed information about the request
+         */
+        void playerRequestInformation(pb::PlayerInteract &&interact);
 
     private:
         std::shared_ptr<WorldServer> _ws;
+        std::shared_ptr<WorldEngine> _worldEngine;
+
 
     };
 

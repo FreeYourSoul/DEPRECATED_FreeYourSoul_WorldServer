@@ -25,6 +25,7 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/FySMQ/include/bus
         ${CMAKE_SOURCE_DIR}/FySMemoryManager/include
         ${CMAKE_SOURCE_DIR}/Server/include/ws
+        ${CMAKE_SOURCE_DIR}/Server/include/ws/listener
         ${CMAKE_SOURCE_DIR}/Server/include/ws/tmx
         ${CMAKE_SOURCE_DIR}/Server/include/network
         ${CMAKE_SOURCE_DIR}/Server/include/game Utils/src)
