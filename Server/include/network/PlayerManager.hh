@@ -14,6 +14,8 @@ namespace fys::network {
 
     class PlayerManager : public SessionManager {
 
+        enum { CONNECTION_NUMBER = 1000 };
+
     public:
         PlayerManager(const uint size);
 

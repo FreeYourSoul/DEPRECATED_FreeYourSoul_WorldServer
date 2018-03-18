@@ -20,8 +20,8 @@ const uint fys::network::SessionManager::addConnection(const fys::network::TcpCo
             return i;
         }
     }
-    _connections.resize(_connections.size() * 2, nullptr);
-    _connectionsToken.resize(_connections.size() * 2);
+    _connections.resize(_connections.size() + 100, nullptr);
+    _connectionsToken.resize(_connections.size() + 100);
     connectionHandle(newConnection, i);
     return i;
 }

@@ -7,11 +7,10 @@
 
 #include <memory>
 
-namespace fys {
-    namespace ws {
-        class Map;
-        class WorldEngine;
-    }
+namespace fys::ws {
+    class Map;
+    class WorldEngine;
+    class PlayerMapData;
 }
 
 namespace fys::ws {
@@ -26,6 +25,7 @@ namespace fys::ws {
 
     private:
         std::unique_ptr<ws::Map> _map;
+        std::vector<ws::PlayerMapData> _playersMapData;
     };
 
 }

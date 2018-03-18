@@ -68,7 +68,8 @@ set(SOURCE_FILES_SRV
 set(SOURCE_FILES_UTILS
         ${CMAKE_SOURCE_DIR}/Utils/src/CheckVars.hh
         ${CMAKE_SOURCE_DIR}/Utils/src/TokenGenerator.cpp
-        ${CMAKE_SOURCE_DIR}/Utils/src/TokenGenerator.hh)
+        ${CMAKE_SOURCE_DIR}/Utils/src/TokenGenerator.hh
+        ${CMAKE_SOURCE_DIR}/Utils/src/PlayerDataType.hh)
 
 set(SOURCE_FILES_ALL
         ${SOURCE_PROTOBUF}

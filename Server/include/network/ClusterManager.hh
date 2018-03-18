@@ -10,6 +10,9 @@
 namespace fys::network {
 
     class ClusterManager : public SessionManager {
+
+        enum { CONNECTION_NUMBER = 10 };
+
     public:
         ClusterManager(const uint size);
 
