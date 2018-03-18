@@ -8,6 +8,7 @@
 #include <functional>
 #include <variant>
 #include <cmath>
+#include <memory>
 
 static constexpr char COLLISION_LAYER[] = "Collision";
 

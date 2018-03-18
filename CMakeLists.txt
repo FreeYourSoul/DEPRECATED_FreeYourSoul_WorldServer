@@ -60,7 +60,9 @@ set(SOURCE_FILES_SRV
         ${CMAKE_SOURCE_DIR}/Server/src/network/ClusterManager.cpp
         ${CMAKE_SOURCE_DIR}/Server/include/network/ClusterManager.hh
         ${CMAKE_SOURCE_DIR}/Server/src/network/PlayerManager.cpp
-        ${CMAKE_SOURCE_DIR}/Server/include/network/PlayerManager.hh)
+        ${CMAKE_SOURCE_DIR}/Server/include/network/PlayerManager.hh
+        ${CMAKE_SOURCE_DIR}/Server/src/ws/WorldEngine.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/ws/WorldEngine.hh)
 
 set(SOURCE_FILES_UTILS
         ${CMAKE_SOURCE_DIR}/Utils/src/CheckVars.hh

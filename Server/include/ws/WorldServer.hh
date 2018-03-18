@@ -17,7 +17,7 @@ namespace fys {
         class FysBus;
     }
     namespace ws {
-        class Map;
+        class WorldEngine;
     }
     namespace pb {
         class FySMessage;
@@ -70,8 +70,7 @@ namespace fys::ws {
         network::ClusterManager _worldServerCluster;
         std::unique_ptr<network::TcpConnection> _gtwConnection;
 
-        std::unique_ptr<WorldEngine> _worldEngine;
-        std::unique_ptr<Map> _map;
+        std::unique_ptr<ws::WorldEngine> _worldEngine;
     };
 
 }

@@ -10,6 +10,7 @@
 #include <FySAuthenticationLoginMessage.pb.h>
 #include <FySMessage.pb.h>
 #include <TcpConnection.hh>
+#include <WorldEngine.hh>
 #include <Map.hh>
 
 /**
@@ -28,7 +29,7 @@ fys::ws::WorldServer::WorldServer(const fys::ws::Context &ctx, boost::asio::io_s
         _gamerConnections(1000),
         _worldServerCluster(10),
         _gtwConnection(std::make_unique<fys::network::TcpConnection>(ios)),
-        _map(std::make_unique<fys::ws::Map>(ctx.getTmxFileMapName())) {
+        _worldEngine(std::make_unique<fys::ws::WorldEngine>(ctx.getTmxFileMapName())) {
 }
 
 void fys::ws::WorldServer::runPlayerAccept() {
