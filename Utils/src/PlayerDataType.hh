@@ -10,16 +10,22 @@
 namespace fys::ws {
 
     struct Velocity {
-        double speed = 1.00;
-        double angle = 0.00;
+        float speed = 1.00;
+        float angle = 0.00;
     };
 
     struct MapPosition {
-        double x;
-        double y;
+        float x = 0.0;
+        float y = 0.0;
+    };
+
+    enum PlayerState {
+        MOVE_ON = 0,
+        MOVE_OFF = 1
     };
 
     struct PlayerMapData {
+        PlayerState _state = PlayerState::MOVE_OFF;
         MapPosition _pos;
         Velocity _velocity;
     };
