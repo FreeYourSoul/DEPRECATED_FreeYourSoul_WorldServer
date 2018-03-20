@@ -13,25 +13,25 @@ fys::ws::WorldEngine::WorldEngine(const std::string &tmxMapFilePath) :
 }
 
 void fys::ws::WorldEngine::runWorldLoop() {
-    std::time_t lastTime = std::time(nullptr);
     std::time_t accumulatedLag = 0;
 
     while (true) {
         std::time_t current = std::time(nullptr);
-        std::time_t elapsed = current - lastTime;
-        lastTime = current;
-        accumulatedLag += elapsed;
 
-        updatePlayersPositions(elapsed);
+        updatePlayersPositions(accumulatedLag);
 
         std::time_t endTick = std::time(nullptr);
         std::time_t durationSleep = (((current * 1000) + TIME_LOOP) - (endTick * 1000));
-        std::chrono::duration<std::time_t, std::milli> d(durationSleep);
-        std::this_thread::sleep_for(d);
+        if (durationSleep <= 0)
+            accumulatedLag += (durationSleep * -1);
+        else {
+            std::chrono::duration<std::time_t, std::milli> d(durationSleep);
+            std::this_thread::sleep_for(d);
+        }
     }
 }
 
-void fys::ws::WorldEngine::updatePlayersPositions(time_t elapsed) {
+void fys::ws::WorldEngine::updatePlayersPositions(time_t lag) {
 
 }
 

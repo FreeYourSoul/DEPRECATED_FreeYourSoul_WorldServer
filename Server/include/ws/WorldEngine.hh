@@ -16,7 +16,7 @@ namespace fys::ws {
 namespace fys::ws {
 
     class WorldEngine {
-        constexpr auto TIME_LOOP = std::chrono::milliseconds(100);
+        constexpr auto TIME_LOOP = std::chrono::milliseconds(33);
 
     public:
         ~WorldEngine() = default;
@@ -28,7 +28,7 @@ namespace fys::ws {
         void initPlayerPosition(const uint idx, MapPosition &&pos);
 
     private:
-        void updatePlayersPositions(time_t elapsed);
+        void updatePlayersPositions(time_t lag);
         void increaseObjectPool(const uint minSize);
 
     private:
