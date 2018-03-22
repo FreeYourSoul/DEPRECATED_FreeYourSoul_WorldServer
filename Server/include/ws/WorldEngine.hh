@@ -5,12 +5,16 @@
 #ifndef FREESOULS_WORLD_WORLDENGINE_HPP
 #define FREESOULS_WORLD_WORLDENGINE_HPP
 
-#include <PlayerDataType.hh>
 #include <memory>
 
+//forward declarations
 namespace fys::ws {
     class Map;
     class WorldEngine;
+    class MapPosition;
+    class PlayerMapData;
+
+    enum class PlayerState : unsigned int;
 }
 
 namespace fys::ws {
@@ -28,8 +32,9 @@ namespace fys::ws {
         void initPlayerPosition(const uint idx, MapPosition &&pos);
 
     private:
-        void updatePlayersPositions(time_t lag);
+        void updatePlayersPositions(time_t current);
         void increaseObjectPool(const uint minSize);
+        int getTimesToMove(const time_t current, const PlayerMapData &playerData);
 
     private:
         std::unique_ptr<ws::Map> _map;

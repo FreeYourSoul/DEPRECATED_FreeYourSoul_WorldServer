@@ -9,6 +9,7 @@
 #include <variant>
 #include <cmath>
 #include <memory>
+#include <PlayerDataType.hh>
 
 static constexpr char COLLISION_LAYER[] = "Collision";
 
@@ -45,15 +46,23 @@ namespace fys::ws {
 
     public:
         void setTypeElem(MapElemProperty type) {
-            this->type = type;
+            this->_property = type;
         }
 
         void setLevel(const unsigned l) {
-            levelFlags = static_cast<unsigned char>(std::pow(l, 2));
+            _levelFlags = static_cast<unsigned char>(std::pow(l, 2));
         }
 
-        bool isLevel(const unsigned l) {
-            return (levelFlags & static_cast<unsigned char>(std::pow(l, 2))) == static_cast<unsigned char>(std::pow(l, 2));
+        bool isLevel(const unsigned l) const {
+            return (_levelFlags & static_cast<unsigned char>(std::pow(l, 2))) == static_cast<unsigned char>(std::pow(l, 2));
+        }
+
+        MapElemProperty getProperty() const {
+            return _property;
+        }
+
+        const Trigger &getTrigger() const {
+            return *_trigger.get();
         }
 
     private:
@@ -61,15 +70,15 @@ namespace fys::ws {
          * bitmask
          * Highness of the ground elem
          */
-        unsigned char levelFlags = 0;
+        unsigned char _levelFlags = 0;
         /**
          * Physical property of the map elem
          */
-        MapElemProperty type = MapElemProperty::NI;
+        MapElemProperty _property = MapElemProperty::NI;
         /**
          * Potential trigger occured because of the map elem
          */
-        std::unique_ptr<Trigger> trigger = nullptr;
+        std::unique_ptr<Trigger> _trigger = nullptr;
 
     };
 
@@ -81,6 +90,17 @@ namespace fys::ws {
 
         Map(const std::string &tmxFileName);
 
+        /**
+         * \brief Get if the position x, y in the map is a valid position for a player to be on
+         *
+         * \param x
+         * \param y
+         * \return return the map propert
+         */
+        const MapElemProperty getMapElementPropertyAtPosition(const float x, const float y) const;
+
+        void triggerForPlayer(const float x, const float y, PlayerMapData &playerData);
+
     private:
         /**
          * \brief Just initialize the _mapElems at the correct size
@@ -89,6 +109,8 @@ namespace fys::ws {
         void initCollisionMapFromLayer(const unsigned xMap, const unsigned  yMap, const tmx::TileLayer &tileLayer);
 
     private:
+        int _boudaryX = 0;
+        int _boudaryY = 0;
         std::vector<std::vector<MapElem>> _mapElems;
 
     };

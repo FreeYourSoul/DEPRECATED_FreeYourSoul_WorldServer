@@ -28,6 +28,8 @@ namespace fys::ws {
         PlayerState _state = PlayerState::MOVE_OFF;
         MapPosition _pos;
         Velocity _velocity;
+        std::time_t _initRequestTime;
+        std::time_t _lastTimeMoved;
     };
 
 }

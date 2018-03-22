@@ -24,6 +24,8 @@ fys::ws::Map::Map(const std::string &tmxMap) {
                 initCollisionMapFromLayer(xMap, yMap, *dynamic_cast<const tmx::TileLayer*>(layer.get()));
             }
         }
+        _boudaryX = xMap;
+        _boudaryY = yMap;
     }
     catch (const std::out_of_range& e) {
         spdlog::get("c")->error("An exception occurred at the map initialization {}", e.what());
@@ -49,3 +51,20 @@ void fys::ws::Map::initCollisionMapFromLayer(const unsigned xMap, const unsigned
         }
     }
 }
+
+const fys::ws::MapElemProperty fys::ws::Map::getMapElementPropertyAtPosition(const float x, const float y) const {
+    if (x >= _boudaryX || y >= _boudaryY || y < 0 || x < 0)
+        return fys::ws::MapElemProperty::BLOCK;
+    return _mapElems.at(y).at(x).getProperty();
+}
+
+void fys::ws::Map::triggerForPlayer(const float x, const float y, fys::ws::PlayerMapData &playerData) {
+    if ((x >= 0 && x < _boudaryX) && (y >= 0 && y < _boudaryY)) {
+        if (_mapElems.at(y).at(x).getProperty() == fys::ws::MapElemProperty::TRIGGER) {
+
+        }
+        else
+            spdlog::get("c")->error("Trying to execute a trigger at x:{} y:{} but the map element wasn't trigger", x, y);
+    }
+}
+
