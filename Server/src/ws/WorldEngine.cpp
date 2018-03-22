@@ -5,6 +5,7 @@
 #include <spdlog/spdlog.h>
 #include <PlayerManager.hh>
 #include <Map.hh>
+#include <cmath>
 #include "WorldEngine.hh"
 
 fys::ws::WorldEngine::WorldEngine(const std::string &tmxMapFilePath) :
@@ -32,7 +33,12 @@ void fys::ws::WorldEngine::runWorldLoop() {
 }
 
 void fys::ws::WorldEngine::updatePlayersPositions(time_t lag) {
-
+    for (PlayerMapData &p : _playersMapData) {
+        if (p._state != PlayerState::MOVE_OFF) {
+            p._pos.x += (p._velocity.speed * std::cos(p._velocity.angle));
+            p._pos.y += (p._velocity.speed * std::sin(p._velocity.angle));
+        }
+    }
 }
 
 void fys::ws::WorldEngine::initPlayerPosition(const uint idx, fys::ws::MapPosition &&pos) {
