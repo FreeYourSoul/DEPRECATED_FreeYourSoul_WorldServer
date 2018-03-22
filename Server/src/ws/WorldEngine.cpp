@@ -3,6 +3,8 @@
 //
 
 #include <spdlog/spdlog.h>
+#include <chrono>
+#include <thread>
 #include <PlayerManager.hh>
 #include <Map.hh>
 #include <PlayerDataType.hh>
@@ -52,7 +54,7 @@ int fys::ws::WorldEngine::getTimesToMove(const time_t current, const fys::ws::Pl
     time_t timeLastMove = playerData._initRequestTime;
     if (playerData._lastTimeMoved > 0)
         timeLastMove = playerData._lastTimeMoved;
-    return 1 + ((current -  timeLastMove) / TIME_LOOP);
+    return 1 + static_cast<int>((current -  timeLastMove) / TIME_LOOP);
 }
 
 void fys::ws::WorldEngine::initPlayerPosition(const uint idx, fys::ws::MapPosition &&pos) {
@@ -68,7 +70,7 @@ void fys::ws::WorldEngine::initPlayerPosition(const uint idx, fys::ws::MapPositi
 void fys::ws::WorldEngine::changeStatePlayer(const uint idx, const float angle, const PlayerState state) {
     if (idx < _playersMapData.size()) {
         spdlog::get("c")->error("A player at index {} tried to change moving status ({}) with angle."
-                                "Pool of current player state is {}", idx, state, _playersMapData.size());
+                                "Pool of current player state is {}", idx, static_cast<unsigned int>(state), _playersMapData.size());
     }
     else {
         if (state == PlayerState::MOVE_ON)

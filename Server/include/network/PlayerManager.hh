@@ -5,6 +5,7 @@
 #ifndef FREESOULS_WORLD_PLAYERMANAGER_HH
 #define FREESOULS_WORLD_PLAYERMANAGER_HH
 
+#include <unordered_map>
 #include "SessionManager.hh"
 
 namespace fys::network {
@@ -44,7 +45,12 @@ namespace fys::network {
          */
         const bool connectPlayerWithToken(const uint indexInSession, const Token &token);
 
-        const bool isAuthenticated(const uint indexInSession) const;
+        /**
+         * \brief Check authentication for the given indexInSession
+         * \param indexInSession
+         * \return
+         */
+        const bool isAuthenticated(uint indexInSession, const std::string &token) const;
 
     private:
         std::unordered_map<std::string, Token> _incomingPlayer;

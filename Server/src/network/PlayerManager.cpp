@@ -3,6 +3,7 @@
 //
 
 #include <spdlog/spdlog.h>
+#include <utility>
 #include <TcpConnection.hh>
 #include "PlayerManager.hh"
 
@@ -14,8 +15,9 @@ void fys::network::PlayerManager::addIncomingPlayer(const std::string &ipIncoPla
     _incomingPlayer[ipIncoPlayer] = tokenIncoPlayer;
 }
 
-const bool fys::network::PlayerManager::isAuthenticated(const uint indexInSession) const {
-    return _incomingPlayer.find(getIp(indexInSession)) != _incomingPlayer.end();
+const bool fys::network::PlayerManager::isAuthenticated(uint indexInSession, const std::string &token) const {
+    return indexInSession < _connectionsToken.size() &&
+           std::equal(token.begin(), token.end(), _connectionsToken.at(indexInSession).begin());
 }
 
 const uint fys::network::PlayerManager::addPlayerConnection(const fys::network::TcpConnection::ptr &newConnection) {

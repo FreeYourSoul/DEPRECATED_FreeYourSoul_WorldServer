@@ -7,6 +7,7 @@
 
 #include <zconf.h>
 #include <vector>
+#include <memory>
 
 // forward declarations
 namespace fys {
@@ -43,7 +44,7 @@ namespace fys::network {
     private:
         inline void connectionHandle(const std::shared_ptr<TcpConnection> &newConnection, const uint i);
 
-    private:
+    protected:
         std::string _name;
         std::vector<std::shared_ptr<TcpConnection>> _connections;
         std::vector<Token> _connectionsToken;

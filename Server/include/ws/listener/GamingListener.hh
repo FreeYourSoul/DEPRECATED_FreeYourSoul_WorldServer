@@ -56,7 +56,7 @@ namespace fys::ws::buslistener {
          * this method stop the character movement
          * \param interact interaction message sent by the player
          */
-        void changePlayerStatInteractionStop(pb::PlayerInteract &&interact);
+        void changePlayerStatInteractionStopMoving(pb::PlayerInteract &&interact);
 
         /**
          * \brief Change the state of a connected player to stop its moving state

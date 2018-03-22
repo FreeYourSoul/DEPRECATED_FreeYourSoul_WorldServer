@@ -6,6 +6,7 @@
 #define FREESOULS_WORLD_WORLDENGINE_HPP
 
 #include <memory>
+#include <vector>
 
 //forward declarations
 namespace fys::ws {
@@ -20,7 +21,7 @@ namespace fys::ws {
 namespace fys::ws {
 
     class WorldEngine {
-        constexpr auto TIME_LOOP = std::chrono::milliseconds(33);
+        static constexpr int TIME_LOOP = 33;
 
     public:
         ~WorldEngine() = default;

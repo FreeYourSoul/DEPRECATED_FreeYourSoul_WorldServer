@@ -2,6 +2,7 @@
 // Created by FyS on 18/03/18.
 //
 
+#include <spdlog/spdlog.h>
 #include <FySPlayerInteraction.pb.h>
 #include <FySMessage.pb.h>
 #include <WorldServer.hh>
@@ -15,7 +16,11 @@ void fys::ws::buslistener::GamingListener::operator()(fys::mq::QueueContainer<pb
     pb::PlayerInteract playerInteract;
 
     msg.getContained().content().UnpackTo(&playerInteract);
-    if (pb::PlayerInteract_Type_IsValid(playerInteract.type())) {
+    if (_ws->getGamerConnections().isAuthenticated(msg.getIndexSession(), playerInteract.token())) {
+        spdlog::get("c")->error("Bad authentication used in GamingListener user {} with token {}",
+                                msg.getIndexSession(), playerInteract.token());
+    }
+    else if (pb::PlayerInteract_Type_IsValid(playerInteract.type())) {
         switch (playerInteract.type()) {
 
             case pb::PlayerInteract::MOVE_ON:
@@ -23,7 +28,7 @@ void fys::ws::buslistener::GamingListener::operator()(fys::mq::QueueContainer<pb
                 break;
 
             case pb::PlayerInteract::MOVE_OFF:
-                changePlayerStatInteractionStop(std::move(playerInteract));
+                changePlayerStatInteractionStopMoving(std::move(playerInteract));
                 break;
 
             case pb::PlayerInteract::ACTIVATE:
@@ -41,7 +46,13 @@ void fys::ws::buslistener::GamingListener::operator()(fys::mq::QueueContainer<pb
 }
 
 void fys::ws::buslistener::GamingListener::changePlayerStateInteractionMove(fys::pb::PlayerInteract &&interact) {
+    fys::pb::PlayerMove playerMove;
+    interact.content().UnpackTo(&playerMove);
+//    _worldEngine->changePlayerMovingState(, playerMove.angle());
+}
 
+void fys::ws::buslistener::GamingListener::changePlayerStatInteractionStopMoving(fys::pb::PlayerInteract &&interact) {
+//    _worldEngine->changePlayerMovingState();
 }
 
 void fys::ws::buslistener::GamingListener::playerRequestInformation(fys::pb::PlayerInteract &&interact) {
@@ -49,9 +60,5 @@ void fys::ws::buslistener::GamingListener::playerRequestInformation(fys::pb::Pla
 }
 
 void fys::ws::buslistener::GamingListener::playerInteractionWithWorldItem(fys::pb::PlayerInteract &&interact) {
-
-}
-
-void fys::ws::buslistener::GamingListener::changePlayerStatInteractionStop(fys::pb::PlayerInteract &&interact) {
 
 }

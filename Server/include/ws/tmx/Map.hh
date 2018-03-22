@@ -25,7 +25,7 @@ namespace fys::ws {
      * Type of element findable in a map
      * NI = No Interaction, those are empty elements
      */
-    enum MapElemProperty {
+    enum class MapElemProperty {
         // element can block the path
         BLOCK,
         // element contain a trigger for an action

@@ -46,7 +46,7 @@ void fys::ws::Map::initCollisionMapFromLayer(const unsigned xMap, const unsigned
                 throw new std::out_of_range("index is out of range of the map layer:" + index);
             if (tiles.at(index).ID) {
                 _mapElems[y][x].setLevel(level);
-                _mapElems[y][x].setTypeElem(BLOCK);
+                _mapElems[y][x].setTypeElem(fys::ws::MapElemProperty::BLOCK);
             }
         }
     }
