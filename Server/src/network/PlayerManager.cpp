@@ -7,7 +7,7 @@
 #include <TcpConnection.hh>
 #include "PlayerManager.hh"
 
-fys::network::PlayerManager::PlayerManager(const uint size) : SessionManager(size), _incomingPlayer(size) {
+fys::network::PlayerManager::PlayerManager(uint size) : SessionManager(size), _incomingPlayer(size) {
     setName("Player Manager");
 }
 
@@ -15,12 +15,12 @@ void fys::network::PlayerManager::addIncomingPlayer(const std::string &ipIncoPla
     _incomingPlayer[ipIncoPlayer] = tokenIncoPlayer;
 }
 
-const bool fys::network::PlayerManager::isAuthenticated(uint indexInSession, const std::string &token) const {
+bool fys::network::PlayerManager::isAuthenticated(uint indexInSession, const std::string &token) const {
     return indexInSession < _connectionsToken.size() &&
            std::equal(token.begin(), token.end(), _connectionsToken.at(indexInSession).begin());
 }
 
-const uint fys::network::PlayerManager::addPlayerConnection(const fys::network::TcpConnection::ptr &newConnection) {
+uint fys::network::PlayerManager::addPlayerConnection(const fys::network::TcpConnection::ptr &newConnection) {
     auto findIt = _incomingPlayer.find(newConnection->getIpAddress());
 
     if (findIt == _incomingPlayer.end()) {
@@ -30,7 +30,7 @@ const uint fys::network::PlayerManager::addPlayerConnection(const fys::network::
     return addConnection(newConnection);
 }
 
-const bool fys::network::PlayerManager::connectPlayerWithToken(const uint indexInSession, const Token &token) {
+bool fys::network::PlayerManager::connectPlayerWithToken(uint indexInSession, const Token &token) {
     const std::string ip = getIp(indexInSession);
     auto findIt = _incomingPlayer.find(ip);
 

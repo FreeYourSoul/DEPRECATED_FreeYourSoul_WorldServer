@@ -97,16 +97,16 @@ namespace fys::ws {
          * \param y
          * \return return the map propert
          */
-        const MapElemProperty getMapElementPropertyAtPosition(const float x, const float y) const;
+        MapElemProperty getMapElementPropertyAtPosition(float x, float y) const;
 
-        void triggerForPlayer(const float x, const float y, PlayerMapData &playerData);
+        void triggerForPlayer(float x, float y, PlayerMapData &playerData);
 
     private:
         /**
          * \brief Just initialize the _mapElems at the correct size
          * \param map
          */
-        void initCollisionMapFromLayer(const unsigned xMap, const unsigned  yMap, const tmx::TileLayer &tileLayer);
+        void initCollisionMapFromLayer(unsigned xMap, unsigned yMap, const tmx::TileLayer &tileLayer);
 
     private:
         int _boudaryX = 0;

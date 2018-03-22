@@ -44,7 +44,7 @@ void fys::ws::buslistener::Authenticator::notifyServer(fys::pb::LoginMessage &&l
     _ws->connectAndAddWorldServerInCluster(notif.positionid(), notif.token(), notif.ip(), notif.port());
 }
 
-void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(const uint indexSession, fys::pb::LoginMessage &&loginMsg) {
+void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(uint indexSession, fys::pb::LoginMessage &&loginMsg) {
     pb::NotifyPlayerIncoming notif;
     loginMsg.content().UnpackTo(&notif);
     network::Token token(notif.token().begin(), notif.token().end());
@@ -52,7 +52,7 @@ void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(const uint indexS
     _ws->getGamerConnections().addIncomingPlayer(notif.ip(), token);
 }
 
-void fys::ws::buslistener::Authenticator::authPlayer(const uint indexSession, fys::pb::LoginMessage &&loginMessage) {
+void fys::ws::buslistener::Authenticator::authPlayer(uint indexSession, fys::pb::LoginMessage &&loginMessage) {
     pb::LogingPlayerOnGame loginPlayerOnGame;
     const std::string &actualToken = _ws->getGamerConnections().getConnectionToken(indexSession);
     const std::string &token = loginPlayerOnGame.tokengameserver();

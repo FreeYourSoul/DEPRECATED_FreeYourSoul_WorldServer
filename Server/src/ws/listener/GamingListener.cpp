@@ -3,10 +3,14 @@
 //
 
 #include <spdlog/spdlog.h>
+#include <google/protobuf/util/time_util.h>
 #include <FySPlayerInteraction.pb.h>
 #include <FySMessage.pb.h>
 #include <WorldServer.hh>
+#include <WorldEngine.hh>
 #include "GamingListener.hh"
+
+using namespace google::protobuf::util;
 
 fys::ws::buslistener::GamingListener::GamingListener(std::shared_ptr<fys::ws::WorldServer> &ws) :
         _ws(ws), _worldEngine(ws->getWorldEngine()){
@@ -24,19 +28,19 @@ void fys::ws::buslistener::GamingListener::operator()(fys::mq::QueueContainer<pb
         switch (playerInteract.type()) {
 
             case pb::PlayerInteract::MOVE_ON:
-                changePlayerStateInteractionMove(std::move(playerInteract));
+                changePlayerStateInteractionMove(msg.getIndexSession(), std::move(playerInteract));
                 break;
 
             case pb::PlayerInteract::MOVE_OFF:
-                changePlayerStatInteractionStopMoving(std::move(playerInteract));
+                changePlayerStatInteractionStopMoving(msg.getIndexSession());
                 break;
 
             case pb::PlayerInteract::ACTIVATE:
-                playerInteractionWithWorldItem(std::move(playerInteract));
+                playerInteractionWithWorldItem(msg.getIndexSession(), std::move(playerInteract));
                 break;
 
             case pb::PlayerInteract::REQUEST_INFO:
-                playerRequestInformation(std::move(playerInteract));
+                playerRequestInformation(msg.getIndexSession(), std::move(playerInteract));
                 break;
 
             default:
@@ -45,20 +49,21 @@ void fys::ws::buslistener::GamingListener::operator()(fys::mq::QueueContainer<pb
     }
 }
 
-void fys::ws::buslistener::GamingListener::changePlayerStateInteractionMove(fys::pb::PlayerInteract &&interact) {
+void fys::ws::buslistener::GamingListener::changePlayerStateInteractionMove(uint idx, pb::PlayerInteract &&interact) {
     fys::pb::PlayerMove playerMove;
     interact.content().UnpackTo(&playerMove);
-//    _worldEngine->changePlayerMovingState(, playerMove.angle());
+    _worldEngine->changePlayerMovingState(idx, TimeUtil::TimestampToMilliseconds(interact.time()), playerMove.angle());
 }
 
-void fys::ws::buslistener::GamingListener::changePlayerStatInteractionStopMoving(fys::pb::PlayerInteract &&interact) {
-//    _worldEngine->changePlayerMovingState();
+void fys::ws::buslistener::GamingListener::changePlayerStatInteractionStopMoving(uint idx) {
+    _worldEngine->changePlayerMovingState(idx);
 }
 
-void fys::ws::buslistener::GamingListener::playerRequestInformation(fys::pb::PlayerInteract &&interact) {
+void
+fys::ws::buslistener::GamingListener::playerRequestInformation(uint idx, pb::PlayerInteract &&interact) {
 
 }
 
-void fys::ws::buslistener::GamingListener::playerInteractionWithWorldItem(fys::pb::PlayerInteract &&interact) {
+void fys::ws::buslistener::GamingListener::playerInteractionWithWorldItem(uint idx, pb::PlayerInteract &&interact) {
 
 }

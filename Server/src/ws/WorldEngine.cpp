@@ -57,7 +57,7 @@ int fys::ws::WorldEngine::getTimesToMove(const time_t current, const fys::ws::Pl
     return 1 + static_cast<int>((current -  timeLastMove) / TIME_LOOP);
 }
 
-void fys::ws::WorldEngine::initPlayerPosition(const uint idx, fys::ws::MapPosition &&pos) {
+void fys::ws::WorldEngine::initPlayerPosition(uint idx, fys::ws::MapPosition &&pos) {
     if (idx >= _playersMapData.size())
         increaseObjectPool(idx);
     fys::ws::PlayerMapData pmd;
@@ -67,7 +67,7 @@ void fys::ws::WorldEngine::initPlayerPosition(const uint idx, fys::ws::MapPositi
     _playersMapData.at(idx) = std::move(pmd);
 }
 
-void fys::ws::WorldEngine::changeStatePlayer(const uint idx, const float angle, const PlayerState state) {
+void fys::ws::WorldEngine::changeStatePlayer(uint idx, float angle, const PlayerState state) {
     if (idx < _playersMapData.size()) {
         spdlog::get("c")->error("A player at index {} tried to change moving status ({}) with angle."
                                 "Pool of current player state is {}", idx, static_cast<unsigned int>(state), _playersMapData.size());
@@ -79,6 +79,10 @@ void fys::ws::WorldEngine::changeStatePlayer(const uint idx, const float angle, 
     }
 }
 
-void fys::ws::WorldEngine::increaseObjectPool(const uint minSize) {
+void fys::ws::WorldEngine::increaseObjectPool(uint minSize) {
     _playersMapData.resize(minSize + 100);
+}
+
+void fys::ws::WorldEngine::changePlayerMovingState(uint idx, const time_t timeMove, double angle) {
+
 }

@@ -2,9 +2,6 @@
 // Created by FyS on 23/05/17.
 //
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "InfiniteRecursion"
-
 #include <spdlog/spdlog.h>
 #include <WorldServer.hh>
 #include <FySAuthenticationLoginMessage.pb.h>
@@ -38,12 +35,16 @@ void fys::ws::WorldServer::runPlayerAccept() {
     _acceptorPlayer.async_accept(session->getSocket(),
 
              [this, session](const boost::system::error_code &e) {
-                 uint idx = this->_gamerConnections.addPlayerConnection(session);
+                 if (e)
+                     spdlog::get("c")->error("An error occurred while connecting a player {}", e.message());
+                 else {
+                     uint idx = this->_gamerConnections.addPlayerConnection(session);
 
-                 if (idx < std::numeric_limits<uint>::max())
-                     session->readOnSocket(_fysBus);
-                 else
-                     spdlog::get("c")->info("A player connected with index {}", idx);
+                     if (idx < std::numeric_limits<uint>::max())
+                         session->readOnSocket(_fysBus);
+                     else
+                         spdlog::get("c")->info("A player connected with index {}", idx);
+                 }
                  this->runPlayerAccept();
              }
 
@@ -107,5 +108,3 @@ void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &
             this->_worldServerCluster.addConnectionInCluster(clusterKey, clusterMemberConnection);
     });
 }
-
-#pragma clang diagnostic pop

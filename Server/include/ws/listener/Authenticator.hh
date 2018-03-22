@@ -6,6 +6,7 @@
 #define FREESOULS_AUTHENTICATION_HH
 
 #include <QueueContainer.hh>
+#include <memory>
 
 //forward declarations
 namespace fys {
@@ -46,17 +47,17 @@ namespace fys::ws::buslistener {
         /**
          * \brief Notify this server instance of a new player connecting soon, give its ip address and authentication
          * token to verify its identity. The real authentication is done in
-         * \link fys::ws::buslistener::Authenticator::authPlayer(const uint, pb::LoginMessage&&)
+         * \link fys::ws::buslistener::Authenticator::authPlayer(uint, pb::LoginMessage&&)
          * \param indexSession
          * \param loginMsg
          */
-        void notifyPlayerIncoming(const uint indexSession, pb::LoginMessage &&loginMsg);
+        void notifyPlayerIncoming(uint indexSession, pb::LoginMessage &&loginMsg);
         /**
          * Authenticate a player in the current world server instance
          * \param indexSession in the player session manager to root reply
          * \param loginMessage full authentication message received
          */
-        void authPlayer(const uint indexSession, pb::LoginMessage &&loginMessage);
+        void authPlayer(uint indexSession, pb::LoginMessage &&loginMessage);
 
     private:
         std::shared_ptr<WorldServer> _ws;

@@ -19,7 +19,7 @@ namespace fys::network {
         enum { CONNECTION_NUMBER = 1000 };
 
     public:
-        PlayerManager(const uint size);
+        PlayerManager(uint size);
 
         /**
          * \brief Add an entry in the accepted ip/token for new player connection
@@ -33,7 +33,7 @@ namespace fys::network {
          * \param newConnection
          * \return
          */
-        const uint addPlayerConnection(const std::shared_ptr<TcpConnection>& newConnection);
+        uint addPlayerConnection(const std::shared_ptr<TcpConnection> &newConnection);
         /**
          * \brief Check if the token corresponding to the given ip is correct and connect the user
          * \note Connect the user thanks to the given token. This token has to match the one given during the incoming
@@ -43,14 +43,14 @@ namespace fys::network {
          * \param token to check
          * \return true if the given token match the accepted one, return false otherwise
          */
-        const bool connectPlayerWithToken(const uint indexInSession, const Token &token);
+        bool connectPlayerWithToken(uint indexInSession, const Token &token);
 
         /**
          * \brief Check authentication for the given indexInSession
          * \param indexInSession
          * \return
          */
-        const bool isAuthenticated(uint indexInSession, const std::string &token) const;
+        bool isAuthenticated(uint indexInSession, const std::string &token) const;
 
     private:
         std::unordered_map<std::string, Token> _incomingPlayer;

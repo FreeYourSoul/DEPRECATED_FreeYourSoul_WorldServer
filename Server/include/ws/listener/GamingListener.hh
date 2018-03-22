@@ -5,6 +5,7 @@
 #ifndef FREESOULS_WORLD_GAMINGLISTENNER_HH
 #define FREESOULS_WORLD_GAMINGLISTENNER_HH
 
+#include <ctime>
 #include <memory>
 #include <QueueContainer.hh>
 
@@ -45,32 +46,37 @@ namespace fys::ws::buslistener {
          * In this state, the player is going to move in the direction given until getting a stop command, or another
          * call to this same method to change its direction
          * \see GamingListener::playerInteractionWithWorldItem
+         * \param idx indexInSession of the gamer session
          * \param interact interaction message sent by the player containing detailed information about the movement
          * wanted
          */
-        void changePlayerStateInteractionMove(pb::PlayerInteract &&interact);
+        void changePlayerStateInteractionMove(uint idx, pb::PlayerInteract &&interact);
 
         /**
          * \brief Change the state of a connected player to stop its moving state
          * If the player was in a moving state (we could assume the actual user was pressing a key and just released it)
          * this method stop the character movement
+         * \param idx indexInSession of the gamer session
          * \param interact interaction message sent by the player
          */
-        void changePlayerStatInteractionStopMoving(pb::PlayerInteract &&interact);
+        void changePlayerStatInteractionStopMoving(uint idx);
 
         /**
          * \brief Change the state of a connected player to stop its moving state
          * If the player was in a moving state (we could assume the actual user was pressing a key and just released it)
          * this method stop the character movement
+         * \param idx indexInSession of the gamer session
          * \param interact interaction message sent by the player
          */
-        void playerInteractionWithWorldItem(pb::PlayerInteract &&interact);
+        void playerInteractionWithWorldItem(uint idx, pb::PlayerInteract &&interact);
 
         /**
          * \brief A player requested informations about the world (information of another connected player for example)
+         * \param idx indexInSession of the gamer session
          * \param interact interaction message sent by the player containing detailed information about the request
-         */
-        void playerRequestInformation(pb::PlayerInteract &&interact);
+s         */
+        void playerRequestInformation(uint idx, pb::PlayerInteract &&interact);
+
 
     private:
         std::shared_ptr<WorldServer> _ws;

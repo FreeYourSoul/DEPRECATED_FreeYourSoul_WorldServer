@@ -32,7 +32,7 @@ fys::ws::Map::Map(const std::string &tmxMap) {
     }
 }
 
-void fys::ws::Map::initCollisionMapFromLayer(const unsigned xMap, const unsigned  yMap, const tmx::TileLayer &tileLayer) {
+void fys::ws::Map::initCollisionMapFromLayer(unsigned xMap, unsigned yMap, const tmx::TileLayer &tileLayer) {
     const auto& tiles = tileLayer.getTiles();
     unsigned level = static_cast<unsigned>(tileLayer.getName().back() - '0');
     unsigned index = 0;
@@ -52,13 +52,13 @@ void fys::ws::Map::initCollisionMapFromLayer(const unsigned xMap, const unsigned
     }
 }
 
-const fys::ws::MapElemProperty fys::ws::Map::getMapElementPropertyAtPosition(const float x, const float y) const {
+fys::ws::MapElemProperty fys::ws::Map::getMapElementPropertyAtPosition(float x, float y) const {
     if (x >= _boudaryX || y >= _boudaryY || y < 0 || x < 0)
         return fys::ws::MapElemProperty::BLOCK;
     return _mapElems.at(y).at(x).getProperty();
 }
 
-void fys::ws::Map::triggerForPlayer(const float x, const float y, fys::ws::PlayerMapData &playerData) {
+void fys::ws::Map::triggerForPlayer(float x, float y, fys::ws::PlayerMapData &playerData) {
     if ((x >= 0 && x < _boudaryX) && (y >= 0 && y < _boudaryY)) {
         if (_mapElems.at(y).at(x).getProperty() == fys::ws::MapElemProperty::TRIGGER) {
 

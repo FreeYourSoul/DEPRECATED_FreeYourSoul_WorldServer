@@ -5,7 +5,7 @@
 #include <TcpConnection.hh>
 #include "ClusterManager.hh"
 
-fys::network::ClusterManager::ClusterManager(const uint size) : SessionManager(size) {
+fys::network::ClusterManager::ClusterManager(uint size) : SessionManager(size) {
     setName("ServerClusterManager");
 }
 
@@ -16,4 +16,5 @@ uint fys::network::ClusterManager::addConnectionInCluster(const std::string &clu
     if (indexInClusterSession >= _clusterKey.size())
         _clusterKey.resize(_clusterKey.size() * 2);
     _clusterKey[indexInClusterSession] = clusterKey;
+    return indexInClusterSession;
 }

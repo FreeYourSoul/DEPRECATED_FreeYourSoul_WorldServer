@@ -30,19 +30,19 @@ namespace fys::network {
         using ptr = std::shared_ptr<SessionManager>;
         using wptr = std::weak_ptr<SessionManager>;
 
-        explicit SessionManager(const uint size);
+        explicit SessionManager(uint size);
 
-        const std::string getConnectionToken(const uint indexInSession) const noexcept;
-        const std::string getIp(const uint indexInSession) const noexcept;
+        const std::string getConnectionToken(uint indexInSession) const noexcept;
+        const std::string getIp(uint indexInSession) const noexcept;
         void setName(std::string &&name);
-        std::pair<std::string, ushort> getConnectionData(const uint indexInSession) const noexcept;
-        const uint addConnection(const std::shared_ptr<TcpConnection>& newConnection);
-        void disconnectUser(const uint idxSession, const fys::network::Token &token);
+        std::pair<std::string, ushort> getConnectionData(uint indexInSession) const noexcept;
+        uint addConnection(const std::shared_ptr<TcpConnection> &newConnection);
+        void disconnectUser(uint idxSession, const fys::network::Token &token);
 
         void sendResponse(uint i, pb::FySResponseMessage &&message) const noexcept;
 
     private:
-        inline void connectionHandle(const std::shared_ptr<TcpConnection> &newConnection, const uint i);
+        inline void connectionHandle(const std::shared_ptr<TcpConnection> &newConnection, uint i);
 
     protected:
         std::string _name;

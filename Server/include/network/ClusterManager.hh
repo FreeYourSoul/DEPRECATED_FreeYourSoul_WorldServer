@@ -14,7 +14,7 @@ namespace fys::network {
         enum { CONNECTION_NUMBER = 10 };
 
     public:
-        ClusterManager(const uint size);
+        ClusterManager(uint size);
 
         uint addConnectionInCluster(const std::string& clusterKey, const std::shared_ptr<TcpConnection> &newConnection);
 
