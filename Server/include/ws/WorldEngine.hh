@@ -7,6 +7,7 @@
 
 #include <memory>
 #include <vector>
+#include <ctime>
 
 //forward declarations
 namespace fys::ws {
@@ -35,7 +36,7 @@ namespace fys::ws {
         /**
          * \brief A player change its moving state,
          * \warning this method  has to be called from a listener, it is not thread safe so the caller has to ensure
-         *          beeing the only one using it
+         *          being the only one using it
          * \param idx indexInSession of the gamer session
          * \param timeMove timestamp at which the move is called, if this value is set to 0, the moving state is STOP
          * \param angle angle in degree value, if this value is set to 0, the moving state is STOP
