@@ -104,9 +104,8 @@ int main(int argc, const char * const *argv) {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
     try {
 
-        auto MyLogHandler = [] (google::protobuf::LogLevel level, const char* filename, int line, const std::string& message)
-        {
-            std::cout << "message " << message << std::endl;
+        auto MyLogHandler = [] (google::protobuf::LogLevel level, const char* filename, int line, const std::string& message) {
+            spdlog::get("c")->debug("PROTOBUF log handler : file {}, line {}, msg {}", filename, line, message);
         };
         google::protobuf::SetLogHandler(MyLogHandler);
 
@@ -119,14 +118,17 @@ int main(int argc, const char * const *argv) {
         WorldServer::ptr worldServer = WorldServer::create(ctx, ios, fysBus);
 
         buslistener::Authenticator authenticator(worldServer);
-        AuthBusListener authenticatorListener(authenticator);
         buslistener::GamingListener gaming(worldServer);
-        GamingListener gamingListener(gamingListener);
+
+        AuthBusListener authenticatorListener(authenticator);
+        GamingListener gamingListener(gaming);
 
         authenticatorListener.launchListenThread(fysBus);
         ::sleep(1);
+        gamingListener.launchListenThread(fysBus);
         worldServer->runPlayerAccept();
         worldServer->connectToGateway(ctx);
+        worldServer->run();
         ios.run();
     }
     catch (std::exception &e) {

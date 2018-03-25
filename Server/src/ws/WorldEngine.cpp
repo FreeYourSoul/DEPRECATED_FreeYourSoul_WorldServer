@@ -22,7 +22,7 @@ void fys::ws::WorldEngine::runWorldLoop() {
         this->updatePlayersPositions(current);
 
         std::time_t endTick = std::time(nullptr);
-        std::time_t durationSleep = (((current * 1000) + TIME_LOOP) - (endTick * 1000));
+        std::time_t durationSleep = (((current * 1000) + TIME_WORLD_LOOP) - (endTick * 1000));
         if (durationSleep > 0) {
             std::chrono::duration<std::time_t, std::milli> dur(durationSleep);
             std::this_thread::sleep_for(dur);
@@ -44,8 +44,14 @@ void fys::ws::WorldEngine::updatePlayersPositions(std::time_t current) {
                     p._pos.y = futureY;
                     if (prop == MapElemProperty::TRIGGER)
                         _map->triggerForPlayer(futureX, futureY, p);
+                    if (timeMove > 1) {
+                        futureX = p._pos.x + (p._velocity.speed * std::cos(p._velocity.angle));
+                        futureY = p._pos.y + (p._velocity.speed * std::sin(p._velocity.angle));
+                    }
                 } while (--timeMove > 0);
             }
+            else
+                spdlog::get("c")->critical("BING YOUPI");
         }
     }
 }
@@ -54,7 +60,7 @@ int fys::ws::WorldEngine::getTimesToMove(const time_t current, const fys::ws::Pl
     time_t timeLastMove = playerData._initRequestTime;
     if (playerData._lastTimeMoved > 0)
         timeLastMove = playerData._lastTimeMoved;
-    return 1 + static_cast<int>((current -  timeLastMove) / TIME_LOOP);
+    return 1 + static_cast<int>((current -  timeLastMove) / GAME_PACE);
 }
 
 void fys::ws::WorldEngine::initPlayerPosition(uint idx, fys::ws::MapPosition &&pos) {

@@ -12,7 +12,7 @@
 
 using namespace google::protobuf::util;
 
-fys::ws::buslistener::GamingListener::GamingListener(std::shared_ptr<fys::ws::WorldServer> &ws) :
+fys::ws::buslistener::GamingListener::GamingListener(WorldServer::ptr &ws) :
         _ws(ws), _worldEngine(ws->getWorldEngine()){
 }
 

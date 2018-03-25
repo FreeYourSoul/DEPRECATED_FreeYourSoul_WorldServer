@@ -49,6 +49,7 @@ namespace fys::ws {
 
         void runPlayerAccept();
         void connectToGateway(const Context &ctx);
+        void run();
 
         void connectAndAddWorldServerInCluster(const std::string &clusterKey, const std::string &token,
                                                const std::string &ip, const std::string &port);

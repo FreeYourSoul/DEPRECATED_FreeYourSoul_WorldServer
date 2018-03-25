@@ -34,7 +34,7 @@ namespace fys::ws::buslistener {
     class GamingListener {
 
     public:
-        enum { IndexInBus = 1 };
+        enum { IndexInBus = 1 }; // fys::pb::PLAYER_INTERACTION
 
         explicit GamingListener(std::shared_ptr<WorldServer> &ws);
 

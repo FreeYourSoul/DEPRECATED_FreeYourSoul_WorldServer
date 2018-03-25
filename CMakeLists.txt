@@ -16,6 +16,9 @@ endif()
 
 enable_testing()
 
+find_package(Boost REQUIRED)
+find_package(TMXLITE REQUIRED)
+
 add_subdirectory(Protobuf)
 
 include_directories(

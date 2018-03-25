@@ -9,7 +9,7 @@
 #include <WorldServer.hh>
 #include "listener/Authenticator.hh"
 
-fys::ws::buslistener::Authenticator::Authenticator(WorldServer::ptr& gtw) : _ws(gtw)
+fys::ws::buslistener::Authenticator::Authenticator(WorldServer::ptr& ws) : _ws(ws)
 {}
 
 void fys::ws::buslistener::Authenticator::operator()(mq::QueueContainer<pb::FySMessage> msg) {

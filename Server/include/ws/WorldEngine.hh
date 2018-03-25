@@ -22,7 +22,8 @@ namespace fys::ws {
 namespace fys::ws {
 
     class WorldEngine {
-        static constexpr int TIME_LOOP = 33;
+        static constexpr int TIME_WORLD_LOOP = 33;
+        static constexpr int GAME_PACE = 15;
 
     public:
         ~WorldEngine() = default;

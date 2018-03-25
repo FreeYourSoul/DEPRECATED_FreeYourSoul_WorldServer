@@ -108,3 +108,10 @@ void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &
             this->_worldServerCluster.addConnectionInCluster(clusterKey, clusterMemberConnection);
     });
 }
+
+void fys::ws::WorldServer::run() {
+    std::thread worldLoopThread([this](){
+        _worldEngine->runWorldLoop();
+    });
+    worldLoopThread.detach();
+}
