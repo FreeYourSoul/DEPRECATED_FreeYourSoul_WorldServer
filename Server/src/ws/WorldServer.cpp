@@ -115,3 +115,7 @@ void fys::ws::WorldServer::run() {
     });
     worldLoopThread.detach();
 }
+
+void fys::ws::WorldServer::initPlayerPosition(uint indexInSession, float x, float y) {
+    _worldEngine->initPlayerPosition(indexInSession, {x, y});
+}

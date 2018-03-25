@@ -58,6 +58,7 @@ namespace fys::ws {
         network::ClusterManager &getWorldServerCluster() { return _worldServerCluster; }
 
         std::shared_ptr<WorldEngine> getWorldEngine() const { return _worldEngine; }
+        void initPlayerPosition(uint indexInSession, float x, float y);
 
         const std::unique_ptr<network::TcpConnection> &getGtwConnection() const { return _gtwConnection; }
 

@@ -3,11 +3,11 @@
 //
 
 #include <spdlog/spdlog.h>
-#include <chrono>
 #include <thread>
-#include <PlayerManager.hh>
 #include <Map.hh>
+#include <chrono>
 #include <PlayerDataType.hh>
+#include <PlayerManager.hh>
 #include "WorldEngine.hh"
 
 fys::ws::WorldEngine::WorldEngine(const std::string &tmxMapFilePath) :
@@ -33,12 +33,14 @@ void fys::ws::WorldEngine::runWorldLoop() {
 void fys::ws::WorldEngine::updatePlayersPositions(std::time_t current) {
     for (PlayerMapData &p : _playersMapData) {
         if (p._state != PlayerState::MOVE_OFF) {
+            int timeMove = this->getTimesToMove(current * 1000, p);
+
             float futureX = p._pos.x + (p._velocity.speed * std::cos(p._velocity.angle));
             float futureY = p._pos.y + (p._velocity.speed * std::sin(p._velocity.angle));
             MapElemProperty prop = _map->getMapElementPropertyAtPosition(futureX, futureY);
 
+            std::printf("fx %f fy %f prop %d times %d\n", p._pos.x, p._pos.x, timeMove);
             if (prop != MapElemProperty::BLOCK) {
-                int timeMove = this->getTimesToMove(current, p);
                 do {
                     p._pos.x = futureX;
                     p._pos.y = futureY;
@@ -56,11 +58,12 @@ void fys::ws::WorldEngine::updatePlayersPositions(std::time_t current) {
     }
 }
 
-int fys::ws::WorldEngine::getTimesToMove(const time_t current, const fys::ws::PlayerMapData &playerData) {
+int fys::ws::WorldEngine::getTimesToMove(const time_t currentInMillisec, const fys::ws::PlayerMapData &playerData) {
     time_t timeLastMove = playerData._initRequestTime;
     if (playerData._lastTimeMoved > 0)
         timeLastMove = playerData._lastTimeMoved;
-    return 1 + static_cast<int>((current -  timeLastMove) / GAME_PACE);
+    std::printf("current %ld lastTimeMoved %ld\n", currentInMillisec, timeLastMove);
+    return static_cast<int>((currentInMillisec -  timeLastMove) / GAME_PACE);
 }
 
 void fys::ws::WorldEngine::initPlayerPosition(uint idx, fys::ws::MapPosition &&pos) {
@@ -90,5 +93,7 @@ void fys::ws::WorldEngine::increaseObjectPool(uint minSize) {
 }
 
 void fys::ws::WorldEngine::changePlayerMovingState(uint idx, const time_t timeMove, double angle) {
-
+    _playersMapData.at(idx)._initRequestTime = timeMove;
+    _playersMapData.at(idx)._velocity.angle = static_cast<float>(angle);
+    _playersMapData.at(idx)._state = (timeMove) ? fys::ws::PlayerState::MOVE_ON : fys::ws::PlayerState::MOVE_OFF;
 }

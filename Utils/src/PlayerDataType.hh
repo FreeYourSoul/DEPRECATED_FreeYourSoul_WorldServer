@@ -11,7 +11,7 @@
 namespace fys::ws {
 
     struct Velocity {
-        float speed = 175.0;
+        float speed = 0.175;
         float angle = 0.0;
     };
 

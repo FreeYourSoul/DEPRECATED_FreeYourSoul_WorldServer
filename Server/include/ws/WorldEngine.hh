@@ -48,7 +48,7 @@ namespace fys::ws {
     private:
         void updatePlayersPositions(time_t current);
         void increaseObjectPool(uint minSize);
-        int getTimesToMove(const time_t current, const PlayerMapData &playerData);
+        int getTimesToMove(const time_t currentInMillisec, const PlayerMapData &playerData);
 
     private:
         std::unique_ptr<ws::Map> _map;

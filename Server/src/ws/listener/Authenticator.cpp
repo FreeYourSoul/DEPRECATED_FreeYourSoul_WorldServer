@@ -60,6 +60,7 @@ void fys::ws::buslistener::Authenticator::authPlayer(uint indexSession, fys::pb:
     loginMessage.content().UnpackTo(&loginPlayerOnGame);
     if (std::equal(token.begin(), token.end(), actualToken.begin())) {
         _ws->getGamerConnections().connectPlayerWithToken(indexSession, {token.begin(), token.end()});
+        _ws->initPlayerPosition(indexSession, 0.0, 0.0);
         spdlog::get("c")->info("A new player ({} at index {}) connected on server", loginMessage.user(), indexSession);
     }
     else {
