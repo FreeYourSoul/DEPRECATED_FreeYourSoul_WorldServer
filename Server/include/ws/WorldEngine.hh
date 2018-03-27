@@ -22,7 +22,7 @@ namespace fys::ws {
 namespace fys::ws {
 
     class WorldEngine {
-        static constexpr int TIME_WORLD_LOOP = 33;
+        static constexpr double TIME_WORLD_LOOP = 33;
         static constexpr int GAME_PACE = 15;
 
     public:
@@ -31,7 +31,6 @@ namespace fys::ws {
 
         void runWorldLoop();
 
-        void changeStatePlayer(uint idx, float angle, const PlayerState state);
         void initPlayerPosition(uint idx, MapPosition &&pos);
 
         /**
@@ -42,13 +41,13 @@ namespace fys::ws {
          * \param timeMove timestamp at which the move is called, if this value is set to 0, the moving state is STOP
          * \param angle angle in degree value, if this value is set to 0, the moving state is STOP
          */
-        void changePlayerMovingState(uint idx, const std::time_t timeMove = 0, double angle = 0);
+        void changePlayerMovingState(uint idx, double timeMove = 0, double angle = 0);
 
 
     private:
-        void updatePlayersPositions(time_t current);
+        void updatePlayersPositions(double current, double previous);
         void increaseObjectPool(uint minSize);
-        int getTimesToMove(const time_t currentInMillisec, const PlayerMapData &playerData);
+        inline bool hasToMove(double currentInMilliseconds, PlayerMapData &playerData) const;
 
     private:
         std::unique_ptr<ws::Map> _map;

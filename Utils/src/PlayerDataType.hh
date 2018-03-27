@@ -29,8 +29,7 @@ namespace fys::ws {
         fys::ws::PlayerState _state = fys::ws::PlayerState::MOVE_OFF;
         MapPosition _pos;
         Velocity _velocity;
-        std::time_t _initRequestTime;
-        std::time_t _lastTimeMoved;
+        double _executeActionTime = std::numeric_limits<double>::max();
     };
 
 }
