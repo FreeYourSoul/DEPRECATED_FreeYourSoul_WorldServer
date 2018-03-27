@@ -40,15 +40,15 @@ void fys::ws::WorldEngine::runWorldLoop() {
 void fys::ws::WorldEngine::updatePlayersPositions(double current, double previous) {
     for (PlayerMapData &p : _playersMapData) {
         if (this->hasToMove(current, p)) {
-            float futureX = static_cast<float>(p._pos.x + (((current - previous) / 1000) * (p._velocity.speed * std::cos(p._velocity.angle))));
-            float futureY = static_cast<float>(p._pos.y + (((current - previous) / 1000) * (p._velocity.speed * std::sin(p._velocity.angle))));
+            float futureX = static_cast<float>(p._pos.x + (((current - previous) / 100) * (p._velocity.speed * std::cos(p._velocity.angle))));
+            float futureY = static_cast<float>(p._pos.y + (((current - previous) / 100) * (p._velocity.speed * std::sin(p._velocity.angle))));
             MapElemProperty prop = _map->getMapElementPropertyAtPosition(futureX, futureY);
 
             std::printf("x %f y %f speed %f angle %f cos %f \n",
-                        p._pos.x, p._pos.y, p._velocity.speed, p._velocity.angle,
+                        p._pos.x* 24, p._pos.y* 24, p._velocity.speed, p._velocity.angle,
                         p._velocity.speed * std::cos(p._velocity.angle));
             std::printf("fx %f fy %f %lf\n",
-                        futureX, futureY, (current - previous));
+                        futureX * 24, futureY* 24, (current - previous));
             if (prop != MapElemProperty::BLOCK) {
                 p._pos.x = futureX;
                 p._pos.y = futureY;
