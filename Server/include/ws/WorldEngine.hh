@@ -23,7 +23,7 @@ namespace fys::ws {
 
     class WorldEngine {
         static constexpr double TIME_WORLD_LOOP = 33;
-        static constexpr double GAME_PACE = 16.67;
+        static constexpr double GAME_PACE = 16.6666;
 
     public:
         ~WorldEngine() = default;
@@ -45,7 +45,7 @@ namespace fys::ws {
 
 
     private:
-        void updatePlayersPositions(double current, double previous);
+        void updatePlayersPositions(double currentTime);
         void increaseObjectPool(uint minSize);
         inline bool hasToMove(double currentInMilliseconds, PlayerMapData &playerData) const;
 

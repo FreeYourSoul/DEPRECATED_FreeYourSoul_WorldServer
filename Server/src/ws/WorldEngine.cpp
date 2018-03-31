@@ -10,6 +10,10 @@
 #include <PlayerManager.hh>
 #include "WorldEngine.hh"
 
+static inline auto getCurrentTimeInMillisec() {
+    return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+}
+
 fys::ws::WorldEngine::WorldEngine(const std::string &tmxMapFilePath) :
         _map(std::make_unique<fys::ws::Map>(tmxMapFilePath)),
         _playersMapData(network::PlayerManager::CONNECTION_NUMBER){
@@ -17,18 +21,17 @@ fys::ws::WorldEngine::WorldEngine(const std::string &tmxMapFilePath) :
 
 void fys::ws::WorldEngine::runWorldLoop() {
     double timeEpochStart = 0;
-    double timeEpochEnd = 0;
     double previousStart = 0;
+    double lag = 0;
 
     while (true) {
-        auto start = std::chrono::high_resolution_clock::now();
-        timeEpochStart = std::chrono::duration_cast<std::chrono::milliseconds>(start.time_since_epoch()).count();
+        timeEpochStart = getCurrentTimeInMillisec();
+        lag += (timeEpochStart - previousStart);
 
-        this->updatePlayersPositions(timeEpochStart, previousStart);
+        this->updatePlayersPositions(timeEpochStart);
 
-        auto end = std::chrono::high_resolution_clock::now();
-        timeEpochEnd = std::chrono::duration_cast<std::chrono::milliseconds>(end.time_since_epoch()).count();
-        double sleepTime = (timeEpochStart + TIME_WORLD_LOOP) - timeEpochEnd;
+        lag = std::fmod(lag, GAME_PACE);
+        double sleepTime = (timeEpochStart + GAME_PACE) - getCurrentTimeInMillisec();
         if (sleepTime > 0) {
             std::chrono::duration<double, std::milli> dur(sleepTime);
             std::this_thread::sleep_for(dur);
@@ -37,18 +40,16 @@ void fys::ws::WorldEngine::runWorldLoop() {
     }
 }
 
-void fys::ws::WorldEngine::updatePlayersPositions(double current, double previous) {
+void fys::ws::WorldEngine::updatePlayersPositions(double currentTime) {
     for (PlayerMapData &p : _playersMapData) {
-        if (this->hasToMove(current, p)) {
-            float futureX = static_cast<float>(p._pos.x + (((current - previous) / 100) * (p._velocity.speed * std::cos(p._velocity.angle))));
-            float futureY = static_cast<float>(p._pos.y + (((current - previous) / 100) * (p._velocity.speed * std::sin(p._velocity.angle))));
+        if (this->hasToMove(currentTime, p)) {
+            float futureX = p._pos.x + (p._velocity.speed * std::cos(p._velocity.angle));
+            float futureY = p._pos.y + (p._velocity.speed * std::sin(p._velocity.angle));
             MapElemProperty prop = _map->getMapElementPropertyAtPosition(futureX, futureY);
 
-            std::printf("x %f y %f speed %f angle %f cos %f \n",
+            std::printf("x %f y %f speed %f angle %f cos*speed %f \n fx %f fy %f\n currentTime %f actionTime %f\n\n",
                         p._pos.x* 24, p._pos.y* 24, p._velocity.speed, p._velocity.angle,
-                        p._velocity.speed * std::cos(p._velocity.angle));
-            std::printf("fx %f fy %f %lf\n",
-                        futureX * 24, futureY* 24, (current - previous));
+                        p._velocity.speed * std::cos(p._velocity.angle), futureX, futureY, currentTime, p._executeActionTime);
             if (prop != MapElemProperty::BLOCK) {
                 p._pos.x = futureX;
                 p._pos.y = futureY;
@@ -62,7 +63,11 @@ void fys::ws::WorldEngine::updatePlayersPositions(double current, double previou
 }
 
 inline bool fys::ws::WorldEngine::hasToMove(double currentInMilliseconds, PlayerMapData &playerData) const {
-    return playerData._executeActionTime - currentInMilliseconds <= 0;
+    if (playerData._state == fys::ws::PlayerState::MOVE_ON) {
+        playerData._state = fys::ws::PlayerState::MOVE_OFF;
+        return currentInMilliseconds <= playerData._executeActionTime;
+    }
+    return false;
 }
 
 void fys::ws::WorldEngine::initPlayerPosition(uint idx, fys::ws::MapPosition &&pos) {
@@ -81,13 +86,12 @@ void fys::ws::WorldEngine::increaseObjectPool(uint minSize) {
 
 void fys::ws::WorldEngine::changePlayerMovingState(uint idx, double timeMove, double angle) {
     if (timeMove && (angle == _playersMapData.at(idx)._velocity.angle ||
-                     _playersMapData.at(idx)._executeActionTime < std::numeric_limits<double>::max())) {
+                     _playersMapData.at(idx)._executeActionTime > 0)) {
         _playersMapData.at(idx)._executeActionTime = timeMove + GAME_PACE;
         _playersMapData.at(idx)._state = fys::ws::PlayerState::MOVE_ON;
     }
     else if (!timeMove) {
-        _playersMapData.at(idx)._executeActionTime = std::numeric_limits<double>::max();
-        _playersMapData.at(idx)._state = fys::ws::PlayerState::MOVE_OFF;
+        _playersMapData.at(idx)._executeActionTime = 0;
     }
     _playersMapData.at(idx)._velocity.angle = static_cast<float>(angle);
 }

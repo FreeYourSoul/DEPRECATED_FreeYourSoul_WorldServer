@@ -11,7 +11,7 @@
 namespace fys::ws {
 
     struct Velocity {
-        float speed = 0.175;
+        float speed = 0.025;
         float angle = 0.0;
     };
 
@@ -29,7 +29,7 @@ namespace fys::ws {
         fys::ws::PlayerState _state = fys::ws::PlayerState::MOVE_OFF;
         MapPosition _pos;
         Velocity _velocity;
-        double _executeActionTime = std::numeric_limits<double>::max();
+        double _executeActionTime = 0;
     };
 
 }
