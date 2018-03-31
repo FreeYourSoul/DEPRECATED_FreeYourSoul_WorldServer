@@ -5,6 +5,7 @@
 #ifndef FREESOULS_WORLD_PLAYERMAPDATA_HH
 #define FREESOULS_WORLD_PLAYERMAPDATA_HH
 
+#include <atomic>
 #include <zconf.h>
 #include <ctime>
 
@@ -20,13 +21,8 @@ namespace fys::ws {
         float y = 0.0;
     };
 
-    enum class PlayerState : unsigned int {
-        MOVE_ON,
-        MOVE_OFF
-    };
-
     struct PlayerMapData {
-        fys::ws::PlayerState _state = fys::ws::PlayerState::MOVE_OFF;
+        bool _isMoving = false;
         MapPosition _pos;
         Velocity _velocity;
         double _executeActionTime = 0;

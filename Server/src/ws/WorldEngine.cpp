@@ -47,9 +47,9 @@ void fys::ws::WorldEngine::updatePlayersPositions(double currentTime) {
             float futureY = p._pos.y + (p._velocity.speed * std::sin(p._velocity.angle));
             MapElemProperty prop = _map->getMapElementPropertyAtPosition(futureX, futureY);
 
-            std::printf("x %f y %f speed %f angle %f cos*speed %f \n fx %f fy %f\n currentTime %f actionTime %f\n\n",
-                        p._pos.x* 24, p._pos.y* 24, p._velocity.speed, p._velocity.angle,
-                        p._velocity.speed * std::cos(p._velocity.angle), futureX, futureY, currentTime, p._executeActionTime);
+            std::printf("x %f y %f speed %f\n fx %f fy %f\n currentTime %f actionTime %f\n\n",
+                        p._pos.x* 24, p._pos.y* 24, p._velocity.speed,
+                        futureX, futureY, currentTime, p._executeActionTime);
             if (prop != MapElemProperty::BLOCK) {
                 p._pos.x = futureX;
                 p._pos.y = futureY;
@@ -63,8 +63,8 @@ void fys::ws::WorldEngine::updatePlayersPositions(double currentTime) {
 }
 
 inline bool fys::ws::WorldEngine::hasToMove(double currentInMilliseconds, PlayerMapData &playerData) const {
-    if (playerData._state == fys::ws::PlayerState::MOVE_ON) {
-        playerData._state = fys::ws::PlayerState::MOVE_OFF;
+    if (playerData._isMoving) {
+        playerData._isMoving = false;
         return currentInMilliseconds <= playerData._executeActionTime;
     }
     return false;
@@ -75,9 +75,9 @@ void fys::ws::WorldEngine::initPlayerPosition(uint idx, fys::ws::MapPosition &&p
         increaseObjectPool(idx);
     fys::ws::PlayerMapData pmd;
 
-    pmd._state = PlayerState::MOVE_OFF;
+    pmd._isMoving = false;
     pmd._pos = std::move(pos);
-    _playersMapData.at(idx) = std::move(pmd);
+    _playersMapData.at(idx) = pmd;
 }
 
 void fys::ws::WorldEngine::increaseObjectPool(uint minSize) {
@@ -88,7 +88,7 @@ void fys::ws::WorldEngine::changePlayerMovingState(uint idx, double timeMove, do
     if (timeMove && (angle == _playersMapData.at(idx)._velocity.angle ||
                      _playersMapData.at(idx)._executeActionTime > 0)) {
         _playersMapData.at(idx)._executeActionTime = timeMove + GAME_PACE;
-        _playersMapData.at(idx)._state = fys::ws::PlayerState::MOVE_ON;
+        _playersMapData.at(idx)._isMoving = true;
     }
     else if (!timeMove) {
         _playersMapData.at(idx)._executeActionTime = 0;
