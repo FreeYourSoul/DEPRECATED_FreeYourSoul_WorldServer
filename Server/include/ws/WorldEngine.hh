@@ -45,7 +45,7 @@ namespace fys::ws {
 
 
     private:
-        void updatePlayersPositions(double currentTime);
+        void updatePlayersPositions(double currentTime, double &lag);
         void increaseObjectPool(uint minSize);
         inline bool hasToMove(double currentInMilliseconds, PlayerMapData &playerData) const;
 
