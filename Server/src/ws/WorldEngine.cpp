@@ -16,12 +16,12 @@ static inline auto getCurrentTimeInMillisec() {
 
 fys::ws::WorldEngine::WorldEngine(const std::string &tmxMapFilePath) :
         _map(std::make_unique<fys::ws::Map>(tmxMapFilePath)),
-        _playersMapData(network::PlayerManager::CONNECTION_NUMBER){
+        _playersMapData(network::PlayerManager::CONNECTION_NUMBER) {
 }
 
 void fys::ws::WorldEngine::runWorldLoop() {
-    double timeEpochStart = 0;
-    double previousStart = 0;
+    double timeEpochStart = getCurrentTimeInMillisec();
+    double previousStart = timeEpochStart;
     double lag = 0;
 
     while (true) {
@@ -30,7 +30,7 @@ void fys::ws::WorldEngine::runWorldLoop() {
 
         this->updatePlayersPositions(timeEpochStart, lag);
 
-        double sleepTime = (timeEpochStart + TIME_WORLD_LOOP) - getCurrentTimeInMillisec();
+        double sleepTime = (timeEpochStart + GAME_PACE - 2) - getCurrentTimeInMillisec();
         if (sleepTime > 0) {
             std::chrono::duration<double, std::milli> dur(sleepTime);
             std::this_thread::sleep_for(dur);
@@ -47,9 +47,9 @@ void fys::ws::WorldEngine::updatePlayersPositions(double currentTime, double &la
                 float futureY = p._pos.y + (p._velocity.speed * std::sin(p._velocity.angle));
                 MapElemProperty prop = _map->getMapElementPropertyAtPosition(futureX, futureY);
 
-                std::printf("x %f y %f speed %f\n fx %f fy %f\n currentTime %f actionTime %f\n\n",
+                std::printf("x %f y %f speed %f\n fx %f fy %f\n currentTime %f actionTime %f\nlag %f\n\n",
                             p._pos.x* 24, p._pos.y* 24, p._velocity.speed,
-                            futureX, futureY, currentTime, p._executeActionTime);
+                            lag, futureX, futureY, currentTime, p._executeActionTime);
                 if (prop != MapElemProperty::BLOCK) {
                     p._pos.x = futureX;
                     p._pos.y = futureY;
@@ -59,7 +59,8 @@ void fys::ws::WorldEngine::updatePlayersPositions(double currentTime, double &la
                 else
                     spdlog::get("c")->critical("BING YOUPI");
             }
-            lag -= GAME_PACE;
+            if (lag - GAME_PACE > 0)
+                lag -= GAME_PACE;
         } while (lag >= GAME_PACE);
     }
 }
