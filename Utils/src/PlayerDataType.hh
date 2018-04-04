@@ -8,6 +8,7 @@
 #include <atomic>
 #include <zconf.h>
 #include <ctime>
+#include <PlayerManager.hh>
 
 namespace fys::ws {
 
@@ -21,11 +22,21 @@ namespace fys::ws {
         float y = 0.0;
     };
 
-    struct PlayerMapData {
-        bool _isMoving = false;
-        MapPosition _pos;
-        Velocity _velocity;
-        double _executeActionTime = 0;
+    struct PlayersMapData {
+        std::vector<bool> _isMoving;
+        std::vector<double> _executeActionTime;
+        std::vector<MapPosition> _pos;
+        std::vector<Velocity> _velocity;
+
+        PlayersMapData() :
+                _isMoving(network::PlayerManager::CONNECTION_NUMBER, false),
+                _executeActionTime(network::PlayerManager::CONNECTION_NUMBER, 0),
+                _pos(network::PlayerManager::CONNECTION_NUMBER),
+                _velocity(network::PlayerManager::CONNECTION_NUMBER) {}
+
+        std::size_t playersSize() const {
+            return _pos.size();
+        }
     };
 
 }

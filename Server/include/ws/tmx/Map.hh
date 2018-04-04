@@ -99,7 +99,7 @@ namespace fys::ws {
          */
         MapElemProperty getMapElementPropertyAtPosition(float x, float y) const;
 
-        void triggerForPlayer(float x, float y, PlayerMapData &playerData);
+        void triggerForPlayer(float x, float y, PlayersMapData &playerData);
 
     private:
         /**

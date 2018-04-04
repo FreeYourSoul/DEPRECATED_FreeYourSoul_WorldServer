@@ -58,7 +58,7 @@ fys::ws::MapElemProperty fys::ws::Map::getMapElementPropertyAtPosition(float x, 
     return _mapElems.at(y).at(x).getProperty();
 }
 
-void fys::ws::Map::triggerForPlayer(float x, float y, fys::ws::PlayerMapData &playerData) {
+void fys::ws::Map::triggerForPlayer(float x, float y, fys::ws::PlayersMapData &playerData) {
     if ((x >= 0 && x < _boudaryX) && (y >= 0 && y < _boudaryY)) {
         if (_mapElems.at(y).at(x).getProperty() == fys::ws::MapElemProperty::TRIGGER) {
 

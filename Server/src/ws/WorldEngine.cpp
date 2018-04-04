@@ -16,7 +16,7 @@ static inline auto getCurrentTimeInMillisec() {
 
 fys::ws::WorldEngine::WorldEngine(const std::string &tmxMapFilePath) :
         _map(std::make_unique<fys::ws::Map>(tmxMapFilePath)),
-        _playersMapData(network::PlayerManager::CONNECTION_NUMBER) {
+        _playersMapData() {
 }
 
 void fys::ws::WorldEngine::runWorldLoop() {
@@ -30,7 +30,7 @@ void fys::ws::WorldEngine::runWorldLoop() {
 
         this->updatePlayersPositions(timeEpochStart, lag);
 
-        double sleepTime = (timeEpochStart + GAME_PACE - 2) - getCurrentTimeInMillisec();
+        double sleepTime = (timeEpochStart + TIME_WORLD_LOOP) - getCurrentTimeInMillisec();
         if (sleepTime > 0) {
             std::chrono::duration<double, std::milli> dur(sleepTime);
             std::this_thread::sleep_for(dur);
@@ -40,21 +40,24 @@ void fys::ws::WorldEngine::runWorldLoop() {
 }
 
 void fys::ws::WorldEngine::updatePlayersPositions(double currentTime, double &lag) {
-    for (PlayerMapData &p : _playersMapData) {
+    for (uint idx = 0; idx < _playersMapData.playersSize(); ++idx) {
         do {
-            if (this->hasToMove(currentTime, p)) {
-                float futureX = p._pos.x + (p._velocity.speed * std::cos(p._velocity.angle));
-                float futureY = p._pos.y + (p._velocity.speed * std::sin(p._velocity.angle));
+            if (this->hasToMove(idx, currentTime)) {
+                float futureX = _playersMapData._pos.at(idx).x + (_playersMapData._velocity.at(idx).speed *
+                                                                  std::cos(_playersMapData._velocity.at(idx).angle));
+                float futureY = _playersMapData._pos.at(idx).y + (_playersMapData._velocity.at(idx).speed *
+                                                                  std::sin(_playersMapData._velocity.at(idx).angle));
                 MapElemProperty prop = _map->getMapElementPropertyAtPosition(futureX, futureY);
 
                 std::printf("x %f y %f speed %f\n fx %f fy %f\n currentTime %f actionTime %f\nlag %f\n\n",
-                            p._pos.x* 24, p._pos.y* 24, p._velocity.speed,
-                            lag, futureX, futureY, currentTime, p._executeActionTime);
+                            _playersMapData._pos.at(idx).x* 24, _playersMapData._pos.at(idx).y* 24, _playersMapData._velocity.at(idx).speed,
+                            lag, futureX, futureY, currentTime, _playersMapData._executeActionTime);
+
                 if (prop != MapElemProperty::BLOCK) {
-                    p._pos.x = futureX;
-                    p._pos.y = futureY;
+                    _playersMapData._pos.at(idx).x = futureX;
+                    _playersMapData._pos.at(idx).y = futureY;
                     if (prop == MapElemProperty::TRIGGER)
-                        _map->triggerForPlayer(futureX, futureY, p);
+                        _map->triggerForPlayer(futureX, futureY, _playersMapData);
                 }
                 else
                     spdlog::get("c")->critical("BING YOUPI");
@@ -65,36 +68,32 @@ void fys::ws::WorldEngine::updatePlayersPositions(double currentTime, double &la
     }
 }
 
-inline bool fys::ws::WorldEngine::hasToMove(double currentInMilliseconds, PlayerMapData &playerData) const {
-    if (playerData._isMoving) {
-        playerData._isMoving = false;
-        return currentInMilliseconds <= playerData._executeActionTime;
+bool fys::ws::WorldEngine::hasToMove(uint idx, double currentInMilliseconds) {
+    if (_playersMapData._isMoving.at(idx)) {
+        _playersMapData._isMoving[idx] = false;
+        return currentInMilliseconds <= _playersMapData._executeActionTime.at(idx);
     }
     return false;
 }
 
 void fys::ws::WorldEngine::initPlayerPosition(uint idx, fys::ws::MapPosition &&pos) {
-    if (idx >= _playersMapData.size())
-        increaseObjectPool(idx);
-    fys::ws::PlayerMapData pmd;
-
-    pmd._isMoving = false;
-    pmd._pos = std::move(pos);
-    _playersMapData.at(idx) = pmd;
-}
-
-void fys::ws::WorldEngine::increaseObjectPool(uint minSize) {
-    _playersMapData.resize(minSize + 100);
+    if (idx >= _playersMapData.playersSize()) {
+        _playersMapData._isMoving.resize(_playersMapData.playersSize() + 100, false);
+        _playersMapData._executeActionTime.resize(_playersMapData.playersSize() + 100, 0);
+        _playersMapData._velocity.resize(_playersMapData.playersSize() + 100);
+        _playersMapData._pos.resize(_playersMapData.playersSize() + 100);
+    }
+    _playersMapData._pos.at(idx) = std::move(pos);
 }
 
 void fys::ws::WorldEngine::changePlayerMovingState(uint idx, double timeMove, double angle) {
-    if (timeMove && (angle == _playersMapData.at(idx)._velocity.angle ||
-                     _playersMapData.at(idx)._executeActionTime > 0)) {
-        _playersMapData.at(idx)._executeActionTime = timeMove + GAME_PACE;
-        _playersMapData.at(idx)._isMoving = true;
+    if (timeMove && (angle == _playersMapData._velocity.at(idx).angle ||
+                     _playersMapData._executeActionTime.at(idx) > 0)) {
+        _playersMapData._executeActionTime.at(idx) = timeMove + GAME_PACE;
+        _playersMapData._isMoving.at(idx) = true;
     }
     else if (!timeMove) {
-        _playersMapData.at(idx)._executeActionTime = 0;
+        _playersMapData._executeActionTime.at(idx) = 0;
     }
-    _playersMapData.at(idx)._velocity.angle = static_cast<float>(angle);
+    _playersMapData._velocity.at(idx).angle = static_cast<float>(angle);
 }

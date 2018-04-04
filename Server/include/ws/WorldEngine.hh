@@ -8,13 +8,13 @@
 #include <memory>
 #include <vector>
 #include <ctime>
+#include <PlayerDataType.hh>
 
 //forward declarations
 namespace fys::ws {
     class Map;
     class WorldEngine;
     class MapPosition;
-    class PlayerMapData;
 
     enum class PlayerState : unsigned int;
 }
@@ -27,7 +27,7 @@ namespace fys::ws {
 
     public:
         ~WorldEngine() = default;
-        WorldEngine(const std::string& tmxMapFilePath);
+        WorldEngine(const std::string &tmxMapFilePath);
 
         void runWorldLoop();
 
@@ -46,12 +46,11 @@ namespace fys::ws {
 
     private:
         void updatePlayersPositions(double currentTime, double &lag);
-        void increaseObjectPool(uint minSize);
-        inline bool hasToMove(double currentInMilliseconds, PlayerMapData &playerData) const;
+        bool hasToMove(uint idx, double currentInMilliseconds);
 
     private:
         std::unique_ptr<ws::Map> _map;
-        std::vector<ws::PlayerMapData> _playersMapData;
+        ws::PlayersMapData _playersMapData;
 
     };
 
