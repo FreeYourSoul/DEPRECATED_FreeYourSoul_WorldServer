@@ -46,7 +46,6 @@ namespace fys::ws {
 
     private:
         void updatePlayersPositions(double currentTime, double &lag);
-        bool hasToMove(uint idx, double currentInMilliseconds);
 
     private:
         std::unique_ptr<ws::Map> _map;
