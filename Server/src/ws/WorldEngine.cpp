@@ -62,7 +62,7 @@ void fys::ws::WorldEngine::updatePlayersPositions(double currentTime, double &la
     }
 }
 
-void fys::ws::WorldEngine::initPlayerPosition(uint idx, fys::ws::MapPosition &&pos) {
+void fys::ws::WorldEngine::initPlayerMapData(uint idx, fys::ws::MapPosition &&pos) {
     if (idx >= _playersMapData.playersSize()) {
         _playersMapData._actionsExec.resize(_playersMapData.playersSize() + 100);
         _playersMapData._pos.resize(_playersMapData.playersSize() + 100);

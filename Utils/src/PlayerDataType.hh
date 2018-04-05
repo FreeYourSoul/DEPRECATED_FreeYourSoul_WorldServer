@@ -67,9 +67,10 @@ namespace fys::ws {
                     toRet.push_back(std::move(vot));
                 }
             }
-            std::sort(toRet.begin(), toRet.end(), [](const Velocity &lhs, const Velocity &rhs) -> bool {
-                return static_cast<const VelocityOnTime&>(lhs).time < static_cast<const VelocityOnTime&>(rhs).time;
-            });
+            if (!toRet.empty())
+                std::sort(toRet.begin(), toRet.end(), [](const Velocity &lhs, const Velocity &rhs) -> bool {
+                    return static_cast<const VelocityOnTime&>(lhs).time < static_cast<const VelocityOnTime&>(rhs).time;
+                });
             return toRet;
         }
 

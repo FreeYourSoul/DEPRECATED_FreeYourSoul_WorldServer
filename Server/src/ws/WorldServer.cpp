@@ -117,5 +117,5 @@ void fys::ws::WorldServer::run() {
 }
 
 void fys::ws::WorldServer::initPlayerPosition(uint indexInSession, float x, float y) {
-    _worldEngine->initPlayerPosition(indexInSession, {x, y});
+    _worldEngine->initPlayerMapData(indexInSession, {x, y});
 }

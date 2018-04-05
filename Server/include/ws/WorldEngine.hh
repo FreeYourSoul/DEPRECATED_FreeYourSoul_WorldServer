@@ -31,7 +31,7 @@ namespace fys::ws {
 
         void runWorldLoop();
 
-        void initPlayerPosition(uint idx, MapPosition &&pos);
+        void initPlayerMapData(uint idx, MapPosition &&pos);
 
         /**
          * \brief A player change its moving state,
