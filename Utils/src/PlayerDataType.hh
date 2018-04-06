@@ -13,6 +13,10 @@
 #include <PlayerManager.hh>
 
 namespace fys::ws {
+    static constexpr double TIME_WORLD_LOOP = 100;
+    static constexpr double GAME_PACE = 16.6666;
+    static constexpr int MAX_ACTION_PER_CYCLE = static_cast<const int>(TIME_WORLD_LOOP / GAME_PACE) + 1;
+
 
     struct Velocity {
         float speed = 0.025;
@@ -38,7 +42,7 @@ namespace fys::ws {
      */
     class ExecutionActions {
         enum {
-            NUMBER_ACTION_ACCEPTED = 10
+            NUMBER_ACTION_ACCEPTED = MAX_ACTION_PER_CYCLE
         };
 
     public:

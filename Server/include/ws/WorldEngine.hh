@@ -22,8 +22,6 @@ namespace fys::ws {
 namespace fys::ws {
 
     class WorldEngine {
-        static constexpr double TIME_WORLD_LOOP = 100;
-        static constexpr double GAME_PACE = 16.6666;
 
     public:
         ~WorldEngine() = default;
