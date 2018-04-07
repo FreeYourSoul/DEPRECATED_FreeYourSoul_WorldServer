@@ -36,9 +36,10 @@ namespace fys::network {
         uint addPlayerConnection(const std::shared_ptr<TcpConnection> &newConnection);
         /**
          * \brief Check if the token corresponding to the given ip is correct and connect the user
-         * \note Connect the user thanks to the given token. This token has to match the one given during the incoming
+         * \details Connect the user thanks to the given token. This token has to match the one given during the incoming
          * player registering phase (by call of #addIncomingPlayer(const std::string&, const Token&) ). If it
          * doesn't match, the player's session is disconnected because of failed authentication.
+         *
          * \param indexInSession used to find the ip of the user
          * \param token to check
          * \return true if the given token match the accepted one, return false otherwise

@@ -3,9 +3,12 @@
 //
 
 #include <spdlog/spdlog.h>
+
+#include <boost/lexical_cast.hpp>
 #include <WorldServer.hh>
 #include <FySAuthenticationLoginMessage.pb.h>
 #include <FySMessage.pb.h>
+
 #include <TcpConnection.hh>
 #include <WorldEngine.hh>
 #include <Map.hh>
@@ -24,7 +27,7 @@ fys::ws::WorldServer::WorldServer(const fys::ws::Context &ctx, boost::asio::io_s
         _acceptorPlayer(_ios, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), ctx.getPort())),
         _fysBus(std::move(fysBus)),
         _gamerConnections(network::PlayerManager::CONNECTION_NUMBER),
-        _worldServerCluster(network::ClusterManager::CONNECTION_NUMBER),
+        _worldServerCluster(),
         _gtwConnection(std::make_unique<fys::network::TcpConnection>(ios)),
         _worldEngine(std::make_shared<fys::ws::WorldEngine>(ctx.getTmxFileMapName())) {
 }
@@ -95,18 +98,11 @@ void fys::ws::WorldServer::notifyGateway(const std::string &id, const ushort por
 
 void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &clusterKey, const std::string &token,
                                                              const std::string &ip, const std::string &port) {
-    spdlog::get("c")->info("Connect and add a new WorldServer in cluster: ip {}, on port {} with token {}", ip, port, token);
-    boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(ip),
-                                            static_cast<unsigned short>(std::stoul(port)));
-    network::TcpConnection::ptr clusterMemberConnection = network::TcpConnection::create(_ios);
+    spdlog::get("c")->info("Add a new WorldServer in cluster: ip {}, on port {} with token {}", ip, port, token);
 
-    _gtwConnection->getSocket().async_connect(endpoint, [this, clusterMemberConnection, clusterKey](const boost::system::error_code &error) {
-        if (error) {
-            boost::asio::deadline_timer timer(_ios);
-            spdlog::get("c")->error("Error while trying to connect and add WorldServer to cluster of positionId {}", clusterKey);
-        } else
-            this->_worldServerCluster.addConnectionInCluster(clusterKey, clusterMemberConnection);
-    });
+    fys::ws::GameServerInstance clusterMember(boost::lexical_cast<unsigned short>(ip), port, clusterKey);
+
+    this->_worldServerCluster.addConnectionInCluster(std::move(clusterMember));
 }
 
 void fys::ws::WorldServer::run() {

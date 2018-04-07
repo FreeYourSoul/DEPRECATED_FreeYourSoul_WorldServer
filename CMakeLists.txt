@@ -61,8 +61,8 @@ set(SOURCE_FILES_SRV
         ${CMAKE_SOURCE_DIR}/Server/include/ws/tmx/MapBuilder.hh
         ${CMAKE_SOURCE_DIR}/Server/src/ws/tmx/Map.cpp
         ${CMAKE_SOURCE_DIR}/Server/include/ws/tmx/Map.hh
-        ${CMAKE_SOURCE_DIR}/Server/src/network/ClusterManager.cpp
-        ${CMAKE_SOURCE_DIR}/Server/include/network/ClusterManager.hh
+        ${CMAKE_SOURCE_DIR}/Server/src/network/WorldServerCluster.cpp
+        ${CMAKE_SOURCE_DIR}/Server/include/network/WorldServerCluster.hh
         ${CMAKE_SOURCE_DIR}/Server/src/network/PlayerManager.cpp
         ${CMAKE_SOURCE_DIR}/Server/include/network/PlayerManager.hh
         ${CMAKE_SOURCE_DIR}/Server/src/ws/WorldEngine.cpp

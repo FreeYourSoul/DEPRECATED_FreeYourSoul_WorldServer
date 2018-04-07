@@ -3,9 +3,11 @@
 //
 
 #include <spdlog/spdlog.h>
+
 #include <google/protobuf/util/time_util.h>
 #include <FySPlayerInteraction.pb.h>
 #include <FySMessage.pb.h>
+
 #include <WorldServer.hh>
 #include <WorldEngine.hh>
 #include "GamingListener.hh"

@@ -8,7 +8,7 @@
 #include <boost/asio/ip/tcp.hpp>
 #include <SessionManager.hh>
 #include <Context.hh>
-#include <ClusterManager.hh>
+#include <WorldServerCluster.hh>
 #include <PlayerManager.hh>
 
 namespace fys {
@@ -55,7 +55,7 @@ namespace fys::ws {
                                                const std::string &ip, const std::string &port);
 
         network::PlayerManager &getGamerConnections() { return _gamerConnections; }
-        network::ClusterManager &getWorldServerCluster() { return _worldServerCluster; }
+        network::WorldServerCluster &getWorldServerCluster() { return _worldServerCluster; }
 
         std::shared_ptr<WorldEngine> getWorldEngine() const { return _worldEngine; }
         void initPlayerPosition(uint indexInSession, float x, float y);
@@ -72,7 +72,7 @@ namespace fys::ws {
         std::shared_ptr<mq::FysBus<pb::FySMessage, BUS_QUEUES_SIZE>> _fysBus;
 
         network::PlayerManager _gamerConnections;
-        network::ClusterManager _worldServerCluster;
+        network::WorldServerCluster _worldServerCluster;
         std::unique_ptr<network::TcpConnection> _gtwConnection;
 
         std::shared_ptr<ws::WorldEngine> _worldEngine;

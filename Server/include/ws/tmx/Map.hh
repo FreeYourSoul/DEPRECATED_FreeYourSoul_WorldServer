@@ -9,6 +9,7 @@
 #include <variant>
 #include <cmath>
 #include <memory>
+
 #include <PlayerDataType.hh>
 
 static constexpr char COLLISION_LAYER[] = "Collision";

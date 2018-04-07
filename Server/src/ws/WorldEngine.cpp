@@ -3,14 +3,16 @@
 //
 
 #include <spdlog/spdlog.h>
+
 #include <thread>
-#include <Map.hh>
 #include <chrono>
+
+#include <Map.hh>
 #include <PlayerDataType.hh>
 #include <PlayerManager.hh>
 #include "WorldEngine.hh"
 
-static inline auto getCurrentTimeInMillisec() {
+static inline double getCurrentTimeInMillisec() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
 }
 
@@ -20,26 +22,22 @@ fys::ws::WorldEngine::WorldEngine(const std::string &tmxMapFilePath) :
 }
 
 void fys::ws::WorldEngine::runWorldLoop() {
-    double timeEpochStart = getCurrentTimeInMillisec();
-    double previousStart = timeEpochStart;
-    double lag = 0;
+    double timeEpochStart;
 
     while (true) {
         timeEpochStart = getCurrentTimeInMillisec();
-        lag += (timeEpochStart - previousStart);
 
-        this->updatePlayersPositions(timeEpochStart, lag);
+        this->updatePlayersPositions(timeEpochStart);
 
         double sleepTime = (timeEpochStart + TIME_WORLD_LOOP) - getCurrentTimeInMillisec();
         if (sleepTime > 0) {
             std::chrono::duration<double, std::milli> dur(sleepTime);
             std::this_thread::sleep_for(dur);
         }
-        previousStart = timeEpochStart;
     }
 }
 
-void fys::ws::WorldEngine::updatePlayersPositions(double currentTime, double &lag) {
+void fys::ws::WorldEngine::updatePlayersPositions(double currentTime) {
     for (uint idx = 0; idx < _playersMapData.playersSize(); ++idx) {
         for (Velocity actionVelocity : _playersMapData._actionsExec.at(idx).getActionsToExecute()) {
             float futureX = _playersMapData._pos.at(idx).x + (actionVelocity.speed * std::cos(actionVelocity.angle));
@@ -73,6 +71,4 @@ void fys::ws::WorldEngine::initPlayerMapData(uint idx, fys::ws::MapPosition &&po
 void fys::ws::WorldEngine::changePlayerMovingState(uint idx, double timeMove, double angle) {
     if (timeMove)
         _playersMapData._actionsExec.at(idx).addAction(timeMove + GAME_PACE, static_cast<float>(angle));
-    else if (!timeMove) {
-    }
 }

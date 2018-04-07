@@ -8,6 +8,7 @@
 #include <memory>
 #include <vector>
 #include <ctime>
+
 #include <PlayerDataType.hh>
 
 //forward declarations
@@ -43,7 +44,7 @@ namespace fys::ws {
 
 
     private:
-        void updatePlayersPositions(double currentTime, double &lag);
+        void updatePlayersPositions(double currentTime);
 
     private:
         std::unique_ptr<ws::Map> _map;

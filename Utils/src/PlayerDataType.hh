@@ -5,11 +5,12 @@
 #ifndef FREESOULS_WORLD_PLAYERMAPDATA_HH
 #define FREESOULS_WORLD_PLAYERMAPDATA_HH
 
-#include <atomic>
 #include <zconf.h>
+#include <atomic>
 #include <ctime>
 #include <list>
 #include <algorithm>
+
 #include <PlayerManager.hh>
 
 namespace fys::ws {
@@ -35,7 +36,7 @@ namespace fys::ws {
     /**
      * \brief Class representing a pool of actions, this pool is limited by the number represented by the anonymous
      * inner-enum NUMBER_ACTION_ACCEPTED.
-     * \note
+     * \details
      * In order to differentiate executed actions and pending actions, a vector of previous executed actions is stored.
      * If the main vector (_timeToExecute) is different at a certain index than the previous action at the same index,
      * it means that the action has not been executed yet and has to be processed

@@ -24,7 +24,7 @@ void fys::ws::buslistener::Authenticator::operator()(mq::QueueContainer<pb::FySM
                 break;
 
             case pb::LoginMessage_Type_NotifyNewServer :
-                notifyServer(std::move(authMessage));
+                notifyWorldServerConnected(std::move(authMessage));
                 break;
 
             case pb::LoginMessage_Type_LoginPlayerOnGame:
@@ -37,7 +37,7 @@ void fys::ws::buslistener::Authenticator::operator()(mq::QueueContainer<pb::FySM
     }
 }
 
-void fys::ws::buslistener::Authenticator::notifyServer(fys::pb::LoginMessage &&loginMessage) {
+void fys::ws::buslistener::Authenticator::notifyWorldServerConnected(fys::pb::LoginMessage &&loginMessage) {
     pb::NotifyServerIncoming notif;
 
     loginMessage.content().UnpackTo(&notif);
