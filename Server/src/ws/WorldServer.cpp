@@ -14,7 +14,7 @@
 #include <Map.hh>
 
 /**
- * Timer between re-connection attempt on the Gateway
+ * Timer (in seconds) between re-connection attempt on the Gateway
  */
 static constexpr int RETRY_TIMER = 10;
 static constexpr char MAGIC_PASSWORD[] = "42Magic42FyS";
@@ -79,14 +79,14 @@ void fys::ws::WorldServer::connectToGateway(const fys::ws::Context &ctx) {
     });
 }
 
-void fys::ws::WorldServer::notifyGateway(const std::string &id, const ushort port) const {
+void fys::ws::WorldServer::notifyGateway(const std::string &positionId, const ushort port) const {
     fys::pb::FySMessage msg;
     fys::pb::LoginMessage loginMsg;
     fys::pb::LoginGameServer gameServerMessage;
 
     gameServerMessage.set_isworldserver(true);
     gameServerMessage.set_portforplayer(std::to_string(port));
-    gameServerMessage.set_magicpassword(std::string(MAGIC_PASSWORD).append(id));
+    gameServerMessage.set_magicpassword(std::string(MAGIC_PASSWORD).append(positionId));
     loginMsg.set_typemessage(fys::pb::LoginMessage_Type_LoginGameServer);
     loginMsg.mutable_content()->PackFrom(gameServerMessage);
     msg.set_type(fys::pb::AUTH);

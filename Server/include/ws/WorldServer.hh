@@ -64,7 +64,7 @@ namespace fys::ws {
 
     private:
 
-        void notifyGateway(const std::string &id, const ushort port) const;
+        void notifyGateway(const std::string &positionId, const ushort port) const;
 
     private:
         boost::asio::io_service &_ios;
