@@ -5,14 +5,12 @@
 #include <TcpConnection.hh>
 #include "WorldServerCluster.hh"
 
-void fys::network::WorldServerCluster::addConnectionInCluster(ws::GameServerInstance &&clusterMemberToAdd) {
-    _worldServerCluster.push_back(std::move(clusterMemberToAdd));
+
+fys::network::WorldServerCluster::WorldServerCluster(uint size) : SessionManager(size) {
+    setName("World Server Manager");
 }
 
-const fys::ws::GameServerInstance &
-fys::network::WorldServerCluster::getWorldServerByPositionId(const std::string &positionId) {
-    auto it = std::find_if(_worldServerCluster.begin(), _worldServerCluster.end(),
-                           [&positionId](const fys::ws::GameServerInstance &gsi){ return positionId == gsi.getPositionId(); }
-                           );
-    return *it;
+void fys::network::WorldServerCluster::addIncomingWorldServer(const std::string &ipIncomingWs,
+                                                              const fys::network::Token &tokenIncomingWs) {
+    _incomingWorldServer[ipIncomingWs] = tokenIncomingWs;
 }

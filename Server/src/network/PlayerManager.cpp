@@ -7,7 +7,7 @@
 #include <TcpConnection.hh>
 #include "PlayerManager.hh"
 
-fys::network::PlayerManager::PlayerManager(uint size) : SessionManager(size), _incomingPlayer(size) {
+fys::network::PlayerManager::PlayerManager(uint size) : SessionManager(size) {
     setName("Player Manager");
 }
 

@@ -58,14 +58,14 @@ void fys::ws::buslistener::Authenticator::authPlayer(uint indexSession, fys::pb:
     const std::string &token = loginPlayerOnGame.tokengameserver();
 
     loginMessage.content().UnpackTo(&loginPlayerOnGame);
-    if (std::equal(token.begin(), token.end(), actualToken.begin())) {
+    if (actualToken.empty())
+        spdlog::get("c")->error("The player {} at index {}, token is {} isn't awaited by server", indexSession, loginMessage.user(), token);
+    else if (std::equal(token.begin(), token.end(), actualToken.begin())) {
         _ws->getGamerConnections().connectPlayerWithToken(indexSession, {token.begin(), token.end()});
-        _ws->initPlayerPosition(indexSession, 0.0, 0.0);
+        _ws->initPlayerPosition(indexSession, 0.0, 0.0); // TODO: change position (x0.0, y0.0) info by the one got from data server
         spdlog::get("c")->info("A new player ({} at index {}) connected on server", loginMessage.user(), indexSession);
     }
-    else {
-        spdlog::get("c")->error("Mismatch has been found for player({}) {}, token is {} and should be {}",
-                                indexSession, loginMessage.user(), token, actualToken);
-    }
+    else
+        spdlog::get("c")->error("Mismatch has been found {}:{}, token is {} and should be {}", indexSession, loginMessage.user(), token, actualToken);
 }
 

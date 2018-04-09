@@ -27,7 +27,7 @@ fys::ws::WorldServer::WorldServer(const fys::ws::Context &ctx, boost::asio::io_s
         _acceptorPlayer(_ios, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), ctx.getPort())),
         _fysBus(std::move(fysBus)),
         _gamerConnections(network::PlayerManager::CONNECTION_NUMBER),
-        _worldServerCluster(),
+        _worldServerCluster(network::WorldServerCluster::CONNECTION_NUMBER),
         _gtwConnection(std::make_unique<fys::network::TcpConnection>(ios)),
         _worldEngine(std::make_shared<fys::ws::WorldEngine>(ctx.getTmxFileMapName())) {
 }
@@ -93,16 +93,17 @@ void fys::ws::WorldServer::notifyGateway(const std::string &positionId, const us
     msg.mutable_content()->PackFrom(loginMsg);
     _gtwConnection->send(std::move(msg));
 
-    spdlog::get("c")->debug("Connection with gateway successful, the Gateway has been notified of connection: {}", msg.ShortDebugString());
+    spdlog::get("c")->debug("Connection with gateway successful, the Gateway has been notified of connection: "
+                            "{}", msg.ShortDebugString());
 }
 
 void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &clusterKey, const std::string &token,
                                                              const std::string &ip, const std::string &port) {
-    spdlog::get("c")->info("Add a new WorldServer in cluster: ip {}, on port {} with token {}", ip, port, token);
+    spdlog::get("c")->info("A new WorldServer has been added in cluster: "
+                           "positionId {}, ip {}, on port {}", clusterKey, ip, port);
 
     fys::ws::GameServerInstance clusterMember(boost::lexical_cast<unsigned short>(ip), port, clusterKey);
 
-    this->_worldServerCluster.addConnectionInCluster(std::move(clusterMember));
 }
 
 void fys::ws::WorldServer::run() {
