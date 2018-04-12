@@ -39,11 +39,19 @@ namespace fys::ws::buslistener {
         /**
          * \brief Notify the current server instance of another world server joining the universe
          * \details This method is called by the FySGateway which acknowledge a new World Server connection in the
-         * cluster and forward this information to the members of the cluster
+         * cluster and forward this information to the members of the cluster.
+         * The server is checked if it is on the good position id (position id of the world server is nearby)
          * \note reminder, universe is how we call a world server cluster
          * \param loginMessage full notification message received
          */
-        void notifyWorldServerConnected(fys::pb::LoginMessage &&loginMessage);
+        void notifyServerIncoming(pb::LoginMessage &&loginMessage);
+        /**
+         * Authenticate a WorldServer in the current world server instance
+         * \param indexSession in the player session manager to root reply
+         * \param loginMessage full authentication message received
+         */
+        void authWorldServer(uint indexSession, fys::pb::LoginMessage &&loginMessage);
+
         /**
          * \brief Notify the current server instance of a new player connecting soon, give its ip address and authentication
          * token to verify its identity. The real authentication is done in

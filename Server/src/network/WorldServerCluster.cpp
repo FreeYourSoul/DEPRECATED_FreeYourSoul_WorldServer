@@ -5,7 +5,6 @@
 #include <TcpConnection.hh>
 #include "WorldServerCluster.hh"
 
-
 fys::network::WorldServerCluster::WorldServerCluster(uint size) : SessionManager(size) {
     setName("World Server Manager");
 }
@@ -13,4 +12,8 @@ fys::network::WorldServerCluster::WorldServerCluster(uint size) : SessionManager
 void fys::network::WorldServerCluster::addIncomingWorldServer(const std::string &ipIncomingWs,
                                                               const fys::network::Token &tokenIncomingWs) {
     _incomingWorldServer[ipIncomingWs] = tokenIncomingWs;
+}
+
+uint fys::network::WorldServerCluster::addWorldServer(const std::shared_ptr<fys::network::TcpConnection> &newConnection) {
+    return 0;
 }

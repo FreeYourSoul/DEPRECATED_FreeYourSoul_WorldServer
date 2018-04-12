@@ -41,8 +41,8 @@ namespace fys::network {
          */
         void addIncomingWorldServer(const std::string &ipIncomingWs, const Token &tokenIncomingWs);
         /**
-         * \brief Add a player connection (call the SessionManager #fys::network::SessionManager::addConnection()) if
-         * the given ip is in the accepted incoming player ip (stored in #_incomingPlayer)
+         * \brief Add a world server connection (call the SessionManager #fys::network::SessionManager::addConnection()) if
+         * the given ip is in the accepted incoming world server ip (stored in #_incomingWorldServer)
          * \param newConnection
          * \return
          */

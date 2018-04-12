@@ -23,12 +23,16 @@ void fys::ws::buslistener::Authenticator::operator()(mq::QueueContainer<pb::FySM
                 notifyPlayerIncoming(msg.getIndexSession(), std::move(authMessage));
                 break;
 
-            case pb::LoginMessage_Type_NotifyNewServer :
-                notifyWorldServerConnected(std::move(authMessage));
-                break;
-
             case pb::LoginMessage_Type_LoginPlayerOnGame:
                 authPlayer(msg.getIndexSession(), std::move(authMessage));
+                break;
+
+            case pb::LoginMessage_Type_NotifyNewServer :
+                notifyServerIncoming(std::move(authMessage));
+                break;
+
+            case pb::LoginMessage_Type_LoginGameServer :
+                authWorldServer(msg.getIndexSession(), std::move(authMessage));
                 break;
 
             default:
@@ -37,7 +41,7 @@ void fys::ws::buslistener::Authenticator::operator()(mq::QueueContainer<pb::FySM
     }
 }
 
-void fys::ws::buslistener::Authenticator::notifyWorldServerConnected(fys::pb::LoginMessage &&loginMessage) {
+void fys::ws::buslistener::Authenticator::notifyServerIncoming(fys::pb::LoginMessage &&loginMessage) {
     pb::NotifyServerIncoming notif;
 
     loginMessage.content().UnpackTo(&notif);
@@ -50,6 +54,23 @@ void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(uint indexSession
     network::Token token(notif.token().begin(), notif.token().end());
 
     _ws->getGamerConnections().addIncomingPlayer(notif.ip(), token);
+}
+
+void fys::ws::buslistener::Authenticator::authWorldServer(uint indexSession, fys::pb::LoginMessage &&loginMessage) {
+    pb::LoginGameServer loginGameServer;
+    const std::string &actualToken = _ws->getGamerConnections().getConnectionToken(indexSession);
+    const std::string &token = loginGameServer.magicpassword();
+
+    loginMessage.content().UnpackTo(&loginGameServer);
+    if (actualToken.empty())
+        spdlog::get("c")->error("The WorldServer {} at index {}, token is {} isn't awaited by server", indexSession, loginMessage.user(), token);
+    else if (std::equal(token.begin(), token.end(), actualToken.begin())) {
+//        _ws->getWorldServerCluster().ad connectPlayerWithToken(indexSession, {token.begin(), token.end()});
+        _ws->connectAndAddWorldServerInCluster(loginMessage.user(), loginGameServer.token(), loginGameServer.ip(), loginGameServer.port());
+        spdlog::get("c")->info("A WorldServer ({} at index {}) connected on server", loginMessage.user(), indexSession);
+    }
+    else
+        spdlog::get("c")->error("Mismatch has been found {}:{}, token is {} and should be {}", indexSession, loginMessage.user(), token, actualToken);
 }
 
 void fys::ws::buslistener::Authenticator::authPlayer(uint indexSession, fys::pb::LoginMessage &&loginMessage) {
