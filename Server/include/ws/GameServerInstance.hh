@@ -9,7 +9,7 @@
 
 namespace fys::ws {
 
-    class GameServerInstance : public std::initializer_list<::fys::ws::GameServerInstance> {
+    class GameServerInstance {
     public:
         ~GameServerInstance() = default;
         GameServerInstance(const ushort port, const std::string &ip, const std::string &positionId);

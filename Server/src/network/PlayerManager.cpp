@@ -34,8 +34,8 @@ bool fys::network::PlayerManager::connectPlayerWithToken(uint indexInSession, co
     const std::string ip = getIp(indexInSession);
     auto findIt = _incomingPlayer.find(ip);
 
-    if (findIt != _incomingPlayer.end()) {
-        if (std::equal(token.begin(), token.end(), _incomingPlayer.at(ip).begin())) {
+    if (findIt != _incomingPlayer.cend()) {
+        if (std::equal(token.cbegin(), token.cend(), _incomingPlayer.at(ip).cbegin())) {
             _incomingPlayer.erase(findIt);
             return true;
         }

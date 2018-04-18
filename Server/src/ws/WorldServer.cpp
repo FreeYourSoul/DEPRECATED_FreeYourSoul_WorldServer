@@ -43,10 +43,10 @@ void fys::ws::WorldServer::runPlayerAccept() {
                  else {
                      uint idx = this->_gamerConnections.addPlayerConnection(session);
 
-                     if (idx < std::numeric_limits<uint>::max())
-                         session->readOnSocket(_fysBus);
-                     else
+                     if (idx < std::numeric_limits<uint>::max()) {
                          spdlog::get("c")->info("A player connected with index {}", idx);
+                         session->readOnSocket(_fysBus);
+                     }
                  }
                  this->runPlayerAccept();
              }
@@ -102,7 +102,6 @@ void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &
     spdlog::get("c")->info("A new WorldServer has been added in cluster: "
                            "positionId {}, ip {}, on port {}", clusterKey, ip, port);
 
-    fys::ws::GameServerInstance clusterMember(boost::lexical_cast<unsigned short>(ip), port, clusterKey);
 
 }
 

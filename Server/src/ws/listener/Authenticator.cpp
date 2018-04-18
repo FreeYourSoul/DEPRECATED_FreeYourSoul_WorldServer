@@ -31,7 +31,7 @@ void fys::ws::buslistener::Authenticator::operator()(mq::QueueContainer<pb::FySM
                 notifyServerIncoming(std::move(authMessage));
                 break;
 
-            case pb::LoginMessage_Type_LoginGameServer :
+            case pb::LoginMessage_Type_LoginWorldServerInCluster :
                 authWorldServer(msg.getIndexSession(), std::move(authMessage));
                 break;
 
@@ -57,16 +57,15 @@ void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(uint indexSession
 }
 
 void fys::ws::buslistener::Authenticator::authWorldServer(uint indexSession, fys::pb::LoginMessage &&loginMessage) {
-    pb::LoginGameServer loginGameServer;
+    pb::LoginWorldServerInCluster loginGameServer;
     const std::string &actualToken = _ws->getGamerConnections().getConnectionToken(indexSession);
-    const std::string &token = loginGameServer.magicpassword();
+    const std::string &token = loginGameServer.tokengameserver();
 
     loginMessage.content().UnpackTo(&loginGameServer);
     if (actualToken.empty())
         spdlog::get("c")->error("The WorldServer {} at index {}, token is {} isn't awaited by server", indexSession, loginMessage.user(), token);
     else if (std::equal(token.begin(), token.end(), actualToken.begin())) {
-//        _ws->getWorldServerCluster().ad connectPlayerWithToken(indexSession, {token.begin(), token.end()});
-        _ws->connectAndAddWorldServerInCluster(loginMessage.user(), loginGameServer.token(), loginGameServer.ip(), loginGameServer.port());
+        _ws->connectAndAddWorldServerInCluster(loginMessage.user(), token, loginGameServer.ip(), loginGameServer.port());
         spdlog::get("c")->info("A WorldServer ({} at index {}) connected on server", loginMessage.user(), indexSession);
     }
     else
