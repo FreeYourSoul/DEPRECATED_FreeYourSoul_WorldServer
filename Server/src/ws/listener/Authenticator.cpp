@@ -9,7 +9,7 @@
 #include <WorldServer.hh>
 #include "listener/Authenticator.hh"
 
-fys::ws::buslistener::Authenticator::Authenticator(WorldServer::ptr& ws) : _ws(ws)
+fys::ws::buslistener::Authenticator::Authenticator(std::shared_ptr<WorldServer> &ws) : _ws(ws)
 {}
 
 void fys::ws::buslistener::Authenticator::operator()(mq::QueueContainer<pb::FySMessage> msg) {
@@ -45,7 +45,7 @@ void fys::ws::buslistener::Authenticator::notifyServerIncoming(fys::pb::LoginMes
     pb::NotifyServerIncoming notif;
 
     loginMessage.content().UnpackTo(&notif);
-    _ws->connectAndAddWorldServerInCluster(notif.positionid(), notif.token(), notif.ip(), notif.port());
+
 }
 
 void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(uint indexSession, fys::pb::LoginMessage &&loginMsg) {

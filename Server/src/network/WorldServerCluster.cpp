@@ -12,7 +12,7 @@ fys::network::WorldServerCluster::WorldServerCluster(uint size) : SessionManager
 
 void fys::network::WorldServerCluster::addIncomingWorldServer(const std::string &positionId,
                                                               const std::string &ipIncomingWs,
-                                                              const fys::network::Token &tokenIncomingWs) {
+                                                              Token &&tokenIncomingWs) {
     if (_awaitedNeighboors.find(positionId) != _awaitedNeighboors.cend()) {
         spdlog::get("c")->debug("Server {} connected to cluster with ip {}", positionId, ipIncomingWs);
         _incomingWorldServer[ipIncomingWs] = tokenIncomingWs;
@@ -20,16 +20,6 @@ void fys::network::WorldServerCluster::addIncomingWorldServer(const std::string 
     else {
         spdlog::get("c")->debug("Server {} attempted to connect but is not neighbour server", positionId);
     }
-}
-
-uint fys::network::WorldServerCluster::addWorldServer(const std::shared_ptr<fys::network::TcpConnection> &newConnection) {
-    const auto findIt = _incomingWorldServer.find(newConnection->getIpAddress());
-
-    if (findIt == _incomingWorldServer.end()) {
-        spdlog::get("c")->warn("The player isn't registered on the accepted ip list, ip trying to connect is {}", newConnection->getIpAddress());
-        return std::numeric_limits<uint>::max();
-    }
-    return addConnection(newConnection);
 }
 
 bool fys::network::WorldServerCluster::connectWorldServerToCluster(uint indexInSession, const fys::network::Token &tk) {

@@ -5,7 +5,6 @@
 #ifndef FREESOULS_WORLD_CLUSTERMANAGER_HH
 #define FREESOULS_WORLD_CLUSTERMANAGER_HH
 
-#include <bits/unordered_set.h>
 #include <unordered_map>
 #include "SessionManager.hh"
 
@@ -40,14 +39,8 @@ namespace fys::network {
          * \param tokenIncomingWs
          */
         void addIncomingWorldServer(const std::string &positionId, const std::string &ipIncomingWs,
-                                            const fys::network::Token &tokenIncomingWs);
-        /**
-         * \brief Add a world server connection (call the SessionManager #fys::network::SessionManager::addConnection()) if
-         * the given ip is in the accepted incoming world server ip (stored in #_incomingWorldServer)
-         * \param newConnection
-         * \return
-         */
-        uint addWorldServer(const std::shared_ptr<TcpConnection> &newConnection);
+                                    Token &&tokenIncomingWs);
+
         /**
          * \brief Check if the token corresponding to the given ip is correct and connect the world server
          * \details Connect the world server to the cluster thanks to the given token. This token has to match the one

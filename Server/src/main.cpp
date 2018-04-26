@@ -110,18 +110,18 @@ int main(int argc, const char * const *argv) {
         google::protobuf::SetLogHandler(MyLogHandler);
 
         boost::asio::io_service ios;
-        boost::asio::io_service::work work(ios);
-        Context ctx(argc, argv);
+        boost::asio::io_service::work work{ios};
+        Context ctx{argc, argv};
         welcome(ctx.isVerbose());
         ctx.logContext();
         auto fysBus = std::make_shared<FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > (fys::pb::Type_ARRAYSIZE);
         WorldServer::ptr worldServer = WorldServer::create(ctx, ios, fysBus);
 
-        buslistener::Authenticator authenticator(worldServer);
-        buslistener::GamingListener gaming(worldServer);
+        buslistener::Authenticator authenticator{worldServer};
+        buslistener::GamingListener gaming{worldServer};
 
-        AuthBusListener authenticatorListener(authenticator);
-        GamingListener gamingListener(gaming);
+        AuthBusListener authenticatorListener{authenticator};
+        GamingListener gamingListener{gaming};
 
         authenticatorListener.launchListenThread(fysBus);
         ::sleep(1);

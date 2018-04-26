@@ -16,6 +16,7 @@ namespace fys {
     }
     namespace ws {
         class WorldServer;
+        class Context;
     }
 }
 
@@ -31,7 +32,7 @@ namespace fys::ws::buslistener {
     public:
         enum { IndexInBus = 0 };
 
-        explicit Authenticator(std::shared_ptr<WorldServer>&);
+        explicit Authenticator(std::shared_ptr<WorldServer> &ws);
 
         void operator()(mq::QueueContainer<fys::pb::FySMessage> msg);
 
@@ -69,7 +70,6 @@ namespace fys::ws::buslistener {
 
     private:
         std::shared_ptr<WorldServer> _ws;
-
 
     };
 
