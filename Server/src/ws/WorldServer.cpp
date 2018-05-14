@@ -5,10 +5,11 @@
 #include <spdlog/spdlog.h>
 
 #include <boost/lexical_cast.hpp>
+#include <boost/asio/deadline_timer.hpp>
 #include <WorldServer.hh>
 #include <FySAuthenticationLoginMessage.pb.h>
-#include <FySMessage.pb.h>
 
+#include <FySMessage.pb.h>
 #include <TcpConnection.hh>
 #include <WorldEngine.hh>
 #include <Map.hh>
@@ -97,16 +98,19 @@ void fys::ws::WorldServer::notifyGateway(const std::string &positionId, const us
                             "{}", msg.ShortDebugString());
 }
 
-void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &clusterKey, const std::string &token,
-                                                             const std::string &ip, const std::string &port) {
+void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &clusterKey, const std::string &ip,
+                                                             const std::string &port, network::Token &&token,
+                                                             uint indexInSession) {
     spdlog::get("c")->info("A new WorldServer has been added in cluster: "
                            "positionId {}, ip {}, on port {}", clusterKey, ip, port);
     boost::asio::ip::tcp::endpoint endpoint{boost::asio::ip::address::from_string(ip), boost::lexical_cast<ushort>(port)};
 
+    _worldServerCluster.connectWorldServerToCluster(indexInSession, std::move(token));
     _gtwConnection->getSocket().async_connect(endpoint, [this, &token](const boost::system::error_code &error) {
         if (!error) {
             network::Token tkn{token.size()};
             std::copy(token.cbegin(), token.cend(), tkn.begin());
+
             _gtwConnection->readOnSocket(_fysBus);
         }
     });

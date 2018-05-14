@@ -11,7 +11,7 @@ fys::network::PlayerManager::PlayerManager(uint size) : SessionManager(size) {
     setName("Player Manager");
 }
 
-void fys::network::PlayerManager::addIncomingPlayer(const std::string &ipIncoPlayer, const Token& tokenIncoPlayer) {
+void fys::network::PlayerManager::addIncomingPlayer(const std::string &ipIncoPlayer, Token &&tokenIncoPlayer) {
     _incomingPlayer[ipIncoPlayer] = tokenIncoPlayer;
 }
 

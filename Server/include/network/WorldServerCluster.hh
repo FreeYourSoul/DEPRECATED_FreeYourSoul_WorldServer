@@ -34,12 +34,18 @@ namespace fys::network {
         WorldServerCluster(uint size);
 
         /**
+         * \brief Setup all incoming neigbhoors given as parameter
+         * \param neighbour
+         */
+        void setUpNeighborhood(const std::vector<std::pair<NeighborWS, std::string>> &neighbour);
+
+        /**
          * \brief Add an entry in the accepted ip/token for new WorldServer connection
          * \param ipIncomingWs
          * \param tokenIncomingWs
          */
         void addIncomingWorldServer(const std::string &positionId, const std::string &ipIncomingWs,
-                                    Token &&tokenIncomingWs);
+                                    fys::network::Token &&tokenIncomingWs);
 
         /**
          * \brief Check if the token corresponding to the given ip is correct and connect the world server
@@ -52,12 +58,18 @@ namespace fys::network {
          * \param tk to check
          * \return true if the given token match the accepted one, return false otherwise
          */
-        bool connectWorldServerToCluster(uint indexInSession, const Token &tk);
+        bool connectWorldServerToCluster(uint indexInSession, Token &&tk);
 
     private:
-        std::unordered_map<std::string, Token> _incomingWorldServer;
-        std::unordered_map<std::string, NeighborWS> _awaitedNeighboors;
-        std::unordered_map<NeighborWS, uint> _neighborWS;
+        /**
+         * Map of <PositionId, Token>
+         */
+        std::unordered_map<std::string, Token> _incomingWorldServer; // todo strongly typed Token required
+        /**
+         * Map of <PositionId, enumPosition>
+         */
+        std::unordered_map<std::string, NeighborWS> _awaitedNeighbour;
+        std::unordered_map<NeighborWS, uint> _neighbourWS;
     };
 }
 

@@ -6,6 +6,7 @@
 #define FREESOULS_GATEWAY_HH
 
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/io_service.hpp>
 #include <SessionManager.hh>
 #include <Context.hh>
 #include <WorldServerCluster.hh>
@@ -44,15 +45,18 @@ namespace fys::ws {
         static inline
         ptr create(const Context &ctx, boost::asio::io_service &ios,
                    std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > fysBus) {
-            return std::make_shared<WorldServer>(ctx, ios, fysBus);
+            ptr ptr = std::make_shared<WorldServer>(ctx, ios, fysBus);
+            ptr->getWorldServerCluster().setUpNeighborhood(ctx.getNeighbours());
+            return ptr;
         }
 
         void runPlayerAccept();
         void connectToGateway(const Context &ctx);
         void run();
 
-        void connectAndAddWorldServerInCluster(const std::string &clusterKey, const std::string &token,
-                                               const std::string &ip, const std::string &port);
+        void connectAndAddWorldServerInCluster(const std::string &clusterKey, const std::string &ip,
+                                               const std::string &port, network::Token &&token,
+                                               uint indexInSession);
 
         network::PlayerManager &getGamerConnections() { return _gamerConnections; }
         network::WorldServerCluster &getWorldServerCluster() { return _worldServerCluster; }

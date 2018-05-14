@@ -7,6 +7,7 @@
 
 #include <string>
 #include <ostream>
+#include <WorldServerCluster.hh>
 #include "GameServerInstance.hh"
 
 // -- Config File Keys
@@ -17,6 +18,15 @@ static constexpr char WS_INI_ASIO_THREADS[] = "server.asioThread";
 static constexpr char WS_QUEUES_SIZE[] = "bus.queuesSize";
 static constexpr char WS_MAP_POSITIONID[] = "map.positionId";
 static constexpr char WS_MAP_TMX[] = "map.tmxPath";
+
+static constexpr char WS_NEIGHBOORS_DR[] = "neighboors_dr";
+static constexpr char WS_NEIGHBOORS_DL[] = "neighboors_dl";
+static constexpr char WS_NEIGHBOORS_TR[] = "neighboors_tr";
+static constexpr char WS_NEIGHBOORS_TL[] = "neighboors_tl";
+static constexpr char WS_NEIGHBOORS_T[] = "neighboors_t";
+static constexpr char WS_NEIGHBOORS_D[] = "neighboors_d";
+static constexpr char WS_NEIGHBOORS_R[] = "neighboors_r";
+static constexpr char WS_NEIGHBOORS_L[] = "neighboors_l";
 
 namespace fys::ws {
 
@@ -39,6 +49,7 @@ namespace fys::ws {
         bool isVerbose() const;
         const std::string &getGtwIp() const;
         const std::string &getTmxFileMapName() const;
+        const std::vector<std::pair<network::WorldServerCluster::NeighborWS, std::string>> &getNeighbours() const;
 
         void setPort(ushort port);
         void setAsioThread(size_t asioThread);
@@ -67,6 +78,7 @@ namespace fys::ws {
 
         std::string _tmxFileMapName;
         std::vector<ws::GameServerInstance> _gameServers;
+        std::vector<std::pair<network::WorldServerCluster::NeighborWS, std::string>> _neighboors; // todo predeclare the enum
     };
 
 }

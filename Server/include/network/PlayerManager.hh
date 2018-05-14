@@ -26,7 +26,7 @@ namespace fys::network {
          * \param ipIncoPlayer
          * \param tokenIncoPlayer
          */
-        void addIncomingPlayer(const std::string& ipIncoPlayer, const Token& tokenIncoPlayer);
+        void addIncomingPlayer(const std::string &ipIncoPlayer, Token &&tokenIncoPlayer);
         /**
          * \brief Add a player connection (call the SessionManager #fys::network::SessionManager::addConnection()) if
          * the given ip is in the accepted incoming player ip (stored in #_incomingPlayer)

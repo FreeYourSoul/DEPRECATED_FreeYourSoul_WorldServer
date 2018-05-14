@@ -10,19 +10,25 @@ fys::network::WorldServerCluster::WorldServerCluster(uint size) : SessionManager
     setName("World Server Manager");
 }
 
+void fys::network::WorldServerCluster::setUpNeighborhood(const std::vector<std::pair<NeighborWS, std::string>> &neighbour) {
+    for (auto neighbourPair : neighbour) {
+        _awaitedNeighbour.at(neighbourPair.second) = neighbourPair.first;
+    }
+}
+
 void fys::network::WorldServerCluster::addIncomingWorldServer(const std::string &positionId,
                                                               const std::string &ipIncomingWs,
-                                                              Token &&tokenIncomingWs) {
-    if (_awaitedNeighboors.find(positionId) != _awaitedNeighboors.cend()) {
-        spdlog::get("c")->debug("Server {} connected to cluster with ip {}", positionId, ipIncomingWs);
-        _incomingWorldServer[ipIncomingWs] = tokenIncomingWs;
+                                                              fys::network::Token &&tk) {
+    if (_awaitedNeighbour.find(positionId) != _awaitedNeighbour.cend()) {
+        spdlog::get("c")->debug("Server is incoming {} with ip {}", positionId, ipIncomingWs);
+        _incomingWorldServer[ipIncomingWs] = tk;
     }
     else {
         spdlog::get("c")->debug("Server {} attempted to connect but is not neighbour server", positionId);
     }
 }
 
-bool fys::network::WorldServerCluster::connectWorldServerToCluster(uint indexInSession, const fys::network::Token &tk) {
+bool fys::network::WorldServerCluster::connectWorldServerToCluster(uint indexInSession, Token &&tk) {
     const std::string ip = getIp(indexInSession);
     const auto findIt = _incomingWorldServer.find(ip);
 
