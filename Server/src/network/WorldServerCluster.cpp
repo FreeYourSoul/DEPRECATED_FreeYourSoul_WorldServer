@@ -12,7 +12,7 @@ fys::network::WorldServerCluster::WorldServerCluster(uint size) : SessionManager
 
 void fys::network::WorldServerCluster::setUpNeighborhood(const std::vector<std::pair<NeighborWS, std::string>> &neighbour) {
     for (auto neighbourPair : neighbour) {
-        _awaitedNeighbour.at(neighbourPair.second) = neighbourPair.first;
+        _awaitedNeighbour[neighbourPair.second] = neighbourPair.first;
     }
 }
 

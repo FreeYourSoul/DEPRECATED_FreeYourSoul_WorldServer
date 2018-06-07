@@ -50,7 +50,8 @@ fys::ws::Context::Context(const int ac, const char *const *av) {
         setVerbose(verbose.getValue());
     }
     catch (std::exception &e) {
-        std::cerr << "Context not initialized " << e.what() << std::endl;
+        std::cerr << "Context not initialized caused by :" << e.what() << std::endl;
+        throw e;
     }
 }
 

@@ -45,7 +45,7 @@ void fys::ws::WorldEngine::updatePlayersPositions(double currentTime) {
             MapElemProperty prop = _map->getMapElementPropertyAtPosition(futureX, futureY);
 
             std::printf("x %f y %f speed %f\n fx %f fy %f\n currentTime %f\n\n",
-                        _playersMapData._pos.at(idx).x* 24, _playersMapData._pos.at(idx).y* 24, actionVelocity.speed,
+                        _playersMapData._pos.at(idx).x * 24, _playersMapData._pos.at(idx).y * 24, actionVelocity.speed,
                         futureX, futureY, currentTime);
 
             if (prop != MapElemProperty::BLOCK) {

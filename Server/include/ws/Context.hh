@@ -19,14 +19,14 @@ static constexpr char WS_QUEUES_SIZE[] = "bus.queuesSize";
 static constexpr char WS_MAP_POSITIONID[] = "map.positionId";
 static constexpr char WS_MAP_TMX[] = "map.tmxPath";
 
-static constexpr char WS_NEIGHBOORS_DR[] = "neighboors_dr";
-static constexpr char WS_NEIGHBOORS_DL[] = "neighboors_dl";
-static constexpr char WS_NEIGHBOORS_TR[] = "neighboors_tr";
-static constexpr char WS_NEIGHBOORS_TL[] = "neighboors_tl";
-static constexpr char WS_NEIGHBOORS_T[] = "neighboors_t";
-static constexpr char WS_NEIGHBOORS_D[] = "neighboors_d";
-static constexpr char WS_NEIGHBOORS_R[] = "neighboors_r";
-static constexpr char WS_NEIGHBOORS_L[] = "neighboors_l";
+static constexpr char WS_NEIGHBOORS_DR[] = "map.neighboors_dr";
+static constexpr char WS_NEIGHBOORS_DL[] = "map.neighboors_dl";
+static constexpr char WS_NEIGHBOORS_TR[] = "map.neighboors_tr";
+static constexpr char WS_NEIGHBOORS_TL[] = "map.neighboors_tl";
+static constexpr char WS_NEIGHBOORS_T[] = "map.neighboors_t";
+static constexpr char WS_NEIGHBOORS_D[] = "map.neighboors_d";
+static constexpr char WS_NEIGHBOORS_R[] = "map.neighboors_r";
+static constexpr char WS_NEIGHBOORS_L[] = "map.neighboors_l";
 
 namespace fys::ws {
 
