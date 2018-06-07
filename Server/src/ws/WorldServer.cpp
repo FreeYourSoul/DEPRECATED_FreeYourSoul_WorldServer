@@ -105,7 +105,7 @@ void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &
                            "positionId {}, ip {}, on port {}", clusterKey, ip, port);
     boost::asio::ip::tcp::endpoint endpoint{boost::asio::ip::address::from_string(ip), boost::lexical_cast<ushort>(port)};
 
-    _worldServerCluster.connectWorldServerToCluster(indexInSession, std::move(token));
+    _worldServerCluster.connectWorldServerToCluster(indexInSession, clusterKey, std::move(token));
     _gtwConnection->getSocket().async_connect(endpoint, [this, &token](const boost::system::error_code &error) {
         if (!error) {
             network::Token tkn{token.size()};

@@ -58,7 +58,8 @@ namespace fys::network {
          * \param tk to check
          * \return true if the given token match the accepted one, return false otherwise
          */
-        bool connectWorldServerToCluster(uint indexInSession, Token &&tk);
+        bool connectWorldServerToCluster(uint indexInSession, const std::string &positionId,
+                                         Token &&tk);
 
     private:
         /**

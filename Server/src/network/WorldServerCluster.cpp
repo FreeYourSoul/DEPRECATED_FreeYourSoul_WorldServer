@@ -28,19 +28,25 @@ void fys::network::WorldServerCluster::addIncomingWorldServer(const std::string 
     }
 }
 
-bool fys::network::WorldServerCluster::connectWorldServerToCluster(uint indexInSession, Token &&tk) {
-    const std::string ip = getIp(indexInSession);
-    const auto findIt = _incomingWorldServer.find(ip);
+bool fys::network::WorldServerCluster::connectWorldServerToCluster(uint indexInSession, const std::string &positionId, Token &&tk) {
+    const NeighborWS nws = _awaitedNeighbour.at(positionId);
 
-    if (findIt != _incomingWorldServer.cend()) {
-        if (std::equal(tk.cbegin(), tk.cend(), _incomingWorldServer.at(ip).cbegin())) {
-            _incomingWorldServer.erase(findIt);
-            return true;
+    if (_neighbourWS.find(nws) == _neighbourWS.end()) {
+        const std::string ip = getIp(indexInSession);
+        const auto findIt = _incomingWorldServer.find(ip);
+
+        if (findIt != _incomingWorldServer.cend()) {
+            if (std::equal(tk.cbegin(), tk.cend(), _incomingWorldServer.at(ip).cbegin())) {
+                _neighbourWS[_awaitedNeighbour.at(positionId)] = indexInSession;
+                _incomingWorldServer.erase(findIt);
+                return true;
+            }
+            disconnectUser(indexInSession, _incomingWorldServer.at(ip));
+            spdlog::get("c")->warn("The given token is wrong for index {} ip {}", indexInSession, ip);
         }
-        disconnectUser(indexInSession, _incomingWorldServer.at(ip));
-        spdlog::get("c")->warn("The given token is wrong for index {} ip {}", indexInSession, ip);
+        spdlog::get("c")->critical("The given ip {} is not registered as accepted ip, "
+                                   "this should have already been checked!", ip);
     }
-    spdlog::get("c")->error("The given ip {} is not registered as accepted ip, "
-                            "this should have already been checked!", ip);
+    spdlog::get("c")->error("A server with positionId {} is already registered", positionId);
     return false;
 }

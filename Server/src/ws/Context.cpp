@@ -104,8 +104,7 @@ void fys::ws::Context::setQueuesSize(std::size_t _queuesSize) {
 }
 
 void fys::ws::Context::logContext() {
-    spdlog::get("c")->info("Current Context: [ port: {} , positionId: {}, asioThread: {}, mainMapFilePath: {} , gatewayIp: {} , gatewayPort: {} ]",
-                           _port, _positionId, _asioThread, _tmxFileMapName, _gtwIp, _gtwPort);
+    spdlog::get("c")->info("\n\nCurrent Context: [\n\tport: {},\n\tpositionId: {},\n\tasioThread: {},\n\tmainMapFilePath: {},\n\tgatewayIp: {},\n\tgatewayPort: {}\n]\n", _port, _positionId, _asioThread, _tmxFileMapName, _gtwIp, _gtwPort);
 }
 
 bool fys::ws::Context::isVerbose() const {
