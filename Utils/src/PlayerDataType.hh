@@ -14,7 +14,13 @@
 #include <PlayerManager.hh>
 
 namespace fys::ws {
+    /**
+     * World Server "FPS"
+     */
     static constexpr double TIME_WORLD_LOOP = 100;
+    /**
+     *
+     */
     static constexpr double GAME_PACE = 16.6666;
     static constexpr int MAX_ACTION_PER_CYCLE = static_cast<const int>(TIME_WORLD_LOOP / GAME_PACE) + 1;
 
@@ -69,7 +75,7 @@ namespace fys::ws {
                     vot.speed = _velocityAction.at(i).speed;
                     vot.time = _timeToExecute.at(i);
                     _prevExecuted.at(i) = _timeToExecute.at(i);
-                    toRet.push_back(std::move(vot));
+                    toRet.emplace_back(std::move(vot));
                 }
             }
             if (!toRet.empty())

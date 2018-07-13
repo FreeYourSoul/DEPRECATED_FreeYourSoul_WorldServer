@@ -52,7 +52,7 @@ namespace fys::network {
         const std::function<void()> &getCustomShutdownHandler() const;
         uint getSessionIndex() const;
         /**
-         * \brief Get the remoge ip address
+         * \brief Get the remote ip address
          * \return
          */
         std::string getIpAddress() const;

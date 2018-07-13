@@ -60,7 +60,7 @@ fys::ws::MapElemProperty fys::ws::Map::getMapElementPropertyAtPosition(float x, 
 
 void fys::ws::Map::triggerForPlayer(float x, float y, fys::ws::PlayersMapData &playerData) {
     if ((x >= 0 && x < _boudaryX) && (y >= 0 && y < _boudaryY)) {
-        if (_mapElems.at(y).at(x).getProperty() == fys::ws::MapElemProperty::TRIGGER) {
+        if (_mapElems.at(static_cast<unsigned>(y)).at(static_cast<unsigned>(x)).getProperty() == fys::ws::MapElemProperty::TRIGGER) {
 
         }
         else
