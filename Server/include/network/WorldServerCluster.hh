@@ -71,6 +71,7 @@ namespace fys::network {
          */
         std::unordered_map<std::string, NeighborWS> _awaitedNeighbour;
         std::unordered_map<NeighborWS, uint> _neighbourWS;
+        uint _neighboursAreOfEffect;
     };
 }
 

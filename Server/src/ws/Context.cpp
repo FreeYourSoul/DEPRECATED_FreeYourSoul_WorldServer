@@ -12,13 +12,13 @@
 
 fys::ws::Context::Context(const fys::ws::Context &other) :
         _port(other._port), _gtwPort(other._gtwPort), _gtwIp(other._gtwIp), _asioThread(other._asioThread),
-        _busIniFilePath(other._busIniFilePath), _queuesSize(other._queuesSize), _verbose(other._verbose), _neighboors(8)
+        _busIniFilePath(other._busIniFilePath), _queuesSize(other._queuesSize), _verbose(other._verbose), _neighbours(8)
 {}
 
 fys::ws::Context::Context(fys::ws::Context &&other) noexcept :
         _port(other._port), _gtwPort(other._gtwPort), _gtwIp(std::move(other._gtwIp)), _asioThread(other._asioThread),
         _busIniFilePath(std::move(other._busIniFilePath)), _queuesSize(other._queuesSize), _verbose(other._verbose),
-        _neighboors(8)
+        _neighbours(8)
 {}
 
 fys::ws::Context::Context(const int ac, const char *const *av) {
@@ -61,6 +61,7 @@ void fys::ws::Context::initializeFromIni(const std::string &iniPath) {
 
     setPort(pt.get<ushort>(WS_INI_PORT));
     setGtwPort(pt.get<ushort>(WS_INI_GTW_PORT));
+    setNeighboursAreaOfEffect(pt.get<uint>(WS_NEIGHBOURS_AREA_OF_EFFECT));
     setGtwIp(std::move(pt.get<std::string>(WS_INI_GTW_IP)));
     setAsioThread(pt.get<std::size_t>(WS_INI_ASIO_THREADS));
     setQueuesSize(pt.get<std::size_t>(WS_QUEUES_SIZE));
@@ -68,15 +69,15 @@ void fys::ws::Context::initializeFromIni(const std::string &iniPath) {
     setTmxFileMapName(pt.get<std::string>(WS_MAP_TMX));
 
     // initialize neighbours
-    _neighboors.reserve(8);
-    _neighboors.emplace_back(std::make_pair<>(network::WorldServerCluster::DWS, pt.get<std::string>(WS_NEIGHBOORS_D)));
-    _neighboors.emplace_back(std::make_pair<>(network::WorldServerCluster::LWS, pt.get<std::string>(WS_NEIGHBOORS_L)));
-    _neighboors.emplace_back(std::make_pair<>(network::WorldServerCluster::RWS, pt.get<std::string>(WS_NEIGHBOORS_R)));
-    _neighboors.emplace_back(std::make_pair<>(network::WorldServerCluster::TWS, pt.get<std::string>(WS_NEIGHBOORS_T)));
-    _neighboors.emplace_back(std::make_pair<>(network::WorldServerCluster::DLWS, pt.get<std::string>(WS_NEIGHBOORS_DL)));
-    _neighboors.emplace_back(std::make_pair<>(network::WorldServerCluster::DRWS, pt.get<std::string>(WS_NEIGHBOORS_DR)));
-    _neighboors.emplace_back(std::make_pair<>(network::WorldServerCluster::TLWS, pt.get<std::string>(WS_NEIGHBOORS_TL)));
-    _neighboors.emplace_back(std::make_pair<>(network::WorldServerCluster::TRWS, pt.get<std::string>(WS_NEIGHBOORS_TR)));
+    _neighbours.reserve(8);
+    _neighbours.emplace_back(std::make_pair<>(network::WorldServerCluster::DWS, pt.get<std::string>(WS_NEIGHBOURS_D)));
+    _neighbours.emplace_back(std::make_pair<>(network::WorldServerCluster::LWS, pt.get<std::string>(WS_NEIGHBOURS_L)));
+    _neighbours.emplace_back(std::make_pair<>(network::WorldServerCluster::RWS, pt.get<std::string>(WS_NEIGHBOURS_R)));
+    _neighbours.emplace_back(std::make_pair<>(network::WorldServerCluster::TWS, pt.get<std::string>(WS_NEIGHBOURS_T)));
+    _neighbours.emplace_back(std::make_pair<>(network::WorldServerCluster::DLWS, pt.get<std::string>(WS_NEIGHBOURS_DL)));
+    _neighbours.emplace_back(std::make_pair<>(network::WorldServerCluster::DRWS, pt.get<std::string>(WS_NEIGHBOURS_DR)));
+    _neighbours.emplace_back(std::make_pair<>(network::WorldServerCluster::TLWS, pt.get<std::string>(WS_NEIGHBOURS_TL)));
+    _neighbours.emplace_back(std::make_pair<>(network::WorldServerCluster::TRWS, pt.get<std::string>(WS_NEIGHBOURS_TR)));
 }
 
 ushort fys::ws::Context::getPort() const {
@@ -149,5 +150,13 @@ void fys::ws::Context::setTmxFileMapName(std::string &&tmxFileMapName) {
 
 const std::vector<std::pair<fys::network::WorldServerCluster::NeighborWS, std::string>> &
 fys::ws::Context::getNeighbours() const {
-    return _neighboors;
+    return _neighbours;
+}
+
+uint fys::ws::Context::getNeighboursAreaOfEffect() const {
+    return _neighbourAreaOfEffect;
+}
+
+void fys::ws::Context::setNeighboursAreaOfEffect(uint aoe) {
+    _neighbourAreaOfEffect = aoe;
 }

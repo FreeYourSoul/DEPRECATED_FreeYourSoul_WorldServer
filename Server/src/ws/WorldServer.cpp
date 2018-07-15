@@ -28,7 +28,7 @@ fys::ws::WorldServer::WorldServer(const fys::ws::Context &ctx, boost::asio::io_s
         _acceptorPlayer(_ios, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), ctx.getPort())),
         _fysBus(std::move(fysBus)),
         _gamerConnections(network::PlayerManager::CONNECTION_NUMBER),
-        _worldServerCluster(network::WorldServerCluster::CONNECTION_NUMBER),
+        _worldServerCluster(network::WorldServerCluster::CONNECTION_NUMBER, ctx->getNeighboursAreaOfEffect()),
         _gtwConnection(std::make_unique<fys::network::TcpConnection>(ios)),
         _worldEngine(std::make_shared<fys::ws::WorldEngine>(ctx.getTmxFileMapName())) {
 }

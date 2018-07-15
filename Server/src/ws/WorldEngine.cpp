@@ -44,6 +44,7 @@ void fys::ws::WorldEngine::updatePlayersPositions(double currentTime) {
             float futureY = _playersMapData._pos.at(idx).y + (actionVelocity.speed * std::sin(actionVelocity.angle));
             MapElemProperty prop = _map->getMapElementPropertyAtPosition(futureX, futureY);
 
+            // TODO: remove printf
             std::printf("x %f y %f speed %f\n fx %f fy %f\n currentTime %f\n\n",
                         _playersMapData._pos.at(idx).x * 24, _playersMapData._pos.at(idx).y * 24, actionVelocity.speed,
                         futureX, futureY, currentTime);
@@ -71,4 +72,8 @@ void fys::ws::WorldEngine::initPlayerMapData(uint idx, fys::ws::MapPosition &&po
 void fys::ws::WorldEngine::changePlayerMovingState(uint idx, double timeMove, double angle) {
     if (timeMove)
         _playersMapData._actionsExec.at(idx).addAction(timeMove + GAME_PACE, static_cast<float>(angle));
+}
+
+void fys::ws::WorldEngine::notifyNeighbourhoodServer(uint idxPlayer, fys::network::WorldServerCluster &cluster) const {
+    
 }

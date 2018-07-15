@@ -10,6 +10,7 @@
 #include <ctime>
 
 #include <PlayerDataType.hh>
+#include <WorldServerCluster.hh>
 
 //forward declarations
 namespace fys::ws {
@@ -42,6 +43,12 @@ namespace fys::ws {
          */
         void changePlayerMovingState(uint idx, double timeMove = 0, double angle = 0);
 
+        /**
+         * \brief Check if the player identified by the given index is in a
+         * \param idxPlayer index of the player
+         * \param cluster neighbour world servers connections
+         */
+        void notifyNeighbourhoodServer(uint idxPlayer, fys::network::WorldServerCluster &cluster) const;
 
     private:
         void updatePlayersPositions(double currentTime);

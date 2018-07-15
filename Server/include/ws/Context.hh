@@ -19,14 +19,15 @@ static constexpr char WS_QUEUES_SIZE[] = "bus.queuesSize";
 static constexpr char WS_MAP_POSITIONID[] = "map.positionId";
 static constexpr char WS_MAP_TMX[] = "map.tmxPath";
 
-static constexpr char WS_NEIGHBOORS_DR[] = "map.neighboors_dr";
-static constexpr char WS_NEIGHBOORS_DL[] = "map.neighboors_dl";
-static constexpr char WS_NEIGHBOORS_TR[] = "map.neighboors_tr";
-static constexpr char WS_NEIGHBOORS_TL[] = "map.neighboors_tl";
-static constexpr char WS_NEIGHBOORS_T[] = "map.neighboors_t";
-static constexpr char WS_NEIGHBOORS_D[] = "map.neighboors_d";
-static constexpr char WS_NEIGHBOORS_R[] = "map.neighboors_r";
-static constexpr char WS_NEIGHBOORS_L[] = "map.neighboors_l";
+static constexpr char WS_NEIGHBOURS_AREA_OF_EFFECT[] = "map.neigbours_area_of_effect";
+static constexpr char WS_NEIGHBOURS_DR[] = "map.neighbours_dr";
+static constexpr char WS_NEIGHBOURS_DL[] = "map.neighbours_dl";
+static constexpr char WS_NEIGHBOURS_TR[] = "map.neighbours_tr";
+static constexpr char WS_NEIGHBOURS_TL[] = "map.neighbours_tl";
+static constexpr char WS_NEIGHBOURS_T[] = "map.neighbours_t";
+static constexpr char WS_NEIGHBOURS_D[] = "map.neighbours_d";
+static constexpr char WS_NEIGHBOURS_R[] = "map.neighbours_r";
+static constexpr char WS_NEIGHBOURS_L[] = "map.neighbours_l";
 
 namespace fys::ws {
 
@@ -47,10 +48,12 @@ namespace fys::ws {
         size_t getAsioThread() const;
         ushort getGtwPort() const;
         bool isVerbose() const;
+        uint getNeighboursAreaOfEffect() const;
         const std::string &getGtwIp() const;
         const std::string &getTmxFileMapName() const;
         const std::vector<std::pair<network::WorldServerCluster::NeighborWS, std::string>> &getNeighbours() const;
 
+        void setNeighboursAreaOfEffect(uint aoe);
         void setPort(ushort port);
         void setAsioThread(size_t asioThread);
         void setVerbose(bool verbose);
@@ -76,9 +79,10 @@ namespace fys::ws {
         std::string _positionId;
         bool _verbose;
 
+        uint _neighbourAreaOfEffect;
         std::string _tmxFileMapName;
         std::vector<ws::GameServerInstance> _gameServers;
-        std::vector<std::pair<network::WorldServerCluster::NeighborWS, std::string>> _neighboors; // todo predeclare the enum
+        std::vector<std::pair<network::WorldServerCluster::NeighborWS, std::string>> _neighbours; // todo predeclare the enum
     };
 
 }

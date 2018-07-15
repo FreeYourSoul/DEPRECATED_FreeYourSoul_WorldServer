@@ -19,9 +19,10 @@ namespace fys::ws {
      */
     static constexpr double TIME_WORLD_LOOP = 100;
     /**
-     *
+     * Ratio with the speed of the client game
+     * TIME_WORLD_LOOP / 60 (fps) = 16.666
      */
-    static constexpr double GAME_PACE = 16.6666;
+    static constexpr double GAME_PACE = 16.666;
     static constexpr int MAX_ACTION_PER_CYCLE = static_cast<const int>(TIME_WORLD_LOOP / GAME_PACE) + 1;
 
 

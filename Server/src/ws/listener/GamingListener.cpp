@@ -54,9 +54,8 @@ void fys::ws::buslistener::GamingListener::operator()(fys::mq::QueueContainer<pb
 void fys::ws::buslistener::GamingListener::changePlayerStateInteractionMove(uint idx, pb::PlayerInteract &&interact) {
     fys::pb::PlayerMove playerMove;
     interact.content().UnpackTo(&playerMove);
-    // TODO : Check if world server is close enough to be in collision
-    // TODO :
     _worldEngine->changePlayerMovingState(idx, TimeUtil::TimestampToMilliseconds(interact.time()), playerMove.angle());
+    _worldEngine->notifyNeighbourhoodServer(idx, _ws->getWorldServerCluster());
 }
 
 void fys::ws::buslistener::GamingListener::changePlayerStatInteractionStopMoving(uint idx) {
