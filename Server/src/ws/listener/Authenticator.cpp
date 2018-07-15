@@ -9,10 +9,13 @@
 #include <WorldServer.hh>
 #include "listener/Authenticator.hh"
 
-fys::ws::buslistener::Authenticator::Authenticator(std::shared_ptr<WorldServer> &ws) : _ws(ws)
+namespace fys::ws {
+    
+    
+buslistener::Authenticator::Authenticator(std::shared_ptr<WorldServer> &ws) : _ws(ws)
 {}
 
-void fys::ws::buslistener::Authenticator::operator()(mq::QueueContainer<pb::FySMessage> msg) {
+void buslistener::Authenticator::operator()(mq::QueueContainer<pb::FySMessage> msg) {
     pb::LoginMessage authMessage;
 
     msg.getContained().content().UnpackTo(&authMessage);
@@ -41,7 +44,7 @@ void fys::ws::buslistener::Authenticator::operator()(mq::QueueContainer<pb::FySM
     }
 }
 
-void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(fys::pb::LoginMessage &&loginMsg) {
+void buslistener::Authenticator::notifyPlayerIncoming(fys::pb::LoginMessage &&loginMsg) {
     pb::NotifyPlayerIncoming notif;
     loginMsg.content().UnpackTo(&notif);
     network::Token token{notif.token().begin(), notif.token().end()};
@@ -49,7 +52,7 @@ void fys::ws::buslistener::Authenticator::notifyPlayerIncoming(fys::pb::LoginMes
     _ws->getGamerConnections().addIncomingPlayer(notif.ip(), std::move(token));
 }
 
-void fys::ws::buslistener::Authenticator::authPlayer(uint indexSession, fys::pb::LoginMessage &&loginMessage) {
+void buslistener::Authenticator::authPlayer(uint indexSession, fys::pb::LoginMessage &&loginMessage) {
     pb::LogingPlayerOnGame loginPlayerOnGame;
     const std::string &actualToken = _ws->getGamerConnections().getConnectionToken(indexSession);
     const std::string &token = loginPlayerOnGame.tokengameserver();
@@ -66,7 +69,7 @@ void fys::ws::buslistener::Authenticator::authPlayer(uint indexSession, fys::pb:
         spdlog::get("c")->error("Mismatch has been found {}:{}, token is {} and should be {}", indexSession, loginMessage.user(), token, actualToken);
 }
 
-void fys::ws::buslistener::Authenticator::notifyServerIncoming(fys::pb::LoginMessage &&loginMessage) {
+void buslistener::Authenticator::notifyServerIncoming(fys::pb::LoginMessage &&loginMessage) {
     pb::NotifyServerIncoming notif;
     loginMessage.content().UnpackTo(&notif);
     network::Token token{notif.token().begin(), notif.token().end()};
@@ -74,7 +77,7 @@ void fys::ws::buslistener::Authenticator::notifyServerIncoming(fys::pb::LoginMes
     _ws->getWorldServerCluster().addIncomingWorldServer(notif.positionid(), notif.ip(), std::move(token));
 }
 
-void fys::ws::buslistener::Authenticator::authWorldServer(uint indexSession, fys::pb::LoginMessage &&loginMessage) {
+void buslistener::Authenticator::authWorldServer(uint indexSession, fys::pb::LoginMessage &&loginMessage) {
     pb::LoginWorldServerInCluster loginGameServer;
     const std::string &actualToken = _ws->getGamerConnections().getConnectionToken(indexSession);
     const std::string &token = loginGameServer.tokengameserver();
@@ -92,3 +95,4 @@ void fys::ws::buslistener::Authenticator::authWorldServer(uint indexSession, fys
         spdlog::get("c")->error("Mismatch has been found {}:{}, token is {} and should be {}", indexSession, loginMessage.user(), token, actualToken);
 }
 
+}

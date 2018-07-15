@@ -6,6 +6,7 @@
 #define FREESOULS_WORLD_CLUSTERMANAGER_HH
 
 #include <unordered_map>
+#include <PlayerDataType.hh>
 #include "SessionManager.hh"
 
 //forward declarations
@@ -31,7 +32,7 @@ namespace fys::network {
             RWS
         };
 
-        WorldServerCluster(uint size);
+        WorldServerCluster(uint size, uint aoe);
 
         /**
          * \brief Setup all incoming neigbhoors given as parameter
@@ -60,6 +61,8 @@ namespace fys::network {
          */
         bool connectWorldServerToCluster(uint indexInSession, const std::string &positionId,
                                          Token &&tk);
+
+        void sendPositionToClusterAOE(fys::ws::MapPosition &&position);
 
     private:
         /**

@@ -12,16 +12,18 @@
 #include <PlayerManager.hh>
 #include "WorldEngine.hh"
 
+namespace fys::ws {
+
 static inline double getCurrentTimeInMillisec() {
     return std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
 }
 
-fys::ws::WorldEngine::WorldEngine(const std::string &tmxMapFilePath) :
-        _map(std::make_unique<fys::ws::Map>(tmxMapFilePath)),
+WorldEngine::WorldEngine(const std::string &tmxMapFilePath) :
+        _map(std::make_unique<Map>(tmxMapFilePath)),
         _playersMapData() {
 }
 
-void fys::ws::WorldEngine::runWorldLoop() {
+void WorldEngine::runWorldLoop() {
     double timeEpochStart;
 
     while (true) {
@@ -37,7 +39,7 @@ void fys::ws::WorldEngine::runWorldLoop() {
     }
 }
 
-void fys::ws::WorldEngine::updatePlayersPositions(double currentTime) {
+void WorldEngine::updatePlayersPositions(double currentTime) {
     for (uint idx = 0; idx < _playersMapData.playersSize(); ++idx) {
         for (Velocity actionVelocity : _playersMapData._actionsExec.at(idx).getActionsToExecute()) {
             float futureX = _playersMapData._pos.at(idx).x + (actionVelocity.speed * std::cos(actionVelocity.angle));
@@ -61,7 +63,7 @@ void fys::ws::WorldEngine::updatePlayersPositions(double currentTime) {
     }
 }
 
-void fys::ws::WorldEngine::initPlayerMapData(uint idx, fys::ws::MapPosition &&pos) {
+void WorldEngine::initPlayerMapData(uint idx, MapPosition &&pos) {
     if (idx >= _playersMapData.playersSize()) {
         _playersMapData._actionsExec.resize(_playersMapData.playersSize() + 100);
         _playersMapData._pos.resize(_playersMapData.playersSize() + 100);
@@ -69,11 +71,13 @@ void fys::ws::WorldEngine::initPlayerMapData(uint idx, fys::ws::MapPosition &&po
     _playersMapData._pos.at(idx) = std::move(pos);
 }
 
-void fys::ws::WorldEngine::changePlayerMovingState(uint idx, double timeMove, double angle) {
+void WorldEngine::changePlayerMovingState(uint idx, double timeMove, double angle) {
     if (timeMove)
         _playersMapData._actionsExec.at(idx).addAction(timeMove + GAME_PACE, static_cast<float>(angle));
 }
 
-void fys::ws::WorldEngine::notifyNeighbourhoodServer(uint idxPlayer, fys::network::WorldServerCluster &cluster) const {
-    
+void WorldEngine::notifyNeighbourhoodServer(uint idxPlayer, fys::network::WorldServerCluster &cluster) const {
+    const MapPosition &pos = _playersMapData._pos.at(idxPlayer);
+}
+
 }

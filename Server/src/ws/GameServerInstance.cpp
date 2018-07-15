@@ -4,40 +4,44 @@
 
 #include "GameServerInstance.hh"
 
-fys::ws::GameServerInstance::GameServerInstance(const ushort port, const std::string &ip, const std::string &positionId) :
+namespace fys::ws {
+    
+GameServerInstance::GameServerInstance(const ushort port, const std::string &ip, const std::string &positionId) :
  _port(port), _ip(ip), _positionId(positionId) {}
 
-fys::ws::GameServerInstance::GameServerInstance(fys::ws::GameServerInstance &&other) noexcept :
+GameServerInstance::GameServerInstance(GameServerInstance &&other) noexcept :
         _ip(std::move(other._ip)), _port(other._port), _positionId(std::move(other._positionId))
 {}
 
-fys::ws::GameServerInstance &fys::ws::GameServerInstance::operator=(fys::ws::GameServerInstance other) {
+GameServerInstance &GameServerInstance::operator=(GameServerInstance other) {
     std::swap(_ip, other._ip);
     std::swap(_positionId, other._positionId);
     other._port = other._port;
     return *this;
 }
 
-void fys::ws::GameServerInstance::setPositionId(const std::string &positionId) {
+void GameServerInstance::setPositionId(const std::string &positionId) {
     _positionId = positionId;
 }
 
-const std::string &fys::ws::GameServerInstance::getPositionId() const {
+const std::string &GameServerInstance::getPositionId() const {
     return _positionId;
 }
 
-const std::string &fys::ws::GameServerInstance::getIp() const {
+const std::string &GameServerInstance::getIp() const {
     return _ip;
 }
 
-void fys::ws::GameServerInstance::setIp(const std::string &ip) {
+void GameServerInstance::setIp(const std::string &ip) {
     GameServerInstance::_ip = ip;
 }
 
-ushort fys::ws::GameServerInstance::getPort() const {
+ushort GameServerInstance::getPort() const {
     return _port;
 }
 
-void fys::ws::GameServerInstance::setPort(const ushort port) {
+void GameServerInstance::setPort(const ushort port) {
     GameServerInstance::_port = port;
+}
+
 }

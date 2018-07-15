@@ -20,7 +20,6 @@ namespace fys {
 }
 
 namespace fys::network {
-
     using Token = std::vector<char>;
 
     class SessionManager {

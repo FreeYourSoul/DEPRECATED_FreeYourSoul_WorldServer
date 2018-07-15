@@ -14,11 +14,13 @@
 
 using namespace google::protobuf::util;
 
-fys::ws::buslistener::GamingListener::GamingListener(WorldServer::ptr &ws) :
+namespace fys::ws {
+
+buslistener::GamingListener::GamingListener(WorldServer::ptr &ws) :
         _ws(ws), _worldEngine(ws->getWorldEngine()){
 }
 
-void fys::ws::buslistener::GamingListener::operator()(fys::mq::QueueContainer<pb::FySMessage> msg) {
+void buslistener::GamingListener::operator()(fys::mq::QueueContainer<pb::FySMessage> msg) {
     pb::PlayerInteract playerInteract;
 
     msg.getContained().content().UnpackTo(&playerInteract);
@@ -51,22 +53,24 @@ void fys::ws::buslistener::GamingListener::operator()(fys::mq::QueueContainer<pb
     }
 }
 
-void fys::ws::buslistener::GamingListener::changePlayerStateInteractionMove(uint idx, pb::PlayerInteract &&interact) {
+void buslistener::GamingListener::changePlayerStateInteractionMove(uint idx, pb::PlayerInteract &&interact) {
     fys::pb::PlayerMove playerMove;
     interact.content().UnpackTo(&playerMove);
     _worldEngine->changePlayerMovingState(idx, TimeUtil::TimestampToMilliseconds(interact.time()), playerMove.angle());
     _worldEngine->notifyNeighbourhoodServer(idx, _ws->getWorldServerCluster());
 }
 
-void fys::ws::buslistener::GamingListener::changePlayerStatInteractionStopMoving(uint idx) {
+void buslistener::GamingListener::changePlayerStatInteractionStopMoving(uint idx) {
     _worldEngine->changePlayerMovingState(idx);
 }
 
 void
-fys::ws::buslistener::GamingListener::playerRequestInformation(uint idx, pb::PlayerInteract &&interact) {
+buslistener::GamingListener::playerRequestInformation(uint idx, pb::PlayerInteract &&interact) {
 
 }
 
-void fys::ws::buslistener::GamingListener::playerInteractionWithWorldItem(uint idx, pb::PlayerInteract &&interact) {
+void buslistener::GamingListener::playerInteractionWithWorldItem(uint idx, pb::PlayerInteract &&interact) {
+
+}
 
 }

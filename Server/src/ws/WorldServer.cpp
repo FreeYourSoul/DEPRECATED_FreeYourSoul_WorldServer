@@ -14,26 +14,28 @@
 #include <WorldEngine.hh>
 #include <Map.hh>
 
+
+namespace fys::ws {
 /**
  * Timer (in seconds) between re-connection attempt on the Gateway
  */
 static constexpr int RETRY_TIMER = 10;
 static constexpr char MAGIC_PASSWORD[] = "42Magic42FyS";
 
-fys::ws::WorldServer::~WorldServer() = default;
+WorldServer::~WorldServer() = default;
 
-fys::ws::WorldServer::WorldServer(const fys::ws::Context &ctx, boost::asio::io_service &ios,
+WorldServer::WorldServer(const Context &ctx, boost::asio::io_service &ios,
                                   std::shared_ptr<fys::mq::FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE> > fysBus) :
         _ios(ios),
         _acceptorPlayer(_ios, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), ctx.getPort())),
         _fysBus(std::move(fysBus)),
         _gamerConnections(network::PlayerManager::CONNECTION_NUMBER),
-        _worldServerCluster(network::WorldServerCluster::CONNECTION_NUMBER, ctx->getNeighboursAreaOfEffect()),
+        _worldServerCluster(network::WorldServerCluster::CONNECTION_NUMBER, ctx.getNeighboursAreaOfEffect()),
         _gtwConnection(std::make_unique<fys::network::TcpConnection>(ios)),
-        _worldEngine(std::make_shared<fys::ws::WorldEngine>(ctx.getTmxFileMapName())) {
+        _worldEngine(std::make_shared<WorldEngine>(ctx.getTmxFileMapName())) {
 }
 
-void fys::ws::WorldServer::runPlayerAccept() {
+void WorldServer::runPlayerAccept() {
     const network::TcpConnection::ptr session = network::TcpConnection::create(_ios);
 
     _acceptorPlayer.async_accept(session->getSocket(),
@@ -55,7 +57,7 @@ void fys::ws::WorldServer::runPlayerAccept() {
     );
 }
 
-void fys::ws::WorldServer::connectToGateway(const fys::ws::Context &ctx) {
+void WorldServer::connectToGateway(const Context &ctx) {
     static std::once_flag of = {};
     spdlog::get("c")->info("Connect to the gateway on host: {}, with port: {}", ctx.getGtwIp(), ctx.getGtwPort());
     boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(ctx.getGtwIp()), ctx.getGtwPort());
@@ -80,7 +82,7 @@ void fys::ws::WorldServer::connectToGateway(const fys::ws::Context &ctx) {
     });
 }
 
-void fys::ws::WorldServer::notifyGateway(const std::string &positionId, const ushort port) const {
+void WorldServer::notifyGateway(const std::string &positionId, const ushort port) const {
     fys::pb::FySMessage msg;
     fys::pb::LoginMessage loginMsg;
     fys::pb::LoginGameServer gameServerMessage;
@@ -98,7 +100,7 @@ void fys::ws::WorldServer::notifyGateway(const std::string &positionId, const us
                             "{}", msg.ShortDebugString());
 }
 
-void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &clusterKey, const std::string &ip,
+void WorldServer::connectAndAddWorldServerInCluster(const std::string &clusterKey, const std::string &ip,
                                                              const std::string &port, network::Token &&token,
                                                              uint indexInSession) {
     spdlog::get("c")->info("A new WorldServer has been added in cluster: "
@@ -116,13 +118,15 @@ void fys::ws::WorldServer::connectAndAddWorldServerInCluster(const std::string &
     });
 }
 
-void fys::ws::WorldServer::run() {
+void WorldServer::run() {
     std::thread worldLoopThread([this](){
         _worldEngine->runWorldLoop();
     });
     worldLoopThread.detach();
 }
 
-void fys::ws::WorldServer::initPlayerPosition(uint indexInSession, float x, float y) {
+void WorldServer::initPlayerPosition(uint indexInSession, float x, float y) {
     _worldEngine->initPlayerMapData(indexInSession, {x, y});
+}
+
 }
