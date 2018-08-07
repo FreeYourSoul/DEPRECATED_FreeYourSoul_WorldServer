@@ -21,3 +21,9 @@ The World Server, like the gateway, has to be launched by command line.
 
 The required flag is the -c, it point on the config file you want to use (config file determine port and others configuration points).
 The default file is the one present in the GitHub repo (https://github.com/FreeYourSoul/FreeYourSoul_WorldServer/blob/master/Server/resource/worldserver.ini])
+
+### REQUIREMENT
+
+[tmxlite](https://github.com/fallahn/tmxlite) : parsing map
+[spdlog](https://github.com/gabime/spdlog)
+[boost-asio](https://www.boost.org/)
