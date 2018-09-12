@@ -1,4 +1,5 @@
 #include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 #include <google/protobuf/stubs/common.h>
 #include <WorldServer.hh>
 #include <FysBus.hh>
@@ -79,8 +80,6 @@ using AuthBusListener = BusListener <buslistener::Authenticator, FysBus<fys::pb:
 using GamingListener = BusListener <buslistener::GamingListener, FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>>;
 
 void welcome(bool verbose) {
-    spdlog::set_async_mode(1024, spdlog::async_overflow_policy::discard_log_msg);
-
     std::vector<spdlog::sink_ptr> sinks;
 
     auto sys_logger = spdlog::stdout_color_mt("c");
@@ -93,6 +92,7 @@ void welcome(bool verbose) {
     sys_logger->info("Logger set to level {}\n>> log formatting>> [time] [thread] [logLevel] message logged", spdlog::get("c")->level());
     spdlog::get("c")->info(welcomeMsg);
 }
+
 
 
 int main(int argc, const char * const *argv) {
