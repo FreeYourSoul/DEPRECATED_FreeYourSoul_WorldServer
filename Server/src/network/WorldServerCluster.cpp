@@ -56,7 +56,7 @@ bool WorldServerCluster::connectWorldServerToCluster(uint indexInSession, const 
 }
 
 void WorldServerCluster::sendPositionToClusterAOE(fys::ws::MapPosition &&position) {
-    for (auto&& [ k, v ] : _neighbourWS) {
+    for (auto& [ k, v ] : _neighbourWS) {
         fys::pb::FySMessage msg {};
         // TODO : fill msg
         _connections.at(v)->send(std::move(msg));

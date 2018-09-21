@@ -80,8 +80,6 @@ using AuthBusListener = BusListener <buslistener::Authenticator, FysBus<fys::pb:
 using GamingListener = BusListener <buslistener::GamingListener, FysBus<fys::pb::FySMessage, BUS_QUEUES_SIZE>>;
 
 void welcome(bool verbose) {
-    std::vector<spdlog::sink_ptr> sinks;
-
     auto sys_logger = spdlog::stdout_color_mt("c");
 #ifdef DEBUG_LEVEL
     sys_logger->set_level(spdlog::level::debug);

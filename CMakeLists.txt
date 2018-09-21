@@ -8,6 +8,12 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
 
 set(CMAKE_CXX_STANDARD 17)
 
+option(SANITIZE "Enable sanitizer" OFF)
+
+if (SANITIZE)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lasan -fsanitize=address")
+endif()
+
 if ( UNIX )
     set(CMAKE_CXX_FLAGS
             "${CMAKE_CXX_FLAGS} -Wall -Wpedantic -Wextra -Wno-deprecated-declarations")

@@ -63,7 +63,7 @@ void WorldServer::connectToGateway(const Context &ctx) {
     boost::asio::ip::tcp::endpoint endpoint(boost::asio::ip::address::from_string(ctx.getGtwIp()), ctx.getGtwPort());
 
     std::call_once(of, [this, &ctx](){
-        auto disconnectionHandler = [this, &ctx]() {
+        const auto disconnectionHandler = [this, &ctx]() {
             boost::asio::deadline_timer timer(_ios);
             spdlog::get("c")->warn("An Error occurred while trying to connect to the gateway, retry in progress");
             timer.expires_from_now(boost::posix_time::seconds(RETRY_TIMER));
