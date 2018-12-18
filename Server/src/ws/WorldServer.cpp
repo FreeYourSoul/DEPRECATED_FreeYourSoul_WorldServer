@@ -110,7 +110,7 @@ void WorldServer::connectAndAddWorldServerInCluster(const std::string &clusterKe
     _worldServerCluster.connectWorldServerToCluster(indexInSession, clusterKey, std::move(token));
     _gtwConnection->getSocket().async_connect(endpoint, [this, &token](const boost::system::error_code &error) {
         if (!error) {
-            network::Token tkn{token.size()};
+            network::Token tkn(token.size());
             std::copy(token.cbegin(), token.cend(), tkn.begin());
 
             _gtwConnection->readOnSocket(_fysBus);
@@ -128,5 +128,5 @@ void WorldServer::run() {
 void WorldServer::initPlayerPosition(uint indexInSession, float x, float y) {
     _worldEngine->initPlayerMapData(indexInSession, {x, y});
 }
-
 }
+

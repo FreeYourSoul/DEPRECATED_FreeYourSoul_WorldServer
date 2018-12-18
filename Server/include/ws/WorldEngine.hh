@@ -41,7 +41,8 @@ namespace fys::ws {
          * \param timeMove timestamp at which the move is called, if this value is set to 0, the moving state is STOP
          * \param angle angle in degree value, if this value is set to 0, the moving state is STOP
          */
-        void changePlayerMovingState(uint idx, double timeMove = 0, double angle = 0);
+        void changePlayerMovingState(uint idx, double timeMove, double angle);
+        void changePlayerMovingState(uint idx);
 
         /**
          * \brief Check if the player identified by the given index is in a

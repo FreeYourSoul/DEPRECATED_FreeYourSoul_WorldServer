@@ -19,7 +19,7 @@ static constexpr char WS_QUEUES_SIZE[] = "bus.queuesSize";
 static constexpr char WS_MAP_POSITIONID[] = "map.positionId";
 static constexpr char WS_MAP_TMX[] = "map.tmxPath";
 
-static constexpr char WS_NEIGHBOURS_AREA_OF_EFFECT[] = "map.neigbours_area_of_effect";
+static constexpr char WS_NEIGHBOURS_AREA_OF_EFFECT[] = "map.neighbours_area_of_effect";
 static constexpr char WS_NEIGHBOURS_DR[] = "map.neighbours_dr";
 static constexpr char WS_NEIGHBOURS_DL[] = "map.neighbours_dl";
 static constexpr char WS_NEIGHBOURS_TR[] = "map.neighbours_tr";

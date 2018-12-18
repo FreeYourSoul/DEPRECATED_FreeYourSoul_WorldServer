@@ -97,15 +97,6 @@ namespace fys::ws {
      * Data Oriented structure, contains only vector member, the index of each element represent a different player
      */
     struct PlayersMapData {
-        /**
-         * A vector representing the position of each player on the map
-         */
-        std::vector<MapPosition> _pos;
-        /**
-         * A vector representing Actions to executes on the player
-         */
-        std::vector<ExecutionActions> _actionsExec;
-
         PlayersMapData() :
                 _pos(network::PlayerManager::CONNECTION_NUMBER),
                 _actionsExec(network::PlayerManager::CONNECTION_NUMBER) {}
@@ -113,6 +104,16 @@ namespace fys::ws {
         std::size_t playersSize() const {
             return _pos.size();
         }
+
+        /**
+         * A vector representing the position of each player on the map
+         */
+        std::vector<MapPosition> _pos;
+
+        /**
+         * A vector representing Actions to executes on the player
+         */
+        std::vector<ExecutionActions> _actionsExec;
     };
 
 }

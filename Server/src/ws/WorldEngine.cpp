@@ -31,7 +31,7 @@ void WorldEngine::runWorldLoop() {
 
         this->updatePlayersPositions(timeEpochStart);
 
-        double sleepTime = (timeEpochStart + TIME_WORLD_LOOP) - getCurrentTimeInMillisec();
+        const double sleepTime = (timeEpochStart + TIME_WORLD_LOOP) - getCurrentTimeInMillisec();
         if (sleepTime > 0) {
             std::chrono::duration<double, std::milli> dur(sleepTime);
             std::this_thread::sleep_for(dur);
@@ -46,10 +46,9 @@ void WorldEngine::updatePlayersPositions(double currentTime) {
             float futureY = _playersMapData._pos.at(idx).y + (actionVelocity.speed * std::sin(actionVelocity.angle));
             MapElemProperty prop = _map->getMapElementPropertyAtPosition(futureX, futureY);
 
-            // TODO: remove printf
-            std::printf("x %f y %f speed %f\n fx %f fy %f\n currentTime %f\n\n",
-                        _playersMapData._pos.at(idx).x * 24, _playersMapData._pos.at(idx).y * 24, actionVelocity.speed,
-                        futureX, futureY, currentTime);
+//            std::printf("x %f y %f speed %f\n fx %f fy %f\n currentTime %f\n\n",
+//                        _playersMapData._pos.at(idx).x * 24, _playersMapData._pos.at(idx).y * 24, actionVelocity.speed,
+//                        futureX * 24, futureY * 24, currentTime);
 
             if (prop != MapElemProperty::BLOCK) {
                 _playersMapData._pos.at(idx).x = futureX;
@@ -72,11 +71,13 @@ void WorldEngine::initPlayerMapData(uint idx, MapPosition &&pos) {
 }
 
 void WorldEngine::changePlayerMovingState(uint idx, double timeMove, double angle) {
-    if (timeMove)
-        _playersMapData._actionsExec.at(idx).addAction(timeMove + GAME_PACE, static_cast<float>(angle));
+    _playersMapData._actionsExec.at(idx).addAction(timeMove + GAME_PACE, static_cast<float>(angle));
 }
 
-void WorldEngine::notifyNeighbourhoodServer(uint idxPlayer, fys::network::WorldServerCluster &cluster) const {
+void WorldEngine::changePlayerMovingState(uint idx) {
+}
+
+    void WorldEngine::notifyNeighbourhoodServer(uint idxPlayer, fys::network::WorldServerCluster &cluster) const {
     const MapPosition &pos = _playersMapData._pos.at(idxPlayer);
 }
 
